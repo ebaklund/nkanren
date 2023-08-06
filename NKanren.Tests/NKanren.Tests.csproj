@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\nkanren\nkanren.csproj" />
+    <ProjectReference Include="..\NKanren\NKanren.csproj" />
   </ItemGroup>
 
 </Project>
