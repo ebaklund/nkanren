@@ -15,6 +15,47 @@ public class Subst
 
     // PUBLIC
 
+    public Key Fresh() // p 145
+    {
+        Key k = new Key(_slots.Count);
+        _slots.Add(null);
+
+        return k;
+    }
+
+    public object? Walk(object? obj) // p 148
+    {
+        while (obj is Key k && _slots[k.Idx] is not null)
+        {
+            obj = _slots[k.Idx];
+        }
+
+        return obj;
+    }
+
+    public bool Occurs(Key k, object? obj) // p 149
+    {
+        return Walk(obj) switch
+        {
+            Key asKey => asKey == k,
+            Tuple<object?, object?> t => Occurs(k, t.Item1) || Occurs(k, t.Item2),
+            List<object?> asList => Occurs(k, asList.Car()) || Occurs(k, asList.Cdr()),
+            _ => false
+        };
+    }
+
+    public bool Bind(Key k, object? v) // p 149
+    {
+        if (Occurs(k, v))
+        {
+            return false;
+        }
+
+        _slots[k.Idx] = v;
+
+        return true;
+    }
+
     public static (bool, Exception?) IsValidSubstitution((Key, object?)[] args)
     {
         for (int i = 0; i < args.Length; ++i)
@@ -38,26 +79,7 @@ public class Subst
         return (true, null);
     }
 
-    public object? Walk(object? obj)
-    {
-        while (obj is Key k && _slots[k.Idx] is not null)
-        {
-            obj = _slots[k.Idx];
-        }
 
-        return obj;
-    }
-
-    public bool Occurs(Key k, object? obj)
-    {
-        return Walk(obj) switch
-        {
-            Key asKey => asKey == k,
-            Tuple<object?, object?> t => Occurs(k, t.Item1) || Occurs(k, t.Item2),
-            List<object?> asList => Occurs(k, asList.Car()) || Occurs(k, asList.Cdr()),
-            _ => false
-        };
-    }
 
     public (bool, Exception) Extend((Key, object?)[] args, int i, int j)
     {
