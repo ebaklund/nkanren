@@ -5,13 +5,13 @@ using System.Collections.Specialized;
 
 namespace nkanren;
 
-public class Key {};
+public record Key(int Idx);
 
 public class Subst
 {
     // PRIVATE
 
-    private OrderedDictionary _dict = new();
+    private List<object?> _slots = new();
 
     // PUBLIC
 
@@ -40,9 +40,9 @@ public class Subst
 
     public object? Walk(object? obj)
     {
-        while (obj is Key k && _dict[k] is not null)
+        while (obj is Key k && _slots[k.Idx] is not null)
         {
-            obj = _dict[k];
+            obj = _slots[k.Idx];
         }
 
         return obj;
