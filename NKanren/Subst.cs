@@ -13,8 +13,73 @@ public class Subst
 
     private List<object?> _slots = new();
 
-    // PUBLIC
+    private static object? Walk(object? obj, List<object?> slots) // p 148
+    {
+        while (obj is Key k && slots[k.Idx] is not null)
+        {
+            obj = slots[k.Idx];
+        }
 
+        return obj;
+    }
+
+    private static bool Occurs(Key k, object? obj, List<object?> slots) // p 149
+    {
+        return Walk(obj, slots) switch
+        {
+            Key asKey => asKey == k,
+            Tuple<object?, object?> t => Occurs(k, t.Item1, slots) || Occurs(k, t.Item2, slots),
+            List<object?> asList => Occurs(k, asList.Car(), slots) || Occurs(k, asList.Cdr(), slots),
+            _ => false
+        };
+    }
+
+    private static bool Bind(Key k, object? v, List<object?> slots) // p 149
+    {
+        if (Occurs(k, v, slots))
+        {
+            return false;
+        }
+
+        slots[k.Idx] = v;
+
+        return true;
+    }
+
+    private static bool Unify(object? u, object? v, List<object?> slots) // p 151
+    {
+        if (u == v)
+        {
+            return true;
+        }
+
+        if (u is Key ku)
+        {
+            Bind(ku, v, slots);
+            return true;
+        }
+
+        if (v is Key kv)
+        {
+            Bind(kv, u, slots);
+            return true;
+        }
+
+        if (v is List<object?> lv && u is List<object?> lu)
+        {
+            return Unify(lv.Car(), lu.Car(), slots) && Unify(lv.Cdr(), lu.Cdr(), slots);
+        }
+
+        if (v is ValueTuple<object?, object?> tv && u is ValueTuple<object?, object?> tu)
+        {
+            return Unify(tv.Item1, tu.Item1, slots) && Unify(tv.Item2, tu.Item2, slots);
+        }
+
+        return false;
+    }
+
+    // PUBLIC
+    
     public Key Fresh() // p 145
     {
         Key k = new Key(_slots.Count);
@@ -23,74 +88,17 @@ public class Subst
         return k;
     }
 
-    public object? Walk(object? obj) // p 148
+    public bool Unify(object? u, object? v) // p 151
     {
-        while (obj is Key k && _slots[k.Idx] is not null)
-        {
-            obj = _slots[k.Idx];
-        }
+        var newSlots = _slots.ShallowCopy();
 
-        return obj;
-    }
-
-    public bool Occurs(Key k, object? obj) // p 149
-    {
-        return Walk(obj) switch
-        {
-            Key asKey => asKey == k,
-            Tuple<object?, object?> t => Occurs(k, t.Item1) || Occurs(k, t.Item2),
-            List<object?> asList => Occurs(k, asList.Car()) || Occurs(k, asList.Cdr()),
-            _ => false
-        };
-    }
-
-    public bool Bind(Key k, object? v) // p 149
-    {
-        if (Occurs(k, v))
+        if (!Unify(u, v, newSlots))
         {
             return false;
         }
 
-        _slots[k.Idx] = v;
+        _slots = newSlots;
 
         return true;
-    }
-
-    public static (bool, Exception?) IsValidSubstitution((Key, object?)[] args)
-    {
-        for (int i = 0; i < args.Length; ++i)
-        {
-            Key ki = args[i].Item1;
-
-            for (int j = 0; j < args.Length; ++j)
-            {
-                if (i == j && args[i].Item2 is Key vi && ki == vi)
-                {
-                    return (false, new ArgumentException($"Invalid substitution. Key is self referencing: [{i}], [{j}]."));
-                }
-
-                if (i != j && args[i].Item1 is Key k && ki == k)
-                {
-                    return (false, new ArgumentException($"Invalid substitution. Key reoccurs as key: [{i}], [{j}]."));
-                }
-            }
-        }
-
-        return (true, null);
-    }
-
-
-
-    public (bool, Exception) Extend((Key, object?)[] args, int i, int j)
-    {
-        var ki = args[i].Item1;
-        var vi = Walk(args[i].Item2);
-
-        return Extend(args, 0, 0);
-    }
-
-    public (bool, Exception) Extend((Key, object?)[] args)
-    {
-        return Extend(args, 0, 0);
     }
 }

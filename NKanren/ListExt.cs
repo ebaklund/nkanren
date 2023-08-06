@@ -36,4 +36,9 @@ static class ListExt
 
         return (null, new ApplicationException("Cond() fall trough."));
     }
+
+    public static List<object?> ShallowCopy(this List<object?> list)
+    {
+        return list.ToList();
+    }
 }
