@@ -69,7 +69,7 @@ public static class SubstExt
 
     public static bool TryUnify(this Subst s1, out Subst s2, object? o1, object? o2) // p 151
     {
-        s2 = s1.ShallowCopy();
+        s2 = s1.ToList();
         var isUnified = s2.Unify(o1, o2);
 
         if (!isUnified)
