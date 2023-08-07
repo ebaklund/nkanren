@@ -2,7 +2,8 @@
 namespace nkanren;
 
 using Subst = List<object?>;
-public delegate List<object> Goal(Subst input);
+using Stream = List<object>;
+public delegate Stream Goal(Subst input);
 
 public static class NK
 {
@@ -26,5 +27,20 @@ public static class NK
     public static Goal Disj2(Goal g1, Goal g2) // p 156
     {
         return (Subst s) => g1(s).Append(g2(s));
+    }
+
+    public static Goal Nevero() // p 157
+    {
+        return (Subst s) => new Stream() { () => Nevero()(s) };
+    }
+
+    public static Goal Alwayso() // p 159
+    {
+        return (Subst s) => new Stream() { () => Disj2(Succ(), Alwayso())(s) };
+    }
+
+    public static Goal Conj2(Goal g1, Goal g2) // p 156
+    {
+        return (Subst s) => g1(s).AppendMap(g2);
     }
 }
