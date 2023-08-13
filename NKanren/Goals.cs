@@ -54,4 +54,16 @@ public static class Goals
             return new List<object?>() { t3 }; // Is this actually correct? Not clear if input and output are streams.
         };
     }
+
+    public static Goal Ifte(Goal p, Goal t, Goal e) // 173
+    {
+        return (Subst s) =>
+        {
+            var st = p(s);
+            
+            return (st.Count > 0)
+                ? st.AppendMap(t)
+                : e(s);
+        };
+    }
 }
