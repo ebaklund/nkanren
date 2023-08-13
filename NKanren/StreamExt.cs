@@ -1,7 +1,7 @@
 namespace nkanren;
 
-using Stream = List<object>;
 using Subst = List<object?>;
+using  Stream = List<object?>;
 
 public static class StreamExt
 {

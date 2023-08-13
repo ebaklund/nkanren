@@ -7,14 +7,14 @@ namespace nkanren;
 
 using Subst = List<object?>;
 
-public enum Key { }
-
 public static class SubstExt
 {
     // PRIVATE
 
     private static object? Walk(this Subst s, object? o) // p 148
     {
+        // Returns value, Key value or fresh Key
+
         while (o is Key k && s[(int)k] is not null)
         {
             o = s[(int)k];
@@ -66,6 +66,11 @@ public static class SubstExt
 
         return (Key) s.Count - 1;
     }
+    
+    public static Goal CallFresh(this Subst s, Func<Key, Goal> f) // p 165
+    {
+        return f(s.Fresh());
+    }
 
     public static bool TryUnify(this Subst s1, out Subst s2, object? o1, object? o2) // p 151
     {
@@ -78,5 +83,69 @@ public static class SubstExt
         }
 
         return isUnified;
+    }
+
+    public static object? ReifyTree(this Subst s, object? o) // 167
+    {
+        o = s.Walk(o);
+
+        // Substitute all Keys in tree, which by protocol are fresh, with Key reified name
+        if (o is Key k)
+        {            
+            // ISSUE: The original algorithm reifies by the squence fresh variables occurs in o.
+            // Not sure that is what we want. 
+            // Alternatively we could reify by fresh variables' creation index. i.e. (int)Key
+
+            // r.Add((r.Count - 1).ToString());
+            return ((int)k).ToString();
+        }
+        else if (o is List<object?> l )
+        {
+            List<object?> r = new ();
+
+            foreach (object? i in l)
+            {
+                r.Add(ReifyTree(s, i));
+            }
+
+            return r;            
+        }
+
+        return o;
+    }
+
+    public static object? WalkRec(this Subst s, object? o) // p 166
+    {
+        // Returns copy of input tree with all variables resolved leaving only fresh variables unresolved.
+        
+        return s.Walk(o) switch
+        {
+            Key k => k, // Unresolved since it is fresh
+            List<object> l => l.Select(x => s.WalkRec(x)), // Resolve recursively
+            _ => o // Resolved
+        };
+    }
+
+    public static Subst Reify(this Subst r, object? o)
+    {
+        // Creates a new substitution whith variable names.
+        // Can be used in a Goal that generates "r", but is otherwise of questionable use.
+        // A function that does direct substitution in a tre may be more effective.
+
+        o = r.Walk(o);
+
+        if (o is Key k)
+        {
+            r.Add("_" + (r.Count - 1).ToString());
+        }
+        else if (o is List<object?> l)
+        {
+            foreach(var i in l)
+            {
+                r.Reify(i);
+            }
+        }
+
+        return r;
     }
 }
