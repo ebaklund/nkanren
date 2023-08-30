@@ -29,9 +29,29 @@ public static class Goals
         return (Subst s) => g1(s).Append(g2(s));
     }
 
+    public static Goal Disj(params Goal[] gs) // p 177
+    {
+        return (gs.Length) switch
+        {
+            0 => Succ(),
+            1 => gs[0],
+            _ => Disj2(gs[0], Disj(gs[1..]))
+        };
+    }
+
     public static Goal Conj2(Goal g1, Goal g2) // p 156
     {
         return (Subst s) => g1(s).AppendMap(g2);
+    }
+
+    public static Goal Conj(params Goal[] gs) // p 177
+    {
+        return (gs.Length) switch
+        {
+            0 => Succ(),
+            1 => gs[0],
+            _ => Conj2(gs[0], Conj(gs[1..]))
+        };
     }
 
     public static Goal Nevero() // p 157
@@ -65,5 +85,22 @@ public static class Goals
                 ? st.AppendMap(t)
                 : e(s);
         };
+    }
+
+    public static Goal Once(Goal g) // P 174
+    {
+        return (Subst s) =>
+        {
+            Stream st = g(s);
+
+            return (st.Count == 0)
+                ? st
+                : new Stream() { st[0] };
+        };
+    }
+
+    public static Func<Subst, Func<Stream>> defrel(params Goal[] gs) // p 177
+    {
+        return (Subst s) => () => Conj(gs)(s);
     }
 }
