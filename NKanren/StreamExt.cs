@@ -1,7 +1,7 @@
 namespace nkanren;
 
-using Subst = List<object?>;
-using  Stream = List<object?>;
+using Stream = List<object?>;
+using System.Text;
 
 public static class StreamExt
 {
@@ -83,5 +83,23 @@ public static class StreamExt
         }
 
         return result;
+    }
+
+    public static string Stringify(this Stream st)
+    {
+        StringBuilder sb = new("(");
+
+        foreach (var item in st)
+        {            
+            sb.Append(
+                item switch
+                {
+                    List<object?> l => l.Stringify(),
+                    _ => (item ?? "null").ToString()
+                }
+            );
+        }
+
+        return sb.Append(")").ToString();
     }
 }

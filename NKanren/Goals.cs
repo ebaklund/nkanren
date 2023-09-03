@@ -1,7 +1,6 @@
 
 namespace nkanren;
 
-using Subst = List<object?>;
 using Stream = List<object?>;
 public delegate Stream Goal(Subst input);
 
