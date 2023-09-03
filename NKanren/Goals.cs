@@ -69,7 +69,7 @@ public static class Goals
         {
             var t2 = s.WalkRec(t1); // Resolve variables in the tree
             var r = s.Reify(t2); // Collect and name variables in tree by occurance
-            var t3 = r.WalkRec(t2); // Replace variables in tree with variavle names
+            var t3 = r.WalkRec(t2); // Replace variables in tree with variable names
             return new List<object?>() { t3 }; // Is this actually correct? Not clear if input and output are streams.
         };
     }
