@@ -1,7 +1,6 @@
 
 namespace nkanren;
 
-using  Stream = List<object?>;
 using static Goals;
 
 public static class Runners
@@ -18,9 +17,12 @@ public static class Runners
 
     public static Stream Run(Func<Key, Goal> f) // p 169
     {
-        Subst s = new();
-        var g = f(s.Fresh());
-        var st = g(s);
-        return Goals.Reify(st)(s);
+        throw new NotImplementedException();
+        /*
+        Subst subst = new();
+        var g = f(subst.Fresh());
+        var st = g(subst);
+        return subst.Reify(st);
+        */
     }
-}
+} 

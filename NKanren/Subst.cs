@@ -5,7 +5,7 @@ using System.Collections.Specialized;
 
 namespace nkanren;
 
-public class Subst
+public class Subst : IStreamItem
 {
     // PRIVATE
 
@@ -72,6 +72,11 @@ public class Subst
 
     public Subst() : this (new List<object?>())
     {
+    }
+
+    public Subst Unwrap()
+    {
+        return this;
     }
 
     public Key Fresh() // p 145
