@@ -17,12 +17,8 @@ public static class Runners
 
     public static Stream Run(Func<Key, Goal> f) // p 169
     {
-        throw new NotImplementedException();
-        /*
         Subst subst = new();
         var g = f(subst.Fresh());
-        var st = g(subst);
-        return subst.Reify(st);
-        */
+        return g(subst);
     }
 } 
