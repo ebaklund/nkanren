@@ -19,9 +19,9 @@ public class Paythings
     [Fact]
     public void Test_1_7() // p 3
     {
-        var st = Run((Key q) => Fail());
-        _output.WriteLine($"result: {st.ToString()}");
+        var q = Run((Key q) => Fail());
+        _output.WriteLine($"result: {q.ToString()}");
 
-        st.Count.Should().Be(0);
+        q.IsEmpty.Should().BeTrue();
     }
 }

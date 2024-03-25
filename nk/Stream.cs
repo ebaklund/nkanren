@@ -40,9 +40,9 @@ public class Stream
         get => _results[i];
     }
 
-    public int Count
+    public bool IsEmpty
     {
-        get => _results.Count;
+        get => _results.Count == 0;
     }
 
     public Stream Append(Stream st2)

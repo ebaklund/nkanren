@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NKanren", "NKanren\NKanren.csproj", "{AADA1265-8271-48E2-A82B-512EC14BF4D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nk", "nk\nk.csproj", "{AADA1265-8271-48E2-A82B-512EC14BF4D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NKanren.Tests", "NKanren.Tests\NKanren.Tests.csproj", "{526A60A3-D916-45FE-94F4-6C5928109E2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nk.Tests", "nk.Tests\nk.Tests.csproj", "{526A60A3-D916-45FE-94F4-6C5928109E2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

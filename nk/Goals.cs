@@ -68,7 +68,7 @@ public static class Goals
         {
             var st = p(s);
             
-            return (st.Count > 0)
+            return (!st.IsEmpty)
                 ? st.AppendMap(t)
                 : e(s);
         };
@@ -80,7 +80,7 @@ public static class Goals
         {
             Stream st = g(s);
 
-            return (st.Count == 0)
+            return (st.IsEmpty)
                 ? st
                 : new Stream(st[0]);
         };
