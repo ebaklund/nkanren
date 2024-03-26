@@ -127,4 +127,14 @@ public static class Goals
 
         return _Once;
     }
+
+    public static Goal Fresh(Func<Key, Goal> f) // P 174
+    {
+        IEnumerator<IStreamItem> _Fresh(Subst s)
+        {
+            return f(s.Fresh())(s);
+        };
+
+        return _Fresh;
+    }
 }

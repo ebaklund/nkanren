@@ -79,4 +79,22 @@ public class Paythings
 
         res.Should().Be("(_0)");
     }
+
+    [Fact]
+    public void Test_1_24()
+    {
+        var res = RunAll((Key q) => Fresh((Key x) => Eqo("pea", x))).AsString();
+        _output.WriteLine($"result: {res}");
+
+        res.Should().Be("(_0)");
+    }
+
+    [Fact]
+    public void Test_1_25()
+    {
+        var res = RunAll((Key q) => Fresh((Key x) => Eqo(q, x))).AsString();
+        _output.WriteLine($"result: {res}");
+
+        res.Should().Be("(_1)"); // q resolves to x
+    }
 }
