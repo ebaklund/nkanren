@@ -27,9 +27,13 @@ public static class Goals
 
     public static Goal Eqo(object? u, object? v) // p 154
     {
-        return (Subst s) => s.TryUnify(out Subst s2, u, v)
-            ? Succ()(s2) 
-            : Fail()(s2);
+        IEnumerator<IStreamItem> _Eqo(Subst s)
+        {
+            var res = s.TryUnify(out Subst s2, u, v);
+            return res ? Succ()(s2) : Fail()(s2);
+        }
+
+        return _Eqo;
     }
     
     public static Goal Disj(params Goal[] gs) // p 177

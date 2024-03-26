@@ -27,10 +27,19 @@ public class Subst : IStreamItem
         };
     }
 
+    private bool AreSame(object? o1, object? o2)
+    {
+        return o1 switch
+        {
+            Key k1 => o2 is Key k2 && k1 == k2,
+            _ => o1 == o2
+        };
+    }
+
     private bool Unify(object? o1, object? o2) // p 151
     {
-        return 
-            (o1 == o2) ? true
+        return
+            AreSame(o1, o2) ? true
             : (o1 is Key k1) ? Set(k1, o2)
             : (o2 is Key k2) ? Set(k2, o1)
             : (o1 is List<object?> l1 && o2 is List<object?> l2) ? Unify(l1.Car(), l2.Car()) && Unify(l1.Cdr(), l2.Cdr())
@@ -83,7 +92,9 @@ public class Subst : IStreamItem
     public  bool TryUnify(out Subst s2, object? o1, object? o2) // p 151
     {
         s2 = this.Clone();
-        return s2.Unify(o1, o2);
+        var res = s2.Unify(o1, o2);
+
+        return res;
     }
 
     public object? ReifyTree(object? o) // 167
