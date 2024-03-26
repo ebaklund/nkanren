@@ -1,5 +1,4 @@
 
-namespace nkanren;
+namespace nk;
 
-public enum Key { }
-
+public enum Key : int { }

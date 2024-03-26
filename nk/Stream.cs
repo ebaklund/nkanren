@@ -1,122 +1,77 @@
-namespace nkanren;
 
-using System.Text;
+namespace nk;
 
-public interface IStreamItem
+
+public static class StreamExt
 {
-    public object? Unwrap()
+    public static IEnumerator<Subst> FlattenInf(this IEnumerator<IStreamItem> st) // p 163
     {
-        return null;
-    }
-}
+        var streams = new Queue<IEnumerator<IStreamItem>>();
+        streams.Enqueue(st);
 
-public class Stream
-{
-    // PRIVATE
-
-    private List<IStreamItem> _results;
-
-    // PUBLIC
-
-    public Stream(List<IStreamItem> results)
-    {
-        _results = results;
-    }
-
-    public Stream() : this (new List<IStreamItem>())
-    {
-    }
-
-    public Stream(params IStreamItem[] results) : this (results.ToList())
-    {
-    } 
-
-    public Stream(Func<Stream> f) : this (new Susp(f))
-    {
-    }    
-
-    public IStreamItem this[int i]
-    {
-        get => _results[i];
-    }
-
-    public bool IsEmpty
-    {
-        get => _results.Count == 0;
-    }
-
-    public Stream Append(Stream st2)
-    {
-        if (_results.LastOrDefault()?.Unwrap() is Susp susp)
+        while(streams.Count > 0)
         {
-            _results.RemoveAt(_results.Count - 1); // f
-            _results.AddRange(st2._results);
-            _results.Add(susp);
-        }
-        else
-        {
-            _results.AddRange(st2._results);
-        }
+            var st1 = streams.Dequeue();
 
-        return this;        
-    }
-
-    public Stream Take(int n) // p161
-    {
-        Stream st = new();
-
-        for (int i = 0; i < n && i < _results.Count; ++i)
-        {
-            if (_results[i] is Susp susp)
+            if(!st1.MoveNext())
             {
-                st._results.AddRange(susp.ToStream()._results.GetRange(0, n - i));
+                continue;
             }
-            else
+
+            streams.Enqueue(st1);
+
+            if (st1.Current is Subst subst1)
             {
-                st._results.Add(_results[i]);
+                yield return subst1;
+                continue;
+            }
+
+            if (st1.Current is Suspension susp2)
+            {
+                streams.Enqueue(susp2.ToStream());
+                continue;
+            }
+
+            throw new ApplicationException("Unknown IStreamTypetype.");
+        }
+    }
+
+    public static IEnumerator<IStreamItem> MapInf(this IEnumerator<Subst> st, Goal g)
+    {
+        while(st.MoveNext())
+        {
+            var st2 = g(st.Current);
+
+            while(st2.MoveNext())
+            {
+                yield return st2.Current;
             }
         }
-
-        return st;
     }
 
-    public Stream AppendMap(Goal g) // p 163
+    public static IEnumerator<IStreamItem> AppendInf(this IEnumerator<IStreamItem> st1, IEnumerator<IStreamItem> st2)
     {
-        foreach (var obj in _results)
+        while(st1.MoveNext())
         {
-            if (obj is Subst sb)
-            {
-                _results.AddRange(g(sb)._results);
-            }            
-            else if (obj is Susp susp)
-            {
-                _results.AddRange(susp.ToStream().AppendMap(g)._results);
-            }
-            else
-            {
-                throw new ApplicationException("Unknown stream item type");
-            }
+            yield return st1.Current;
         }
 
-        return this;
+        while(st2.MoveNext())
+        {
+            yield return st2.Current;
+        }
     }
 
-    public override string ToString()
+    public static IEnumerator<IStreamItem> FlatMapInf(this IEnumerator<IStreamItem> st, Goal g) // p 163
     {
-        StringBuilder sb = new("(");
+        return MapInf(FlattenInf(st), g);
+    }
 
-        foreach (var item in _results)
-        {            
-            sb.Append(
-                item switch
-                {
-                    Stream st => st.ToString(),
-                    null => "null",
-                    _ => item.ToString()
-                }
-            );
+    public static IEnumerator<IStreamItem> Take(this IEnumerator<IStreamItem> st, int n) // p161
+    {
+        for (int i = 0; i < n && st.MoveNext(); ++i)
+        {
+            yield return st.Current;
         }
-
-        return sb.Append(")").ToString();
     }
 }

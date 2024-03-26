@@ -3,7 +3,7 @@ using KellermanSoftware.CompareNetObjects;
 using System;
 using System.Collections.Specialized;
 
-namespace nkanren;
+namespace nk;
 
 public class Subst : IStreamItem
 {
@@ -14,18 +14,6 @@ public class Subst : IStreamItem
     private Subst Clone()
     {
         return new Subst(_slots.ToList());
-    }
-
-    private object? Walk(object? o) // p 148
-    {
-        // Returns value, Key value or fresh Key
-
-        while (o is Key k && _slots[(int)k] is not null)
-        {
-            o = _slots[(int)k];
-        }
-
-        return o;
     }
 
     private bool Occurs(Key k, object? o) // p 149
@@ -39,24 +27,12 @@ public class Subst : IStreamItem
         };
     }
 
-    private bool Bind(Key k, object? o) // p 149
-    {
-        if (Occurs(k, o))
-        {
-            return false;
-        }
-
-        _slots[(int)k] = o;
-
-        return true;
-    }
-
     private bool Unify(object? o1, object? o2) // p 151
     {
         return 
             (o1 == o2) ? true
-            : (o1 is Key k1) ? Bind(k1, o2)
-            : (o2 is Key k2) ? Bind(k2, o1)
+            : (o1 is Key k1) ? Set(k1, o2)
+            : (o2 is Key k2) ? Set(k2, o1)
             : (o1 is List<object?> l1 && o2 is List<object?> l2) ? Unify(l1.Car(), l2.Car()) && Unify(l1.Cdr(), l2.Cdr())
             : (o1 is ValueTuple<object?, object?> t1 && o1 is ValueTuple<object?, object?> t2) 
                 ? Unify(t1.Item1, t2.Item1) && Unify(t1.Item2, t2.Item2)
@@ -74,17 +50,30 @@ public class Subst : IStreamItem
     {
     }
 
-    public Subst Unwrap()
-    {
-        return this;
-    }
-
     public Key Fresh() // p 145
     {
         _slots.Add(null);
 
         return (Key) _slots.Count - 1;
     }
+
+    private bool Set(Key k, object? o) // p 149
+    {
+        if (Occurs(k, o))
+        {
+            return false;
+        }
+
+        _slots[(int)k] = o;
+
+        return true;
+    }
+    
+    private object? Get(Key k) // p 149
+    {
+        return WalkRec(k);
+    }
+
     
     public Goal CallFresh(Func<Key, Goal> f) // p 165
     {
@@ -121,6 +110,18 @@ public class Subst : IStreamItem
             }
 
             return r;            
+        }
+
+        return o;
+    }
+
+    public object? Walk(object? o) // p 148
+    {
+        // Returns value, Key value or fresh Key
+
+        while (o is Key k && _slots[(int)k] is not null)
+        {
+            o = _slots[(int)k];
         }
 
         return o;

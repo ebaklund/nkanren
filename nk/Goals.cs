@@ -1,32 +1,37 @@
 
-namespace nkanren;
+namespace nk;
 
-public delegate Stream Goal(Subst input);
+public delegate IEnumerator<IStreamItem> Goal(Subst input);
 
 public static class Goals
 {
     public static Goal Succ() // p 154
     {
-        return (Subst s) => new Stream(s);
+        IEnumerator<Subst> _Succ(Subst s)
+        {
+            yield return s;
+        }
+
+        return _Succ;
     }
 
     public static Goal Fail() // p 154
     {
-        return (Subst s) => new Stream();
+        IEnumerator<Subst> _Fail(Subst s) 
+        {
+            yield break;
+        }
+
+        return _Fail;
     }
 
-    public static Goal Equal(object? u, object? v) // p 154
+    public static Goal Eqo(object? u, object? v) // p 154
     {
         return (Subst s) => s.TryUnify(out Subst s2, u, v)
             ? Succ()(s2) 
             : Fail()(s2);
     }
-
-    public static Goal Disj2(Goal g1, Goal g2) // p 156
-    {
-        return (Subst s) => g1(s).Append(g2(s));
-    }
-
+    
     public static Goal Disj(params Goal[] gs) // p 177
     {
         return (gs.Length) switch
@@ -37,9 +42,14 @@ public static class Goals
         };
     }
 
-    public static Goal Conj2(Goal g1, Goal g2) // p 156
+    public static Goal Disj2(Goal g1, Goal g2) // p 156
     {
-        return (Subst s) => g1(s).AppendMap(g2);
+        IEnumerator<IStreamItem> _Disj2(Subst s) 
+        {
+            return g1(s).AppendInf(g2(s));
+        }
+
+        return _Disj2;
     }
 
     public static Goal Conj(params Goal[] gs) // p 177
@@ -52,42 +62,65 @@ public static class Goals
         };
     }
 
+    public static Goal Conj2(Goal g1, Goal g2) // p 163
+    {
+        IEnumerator<IStreamItem> _Conj2(Subst s) 
+        {
+            return g2(s).FlatMapInf(g1);
+        }
+
+        return _Conj2;
+    }
+
     public static Goal Nevero() // p 157
     {
-        return (Subst s) => new Stream(() => Nevero()(s));
+        IEnumerator<IStreamItem> _Nevero(Subst s) 
+        {
+            yield return new Suspension(() => Nevero()(s));
+        }
+
+        return _Nevero;
     }
 
     public static Goal Alwayso() // p 159
     {
-        return (Subst s) => new Stream(() => Disj2(Succ(), Alwayso())(s) );
+        IEnumerator<IStreamItem> _Alwayso(Subst s)
+        {
+            yield return new Suspension(() => Disj2(Succ(), Alwayso())(s));
+        }
+
+        return _Alwayso;
     }
 
-    public static Goal Ifte(Goal p, Goal t, Goal e) // 173
+    public static Goal Ifte(Goal g1, Goal g2, Goal g3) // 173
     {
-        return (Subst s) =>
+        IEnumerator<IStreamItem> _Ifte(Subst s)
         {
-            var st = p(s);
+            var st1 = g1(s);
+
+            if(!st1.MoveNext())
+            {
+                return g3(s);
+            }
             
-            return (!st.IsEmpty)
-                ? st.AppendMap(t)
-                : e(s);
+            return st1.FlatMapInf(g2); 
         };
+
+        return _Ifte;
     }
 
     public static Goal Once(Goal g) // P 174
     {
-        return (Subst s) =>
+        IEnumerator<IStreamItem> _Once(Subst s)
         {
-            Stream st = g(s);
+            var st = g(s);
 
-            return (st.IsEmpty)
-                ? st
-                : new Stream(st[0]);
+            if (st.MoveNext())
+            {
+                yield return st.Current;
+            }
         };
-    }
 
-    public static Func<Subst, Func<Stream>> defrel(params Goal[] gs) // p 177
-    {
-        return (Subst s) => () => Conj(gs)(s);
+        return _Once;
     }
 }
