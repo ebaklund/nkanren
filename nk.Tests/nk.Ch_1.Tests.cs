@@ -96,18 +96,69 @@ public class Paythings
         var res = RunAll((Key q) => Fresh((Key x) => Eqo(q, x))).AsString();
         _output.WriteLine($"result: {res}");
 
-        res.Should().Be("(_1)"); // q resolves to x
+        res.Should().Be("(_1)");
     }
 
     [Fact]
     public void Test_1_32()
     {
-        //var res = RunAll((Key q) => Eqo("pea", "pea")).AsString();
-        //var res = RunAll((Key q) => Eqo(("pea"), ("pea"))).AsString();
-        var res = RunAll((Key q) => Eqo(("pea", "pai"), ("pea", "pai"))).AsString();
-        //var res = RunAll((Key q) => Eqo(((("pea")), "pea"), ((("pea")), "pod"))).AsString();
+        var res = RunAll((Key q) => Eqo(l(l(l("pea")), "pod"), l(l(l("pea")), "pod"))).AsString();
         _output.WriteLine($"result: {res}");
 
-        res.Should().Be("(_0)"); // q resolves to x
+        res.Should().Be("(_0)");
+    }
+
+    [Fact]
+    public void Test_1_33()
+    {
+        var res = RunAll((Key q) => Eqo(l(l(l("pea")), "pod"), l(l(l("pea")), q))).AsString();
+        _output.WriteLine($"result: {res}");
+
+        res.Should().Be("(\"pod\")");
+    }
+
+    [Fact]
+    public void Test_1_34()
+    {
+        var res = RunAll((Key q) => Eqo(l(l(l(q)), "pod"), l(l(l("pea")), "pod"))).AsString();
+        _output.WriteLine($"result: {res}");
+
+        res.Should().Be("(\"pea\")");
+    }
+
+    [Fact]
+    public void Test_1_35()
+    {
+        var res = RunAll((Key q) => 
+            Fresh((Key x) => 
+                Eqo(l(l(l(q)), "pod"), l(l(l(x)), "pod")))).AsString();
+
+        _output.WriteLine($"result: {res}");
+
+        res.Should().Be("(_1)");
+    }
+
+    [Fact]
+    public void Test_1_36()
+    {
+        var res = RunAll((Key q) => 
+            Fresh((Key x) => 
+                Eqo(l(l(l(q)), x), l(l(l(x)), "pod")))).AsString();
+
+        _output.WriteLine($"result: {res}");
+
+        res.Should().Be("(\"pod\")");
+    }
+
+    [Fact]
+    public void Test_1_37()
+    {
+        var res = RunAll((Key q) => 
+            Fresh((Key x) => 
+                Eqo(l(x, x), q))).AsString();
+
+        _output.WriteLine($"result: {res}");
+
+        res.Should().Be("((_1, _1))");
     }
 }

@@ -1,4 +1,4 @@
 
 namespace nk;
 
-public enum Key : int { }
+public record Key(int Idx);

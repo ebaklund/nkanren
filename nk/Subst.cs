@@ -2,6 +2,7 @@
 using KellermanSoftware.CompareNetObjects;
 using System;
 using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 
 namespace nk;
 
@@ -16,53 +17,82 @@ public class Subst : IStreamItem
         return new Subst(_slots.ToList());
     }
 
-    private bool Occurs(Key k, object o) // p 149
+    private bool Occurs(Key k1, object o2) // p 149
     {
-        return Walk(o) switch
+        o2 = Walk(o2);
+
+        if (o2 is Key k2)
         {
-            Key ok                     => ok == k,
-            Tuple<object, object> ot => Occurs(k, ot.Item1) || Occurs(k, ot.Item2),
-            List<object> ol           => ol.Car() is object car && Occurs(k, car) || Occurs(k, ol.Cdr()),
-            _                          => false
-        };
+            return k1 == k2;
+        }
+
+        if (o2 is List<object> l2 )
+        {
+            var i = 0;
+            for(; (i < l2.Count) && !Occurs(k1, l2[i]); ++i);
+
+            return i != l2.Count;
+        }
+
+        return false;
     }
 
     private bool Unify(object o1, object o2) // p 151
     {
-        var type1 = o1.GetType();
-        var type2 = o2.GetType();
+        o1 = Walk(o1);
+        o2 = Walk(o2);
 
         if (o1 == o2)
         {
             return true;
         }
-
-        if (o1 is Key k1 && o2 is Key k2)
+/*
+        if (o1 is Key && o2 is Key)
         {
-            // Unwrap keys since object references may differ
-            return k1 == k2;
+            // Walked keys are fresh so no need to compare values
+            return true;
         }
-
-        if (o1 is Key kk1)
+*/
+        if (o1 is Key k1)
         {
-            return Set(kk1, o2);
+            return Set(k1, o2);
         }
         
-        if (o2 is Key kk2)
+        if (o2 is Key k2)
         {
-            return Set(kk2, o1);
+            return Set(k2, o1);
+        }
+                
+        var type1 = o1.GetType();
+        var type2 = o2.GetType();
+
+        if (type1.MetadataToken != type2.MetadataToken)
+        {
+            return false;
         }
 
         if (o1 is List<object> l1 && o2 is List<object> l2)
         {
-            return l2.Car() is object car1 && l2.Car() is object car2
-                ? Unify(car1, car2) && Unify(l1.Cdr(), l2.Cdr())
-                : false;
+            if (l1.Count != l2.Count)
+            {
+                return false; 
+            }
+            
+            var i = 0;
+            for (; (i < l1.Count) && Unify(l1[i], l2[i]); ++i);
+
+            return i == l1.Count;
         }
 
-        if (o1 is ValueTuple<object, object> t1 && o1 is ValueTuple<object, object> t2)
+        if (type1.Name.StartsWith("ValueTuple"))
         {
-            return Unify(t1.Item1, t2.Item1) && Unify(t1.Item2, t2.Item2);
+            var fields1 = type1.GetFields();
+            var fields2 = type2.GetFields();
+
+            var i = 0;
+            for (; (i < fields1.Length) && Unify(fields1[i].GetValue(o1), fields2[i].GetValue(o2)); ++i);
+    
+            return i == fields1.Length;
         }
 
         return false;
@@ -83,7 +113,7 @@ public class Subst : IStreamItem
     {
         _slots.Add(null);
 
-        return (Key) _slots.Count - 1;
+        return new Key(_slots.Count - 1);
     }
 
     private bool Set(Key k, object o) // p 149
@@ -93,7 +123,7 @@ public class Subst : IStreamItem
             return false;
         }
 
-        _slots[(int)k] = o;
+        _slots[k.Idx] = o;
 
         return true;
     }
@@ -129,7 +159,7 @@ public class Subst : IStreamItem
             // Alternatively we could reify by fresh variables' creation index. i.e. (int)Key
 
             // r.Add((r.Count - 1).ToString());
-            return ((int)k).ToString();
+            return (k.Idx).ToString();
         }
         else if (o is List<object?> l )
         {
@@ -150,9 +180,9 @@ public class Subst : IStreamItem
     {
         // Returns value, Key value or fresh Key
 
-        while (o is Key k && _slots[(int)k] is not null)
+        while (o is Key k && _slots[k.Idx] is not null)
         {
-            o = _slots[(int)k];
+            o = _slots[k.Idx];
         }
 
         return o;
