@@ -25,7 +25,7 @@ public static class Goals
         return _Fail;
     }
 
-    public static Goal Eqo(object? u, object? v) // p 154
+    public static Goal Eqo(object u, object v) // p 154
     {
         IEnumerator<IStreamItem> _Eqo(Subst s)
         {

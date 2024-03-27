@@ -7,6 +7,7 @@ namespace nk.Tests;
 
 using static nk.Runners;
 using static nk.Goals;
+using static nk.ListConstructor;
 
 public class Paythings
 {
@@ -90,11 +91,23 @@ public class Paythings
     }
 
     [Fact]
-    public void Test_1_25()
+    public void Test_1_31()
     {
         var res = RunAll((Key q) => Fresh((Key x) => Eqo(q, x))).AsString();
         _output.WriteLine($"result: {res}");
 
         res.Should().Be("(_1)"); // q resolves to x
+    }
+
+    [Fact]
+    public void Test_1_32()
+    {
+        //var res = RunAll((Key q) => Eqo("pea", "pea")).AsString();
+        //var res = RunAll((Key q) => Eqo(("pea"), ("pea"))).AsString();
+        var res = RunAll((Key q) => Eqo(("pea", "pai"), ("pea", "pai"))).AsString();
+        //var res = RunAll((Key q) => Eqo(((("pea")), "pea"), ((("pea")), "pod"))).AsString();
+        _output.WriteLine($"result: {res}");
+
+        res.Should().Be("(_0)"); // q resolves to x
     }
 }

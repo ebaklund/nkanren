@@ -16,36 +16,56 @@ public class Subst : IStreamItem
         return new Subst(_slots.ToList());
     }
 
-    private bool Occurs(Key k, object? o) // p 149
+    private bool Occurs(Key k, object o) // p 149
     {
         return Walk(o) switch
         {
             Key ok                     => ok == k,
-            Tuple<object?, object?> ot => Occurs(k, ot.Item1) || Occurs(k, ot.Item2),
-            List<object?> ol           => Occurs(k, ol.Car()) || Occurs(k, ol.Cdr()),
+            Tuple<object, object> ot => Occurs(k, ot.Item1) || Occurs(k, ot.Item2),
+            List<object> ol           => ol.Car() is object car && Occurs(k, car) || Occurs(k, ol.Cdr()),
             _                          => false
         };
     }
 
-    private bool AreSame(object? o1, object? o2)
+    private bool Unify(object o1, object o2) // p 151
     {
-        return o1 switch
-        {
-            Key k1 => o2 is Key k2 && k1 == k2,
-            _ => o1 == o2
-        };
-    }
+        var type1 = o1.GetType();
+        var type2 = o2.GetType();
 
-    private bool Unify(object? o1, object? o2) // p 151
-    {
-        return
-            AreSame(o1, o2) ? true
-            : (o1 is Key k1) ? Set(k1, o2)
-            : (o2 is Key k2) ? Set(k2, o1)
-            : (o1 is List<object?> l1 && o2 is List<object?> l2) ? Unify(l1.Car(), l2.Car()) && Unify(l1.Cdr(), l2.Cdr())
-            : (o1 is ValueTuple<object?, object?> t1 && o1 is ValueTuple<object?, object?> t2) 
-                ? Unify(t1.Item1, t2.Item1) && Unify(t1.Item2, t2.Item2)
-            : false;
+        if (o1 == o2)
+        {
+            return true;
+        }
+
+        if (o1 is Key k1 && o2 is Key k2)
+        {
+            // Unwrap keys since object references may differ
+            return k1 == k2;
+        }
+
+        if (o1 is Key kk1)
+        {
+            return Set(kk1, o2);
+        }
+        
+        if (o2 is Key kk2)
+        {
+            return Set(kk2, o1);
+        }
+
+        if (o1 is List<object> l1 && o2 is List<object> l2)
+        {
+            return l2.Car() is object car1 && l2.Car() is object car2
+                ? Unify(car1, car2) && Unify(l1.Cdr(), l2.Cdr())
+                : false;
+        }
+
+        if (o1 is ValueTuple<object, object> t1 && o1 is ValueTuple<object, object> t2)
+        {
+            return Unify(t1.Item1, t2.Item1) && Unify(t1.Item2, t2.Item2);
+        }
+
+        return false;
     }
 
     // PUBLIC
@@ -66,7 +86,7 @@ public class Subst : IStreamItem
         return (Key) _slots.Count - 1;
     }
 
-    private bool Set(Key k, object? o) // p 149
+    private bool Set(Key k, object o) // p 149
     {
         if (Occurs(k, o))
         {
@@ -89,7 +109,7 @@ public class Subst : IStreamItem
         return f(Fresh());
     }
 
-    public  bool TryUnify(out Subst s2, object? o1, object? o2) // p 151
+    public  bool TryUnify(out Subst s2, object o1, object o2) // p 151
     {
         s2 = this.Clone();
         var res = s2.Unify(o1, o2);
