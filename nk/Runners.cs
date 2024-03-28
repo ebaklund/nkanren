@@ -14,7 +14,7 @@ public static class Runners
 
         for(var i = 0; (i < n) && stream.MoveNext();)
         {
-            yield return stream.Current.Walk(q);
+            yield return stream.Current.WalkRec(q);
         }
     }
 

@@ -91,8 +91,10 @@ public class Subst : IStreamItem
     public object? WalkRec(object? o) // p 166
     {
         // Returns copy of input tree with all variables resolved leaving only fresh variables unresolved.
+
+        o = Walk(o);
         
-        return Walk(o) switch
+        return o switch
         {
             Key k => k, // Unresolved since it is fresh
             List<object> l => l.Select(x => WalkRec(x)).ToList(), // Resolve recursively

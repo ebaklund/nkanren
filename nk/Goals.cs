@@ -17,10 +17,9 @@ public static class Goals
 
     public static Goal Eqo(object o1, object o2) // p 154
     {
-        return (Subst s1) =>
+        return (Subst s) =>
         {
-            var s2 = s1.Clone();
-            return s2.Unify(o1, o2) ? Succ()(s2) : Fail()(s2);
+            return s.Unify(o1, o2) ? Succ()(s) : Fail()(s);
         };
     }
     
@@ -36,7 +35,7 @@ public static class Goals
 
     public static Goal Disj2(Goal g1, Goal g2) // p 156
     {
-        return (Subst s) => g1(s).AppendInf(g2(s));
+        return (Subst s) => g1(s.Clone()).AppendInf(g2(s.Clone()));
     }
 
     public static Goal Conj(params Goal[] gs) // p 177
