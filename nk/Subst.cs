@@ -50,6 +50,18 @@ public class Subst : IStreamItem
         return new Key(_slots.Count - 1);
     }
 
+    public Key[] Fresh(int n) // p 145
+    {
+        var ks = new Key[n];
+
+        for (int i = 0; i < n; ++i)
+        {
+            ks[i] = Fresh();
+        }
+
+        return ks;
+    }
+
     private bool Set(Key k, object o) // p 149
     {
         if (Occurs(k, o))
@@ -88,7 +100,7 @@ public class Subst : IStreamItem
         return o;
     }
 
-    public object? WalkRec(object? o) // p 166
+    public object WalkRec(object o) // p 166
     {
         // Returns copy of input tree with all variables resolved leaving only fresh variables unresolved.
 

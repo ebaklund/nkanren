@@ -8,6 +8,7 @@ namespace nk.Tests;
 
 using static nk.Runners;
 using static nk.Goals;
+using static nk.Freshes;
 using static nk.ListConstructor;
 
 public class Playthings
@@ -87,17 +88,20 @@ public class Playthings
     [Fact]
     public void Test_1_24()
     {
-        RunAll((q, x) =>
-            Eqo("pea", x)
+        RunAll((q) =>
+            Fresh((x) =>
+                Eqo("pea", x)
+            )
         ).ShouldBe("(_0)");
     }
 
     [Fact]
     public void Test_1_31()
     {
-        RunAll((q, x) =>
-            Eqo(q, x)
-        ).ShouldBe("(_1)");
+        RunAll((q) =>
+            Fresh((x) =>
+                Eqo(q, x)
+        )).ShouldBe("(_1)");
     }
 
     [Fact]
@@ -127,57 +131,68 @@ public class Playthings
     [Fact]
     public void Test_1_35()
     {
-        RunAll((q, x) => 
-            Eqo(l(l(l(q)), "pod"), l(l(l(x)), "pod"))
-        ).ShouldBe("(_1)");
+        RunAll((q) => 
+            Fresh((x) =>
+                Eqo(l(l(l(q)), "pod"), l(l(l(x)), "pod"))
+        )).ShouldBe("(_1)");
     }
 
     [Fact]
     public void Test_1_36()
     {
-        RunAll((q, x) =>
-            Eqo(l(l(l(q)), x), l(l(l(x)), "pod"))
-        ).ShouldBe("(\"pod\")");
+        RunAll((q) =>
+            Fresh((x) =>
+                Eqo(l(l(l(q)), x), l(l(l(x)), "pod"))
+        )).ShouldBe("(\"pod\")");
     }
 
     [Fact]
     public void Test_1_37()
     {
-        RunAll((q, x) =>
-            Eqo(l(x, x), q)
-        ).ShouldBe("((_1, _1))");
+        RunAll((q) =>
+            Fresh((x) =>
+                Eqo(l(x, x), q)
+        )).ShouldBe("((_1, _1))");
     }
 
     [Fact]
     public void Test_1_38()
     {
-        RunAll((q, x, y) =>
-            Eqo(l(q, y), l(l(x, y), x))
-        ).ShouldBe("((_1, _1))");
+        RunAll((q) =>
+            Fresh((x) =>
+                Fresh((y) =>
+                    Eqo(l(q, y), l(l(x, y), x))
+        ))).ShouldBe("((_1, _1))");
     }
 
     [Fact]
     public void Test_1_41()
     {
-        RunAll((q, x, y) => 
-            Eqo(l(x, y), q)
-        ).ShouldBe("((_1, _2))");
+        RunAll((q) => 
+            Fresh((x) =>
+                Fresh((y) =>
+                    Eqo(l(x, y), q)
+        ))).ShouldBe("((_1, _2))");
     }
 
     [Fact]
     public void Test_1_42()
     {
-        RunAll((s, t, u) => 
-            Eqo(l(t, u), s)
-        ).ShouldBe("((_1, _2))");
+        RunAll((s) => 
+            Fresh((t) =>
+                Fresh((u) =>
+                    Eqo(l(t, u), s)
+        ))).ShouldBe("((_1, _2))");
     }
 
     [Fact]
     public void Test_1_43()
     {
-        RunAll((q, x, y) => 
-            Eqo(l(x, y, x), q)
-        ).ShouldBe("((_1, _2, _1))");
+        RunAll((q) => 
+            Fresh((x) =>
+                Fresh((y) =>
+                    Eqo(l(x, y, x), q)
+        ))).ShouldBe("((_1, _2, _1))");
     }
 
     [Fact]
@@ -255,9 +270,11 @@ public class Playthings
     [Fact]
     public void Test_1_59()
     {
-        RunAll((q, x, y) =>
-            Disj2(Eqo(l(x, y), q), Eqo(l(y,x), q))
-        ).ShouldBe("((_1, _2), (_2, _1))");
+        RunAll((q) =>
+            Fresh((x) =>
+                Fresh((y) =>
+                    Disj2(Eqo(l(x, y), q), Eqo(l(y,x), q))
+        ))).ShouldBe("((_1, _2), (_2, _1))");
     }
 
     [Fact]
@@ -283,8 +300,7 @@ public class Playthings
             Disj2(
                 Conj2(Eqo("olive", x), Fail()),
                 Eqo("oil" ,x)
-            )
-        ).ShouldBe("(\"oil\")");
+        )).ShouldBe("(\"oil\")");
     }
 
     [Fact]
@@ -294,8 +310,7 @@ public class Playthings
             Disj2(
                 Conj2(Eqo("olive", x), Succ()),
                 Eqo("oil" ,x)
-            )
-        ).ShouldBe("(\"olive\", \"oil\")");
+        )).ShouldBe("(\"olive\", \"oil\")");
     }
 
     [Fact]
@@ -305,8 +320,7 @@ public class Playthings
             Disj2(
                 Eqo("oil" ,x),
                 Conj2(Eqo("olive", x), Succ())
-            )
-        ).ShouldBe("(\"oil\", \"olive\")");
+        )).ShouldBe("(\"oil\", \"olive\")");
     }
 
     [Fact]
@@ -318,22 +332,48 @@ public class Playthings
                 Disj2(
                     Eqo("olive" ,x),
                     Disj2(Succ(), Eqo("oil" ,x))
-                )
-            )
-        ).ShouldBe("(\"olive\", _0, \"oil\")");
+        ))).ShouldBe("(\"olive\", _0, \"oil\")");
     }
 
     [Fact]
-    public void Test_1_66()
+    public void Test_1_67()
+    {
+        RunAll((r) =>
+           Fresh((x) =>
+                Fresh((y) =>
+                    Conj2(
+                        Eqo("split", x),
+                        Conj2(
+                            Eqo("pea", y),
+                            Eqo(l(x, y), r)
+        ))))).ShouldBe("((\"split\", \"pea\"))");
+    }
+
+    [Fact]
+    public void Test_1_68()
+    {
+        RunAll((r) =>
+           Fresh((x) =>
+                Fresh((y) =>
+                    Conj2(
+                        Conj2(
+                            Eqo("pea", y),
+                            Eqo("split", x)
+                        ),
+                    Eqo(l(x, y), r)
+        )))).ShouldBe("((\"split\", \"pea\"))");
+    }
+
+    [Fact]
+    public void Test_1_72()
     {
         RunAll((r, x, y) =>
             Conj2(
-                Eqo("split", x),
                 Conj2(
                     Eqo("pea", y),
-                    Eqo(l(x, y), r)
-                )
-            )
-        ).ShouldBe("((\"split\", \"pea\"))");
+                    Eqo("split", x)
+                ),
+                Eqo(l(x, y), r)
+        )).ShouldBe("((\"split\", \"pea\"), \"split\", \"pea\")");
     }
 }
