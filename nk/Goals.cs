@@ -25,37 +25,39 @@ public static class Goals
     
     public static Goal Disj(params Goal[] gs) // p 177
     {
-        return (gs.Length) switch
+        IEnumerator<IStreamItem> _Disj(Subst s)
+        {
+            foreach (var g in gs)
+            {
+                var stream = g(s.Clone());
+
+                while(stream.MoveNext())
+                {
+                    yield return stream.Current;
+                }
+            }
+        }
+
+        return gs.Length switch
         {
             0 => Succ(),
-            1 => gs[0],
-            _ => Disj2(gs[0], Disj(gs[1..]))
+            _ => _Disj
         };
-    }
-
-    public static Goal Disj2(Goal g1, Goal g2) // p 156
-    {
-        return (Subst s) => g1(s.Clone()).AppendInf(g2(s.Clone()));
     }
 
     public static Goal Conj(params Goal[] gs) // p 177
     {
-        return (gs.Length) switch
+        Goal _Conj2(Goal g1, Goal g2) // p 163
+        {
+            return (Subst s) => g2(s).FlatMapInf(g1);
+        }
+
+        return gs.Length switch
         {
             0 => Succ(),
             1 => gs[0],
-            _ => Conj2(gs[0], Conj(gs[1..]))
+            _ => _Conj2(gs[0], Conj(gs[1..]))
         };
-    }
-
-    public static Goal Conj2(Goal g1, Goal g2) // p 163
-    {
-        IEnumerator<IStreamItem> _Conj2(Subst s) 
-        {
-            return g2(s).FlatMapInf(g1);
-        }
-
-        return _Conj2;
     }
 
     public static Goal Nevero() // p 157
@@ -72,7 +74,7 @@ public static class Goals
     {
         IEnumerator<IStreamItem> _Alwayso(Subst s)
         {
-            yield return new Suspension(() => Disj2(Succ(), Alwayso())(s));
+            yield return new Suspension(() => Disj(Succ(), Alwayso())(s));
         }
 
         return _Alwayso;

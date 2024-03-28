@@ -32,32 +32,27 @@ public static class ListExt
     
     public static string AsString(this List<object> list)
     {
-        string _BuildString(string bra, List<object> list, string ket)
+        var sb = new StringBuilder().Append("(");
+
+        for (var i = 0; i < list.Count; ++i)
         {
-            var sb = new StringBuilder().Append(bra);
-
-            for (var i = 0; i < list.Count; ++i)
+            var str = list[i] switch
             {
-                var str = list[i] switch
-                {
-                    Key k => $"_{k.Idx}",
-                    string s => $"\"{s}\"",
-                    List<object> l => l.AsString(),
-                    object[] a => _BuildString("", a.ToList(), ""),
-                    _ => list[i].ToString()
-                };
+                Key k => $"_{k.Idx}",
+                string s => $"\"{s}\"",
+                List<object> l => l.AsString(),
+                object[] a => a.ToList().AsString(),
+                _ => list[i].ToString()
+            };
 
-                sb.Append(str);
+            sb.Append(str);
             
-                if ((i+1) < list.Count)
-                {
-                    sb.Append(", ");
-                }
+            if ((i+1) < list.Count)
+            {
+                sb.Append(", ");
             }
-
-            return sb.Append(ket).ToString();
         }
 
-        return _BuildString("(", list, ")");
+        return sb.Append(")").ToString();
     }
 }
