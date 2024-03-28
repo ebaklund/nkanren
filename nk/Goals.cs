@@ -7,33 +7,21 @@ public static class Goals
 {
     public static Goal Succ() // p 154
     {
-        IEnumerator<Subst> _Succ(Subst s)
-        {
-            yield return s;
-        }
-
-        return _Succ;
+        return (Subst s) => Enumerable.Repeat(s, 1).GetEnumerator();;
     }
 
     public static Goal Fail() // p 154
     {
-        IEnumerator<Subst> _Fail(Subst s) 
-        {
-            yield break;
-        }
-
-        return _Fail;
+        return (Subst s) => Enumerable.Repeat(s, 0).GetEnumerator();;
     }
 
-    public static Goal Eqo(object u, object v) // p 154
+    public static Goal Eqo(object o1, object o2) // p 154
     {
-        IEnumerator<IStreamItem> _Eqo(Subst s)
+        return (Subst s1) =>
         {
-            var res = s.TryUnify(out Subst s2, u, v);
-            return res ? Succ()(s2) : Fail()(s2);
-        }
-
-        return _Eqo;
+            var s2 = s1.Clone();
+            return s2.Unify(o1, o2) ? Succ()(s2) : Fail()(s2);
+        };
     }
     
     public static Goal Disj(params Goal[] gs) // p 177
@@ -48,12 +36,7 @@ public static class Goals
 
     public static Goal Disj2(Goal g1, Goal g2) // p 156
     {
-        IEnumerator<IStreamItem> _Disj2(Subst s) 
-        {
-            return g1(s).AppendInf(g2(s));
-        }
-
-        return _Disj2;
+        return (Subst s) => g1(s).AppendInf(g2(s));
     }
 
     public static Goal Conj(params Goal[] gs) // p 177
@@ -126,15 +109,5 @@ public static class Goals
         };
 
         return _Once;
-    }
-
-    public static Goal Fresh(Func<Key, Goal> f) // P 174
-    {
-        IEnumerator<IStreamItem> _Fresh(Subst s)
-        {
-            return f(s.Fresh())(s);
-        };
-
-        return _Fresh;
     }
 }
