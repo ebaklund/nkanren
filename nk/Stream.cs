@@ -49,16 +49,19 @@ public static class StreamExt
         }
     }
 
-    public static IEnumerator<IStreamItem> AppendInf(this IEnumerator<IStreamItem> st1, IEnumerator<IStreamItem> st2)
+    public static IEnumerator<IStreamItem> AppendInf(this IEnumerator<IStreamItem> st1, params IEnumerator<IStreamItem>[] sts)
     {
         while(st1.MoveNext())
         {
             yield return st1.Current;
         }
 
-        while(st2.MoveNext())
+        foreach (var st in sts)
         {
-            yield return st2.Current;
+            while(st.MoveNext())
+            {
+                yield return st.Current;
+            }
         }
     }
 
