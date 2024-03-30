@@ -95,7 +95,8 @@ public class Subst : IStreamItem
 
     public object Walk(object o) // p 148
     {
-        for (;o is Key k && _slots[k.Idx] is not null; o = _slots[k.Idx]);
+        for (;o is Key k && _slots[k.Idx] is not null; o = _slots[k.Idx]!)
+        {}
 
         return o;
     }
@@ -167,7 +168,7 @@ public class Subst : IStreamItem
             var fields2 = type2.GetFields();
 
             var i = 0;
-            for (; (i < fields1.Length) && Unify(fields1[i].GetValue(o1), fields2[i].GetValue(o2)); ++i);
+            for (; (i < fields1.Length) && Unify(fields1[i].GetValue(o1)!, fields2[i].GetValue(o2)!); ++i);
     
             return i == fields1.Length;
         }

@@ -3,6 +3,11 @@ namespace nk;
 
 public static class Freshes
 {
+    public static Goal Fresh(int n, Func<Key[], Goal> f)
+    {
+        return (Subst s) => f(s.Fresh(n))(s);
+    }
+
     public static Goal Fresh(Func<Key, Goal> f)
     {
         return (Subst s) => f(s.Fresh())(s);

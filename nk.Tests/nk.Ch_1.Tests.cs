@@ -1,8 +1,6 @@
 
 using Xunit;
 using Xunit.Abstractions;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestPlatform.Utilities;
 
 namespace nk.Tests;
 
@@ -86,7 +84,7 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_24()
+    public void Test_1_24a()
     {
         RunAll((q) =>
             Fresh((x) =>
@@ -96,11 +94,30 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_31()
+    public void Test_1_24b()
+    {
+        RunAll((q) =>
+            Fresh(1, (x) =>
+                Eqo("pea", x[0])
+            )
+        ).ShouldBe("(_0)");
+    }
+
+    [Fact]
+    public void Test_1_31a()
     {
         RunAll((q) =>
             Fresh((x) =>
                 Eqo(q, x)
+        )).ShouldBe("(_1)");
+    }
+
+    [Fact]
+    public void Test_1_31b()
+    {
+        RunAll((q) =>
+            Fresh(1, (x) =>
+                Eqo(q, x[0])
         )).ShouldBe("(_1)");
     }
 
@@ -129,16 +146,25 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_35()
+    public void Test_1_35a()
     {
         RunAll((q) => 
             Fresh((x) =>
                 Eqo(l(l(l(q)), "pod"), l(l(l(x)), "pod"))
         )).ShouldBe("(_1)");
     }
+    
+    [Fact]
+    public void Test_1_35b()
+    {
+        RunAll((q) => 
+            Fresh(1, (x) =>
+                Eqo(l(l(l(q)), "pod"), l(l(l(x[0])), "pod"))
+        )).ShouldBe("(_1)");
+    }
 
     [Fact]
-    public void Test_1_36()
+    public void Test_1_36a()
     {
         RunAll((q) =>
             Fresh((x) =>
@@ -147,7 +173,16 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_37()
+    public void Test_1_36b()
+    {
+        RunAll((q) =>
+            Fresh(1, (x) =>
+                Eqo(l(l(l(q)), x), l(l(l(x[0])), "pod"))
+        )).ShouldBe("(\"pod\")");
+    }
+
+    [Fact]
+    public void Test_1_37a()
     {
         RunAll((q) =>
             Fresh((x) =>
@@ -156,7 +191,16 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_38()
+    public void Test_1_37b()
+    {
+        RunAll((q) =>
+            Fresh(1, (x) =>
+                Eqo(l(x[0], x[0]), q)
+        )).ShouldBe("((_1, _1))");
+    }
+    
+    [Fact]
+    public void Test_1_38a()
     {
         RunAll((q) =>
             Fresh((x) =>
@@ -166,7 +210,16 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_41()
+    public void Test_1_38b()
+    {
+        RunAll((q) =>
+            Fresh(2, (x) =>
+                Eqo(l(q, x[1]), l(l(x[0], x[1]), x))
+        )).ShouldBe("((_1, _1))");
+    }
+
+    [Fact]
+    public void Test_1_41a()
     {
         RunAll((q) => 
             Fresh((x) =>
@@ -174,9 +227,18 @@ public class Playthings
                     Eqo(l(x, y), q)
         ))).ShouldBe("((_1, _2))");
     }
+    
+    [Fact]
+    public void Test_1_41b()
+    {
+        RunAll((q) => 
+            Fresh(2, (x) =>
+                Eqo(l(x[0], x[1]), q)
+        )).ShouldBe("((_1, _2))");
+    }
 
     [Fact]
-    public void Test_1_42()
+    public void Test_1_42a()
     {
         RunAll((s) => 
             Fresh((t) =>
@@ -186,13 +248,31 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_43()
+    public void Test_1_42b()
+    {
+        RunAll((s) => 
+            Fresh(2, (t) =>
+                Eqo(l(t[0], t[1]), s)
+        )).ShouldBe("((_1, _2))");
+    }
+
+    [Fact]
+    public void Test_1_43a()
     {
         RunAll((q) => 
             Fresh((x) =>
                 Fresh((y) =>
                     Eqo(l(x, y, x), q)
         ))).ShouldBe("((_1, _2, _1))");
+    }
+
+    [Fact]
+    public void Test_1_43b()
+    {
+        RunAll((q) => 
+            Fresh(2, (x) =>
+                Eqo(l(x[0], x[1], x[0]), q)
+        )).ShouldBe("((_1, _2, _1))");
     }
 
     [Fact]
@@ -268,13 +348,22 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_59()
+    public void Test_1_59a()
     {
         RunAll((q) =>
             Fresh((x) =>
                 Fresh((y) =>
-                    Disj(Eqo(l(x, y), q), Eqo(l(y,x), q))
+                    Disj(Eqo(l(x, y), q), Eqo(l(y, x), q))
         ))).ShouldBe("((_1, _2), (_2, _1))");
+    }
+
+    [Fact]
+    public void Test_1_59b()
+    {
+        RunAll((q) =>
+            Fresh(2, (x) =>
+                Disj(Eqo(l(x[0], x[1]), q), Eqo(l(x[1], x[0]), q))
+        )).ShouldBe("((_1, _2), (_2, _1))");
     }
 
     [Fact]
@@ -338,7 +427,7 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_67()
+    public void Test_1_67a()
     {
         RunAll((r) =>
             Fresh((x) =>
@@ -353,7 +442,21 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_68()
+    public void Test_1_67b()
+    {
+        RunAll((r) =>
+            Fresh(2, (x) =>
+                Conj(
+                    Eqo("split", x[0]),
+                    Conj(
+                        Eqo("pea", x[1]),
+                        Eqo(l(x[0], x[1]), r)
+            )))
+        ).ShouldBe("((\"split\", \"pea\"))");
+    }
+
+    [Fact]
+    public void Test_1_68a()
     {
         RunAll((r) =>
            Fresh((x) =>
@@ -364,7 +467,22 @@ public class Playthings
                             Eqo("split", x)
                         ),
                     Eqo(l(x, y), r)
-            )))
+           )))
+        ).ShouldBe("((\"split\", \"pea\"))");
+    }
+
+    [Fact]
+    public void Test_1_68b()
+    {
+        RunAll((r) =>
+           Fresh(2, (x) =>
+                Conj(
+                    Conj(
+                        Eqo("pea", x[1]),
+                        Eqo("split", x[0])
+                    ),
+                Eqo(l(x[0], x[1]), r)
+           ))
         ).ShouldBe("((\"split\", \"pea\"))");
     }
 
@@ -405,7 +523,7 @@ public class Playthings
     }
     
     [Fact]
-    public void Test_1_77()
+    public void Test_1_77a()
     {
         RunAll((r) =>
             Fresh((x, y) =>
@@ -418,9 +536,24 @@ public class Playthings
             ))
         ).ShouldBe("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
     }
+    
+    [Fact]
+    public void Test_1_77b()
+    {
+        RunAll((r) =>
+            Fresh(2, (x) =>
+                Conj(
+                    Disj(
+                        Conj(Eqo("split", x[0]), Eqo("pea", x[1])),
+                        Conj(Eqo("red", x[0]), Eqo("bean", x[1]))
+                    ),
+                    Eqo(l(x[0], x[1], "soup"), r)
+            ))
+        ).ShouldBe("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
+    }
 
     [Fact]
-    public void Test_1_78()
+    public void Test_1_78a()
     {
         RunAll((r) =>
             Fresh((x, y) => Conj( // NOTE: Implicit Fresh conjunction presented in 1_78, is not possible in C#.
@@ -429,6 +562,20 @@ public class Playthings
                     Conj(Eqo("red", x), Eqo("bean", y))
                 ),
                 Eqo(l(x, y, "soup"), r)
+            ))
+        ).ShouldBe("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
+    }
+
+    [Fact]
+    public void Test_1_78b()
+    {
+        RunAll((r) =>
+            Fresh(2, (x) => Conj( // NOTE: Implicit Fresh conjunction presented in 1_78, is not possible in C#.
+                Disj(
+                    Conj(Eqo("split", x[0]), Eqo("pea", x[1])),
+                    Conj(Eqo("red", x[0]), Eqo("bean", x[1]))
+                ),
+                Eqo(l(x[0], x[1], "soup"), r)
             ))
         ).ShouldBe("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
     }
