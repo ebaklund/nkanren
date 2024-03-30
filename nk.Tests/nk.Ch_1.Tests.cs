@@ -177,7 +177,7 @@ public class Playthings
     {
         RunAll((q) =>
             Fresh(1, (x) =>
-                Eqo(l(l(l(q)), x), l(l(l(x[0])), "pod"))
+                Eqo(l(l(l(q)), x[0]), l(l(l(x[0])), "pod"))
         )).ShouldBe("(\"pod\")");
     }
 
@@ -214,7 +214,7 @@ public class Playthings
     {
         RunAll((q) =>
             Fresh(2, (x) =>
-                Eqo(l(q, x[1]), l(l(x[0], x[1]), x))
+                Eqo(l(q, x[1]), l(l(x[0], x[1]), x[0]))
         )).ShouldBe("((_1, _1))");
     }
 
@@ -487,39 +487,41 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_72()
+    public void Test_1_72_nk()
     {
-        RunAll((r, x, y) =>
+        RunAll(2, (r, x) =>
             Conj(
                 Conj(
-                    Eqo("pea", y),
-                    Eqo("split", x)
+                    Eqo("pea", x[1]),
+                    Eqo("split", x[0])
                 ),
-                Eqo(l(x, y), r)
+                Eqo(l(x, x[0], x[1]), r)
             )
         ).ShouldBe("(((\"split\", \"pea\"), \"split\", \"pea\"))");
     }
 
     [Fact]
-    public void Test_1_75()
+    public void Test_1_75_nk()
     {
-        RunAll((x, y) =>
+        RunAll(2, (q, x) =>
             Conj(
-                Eqo("pea", y),
-                Eqo("split", x)
+                Eqo("pea", x[1]),
+                Eqo("split", x[0]),
+                Eqo(x, q)
             )
         ).ShouldBe("((\"split\", \"pea\"))");
     }
 
     [Fact]
-    public void Test_1_76()
+    public void Test_1_76_nk()
     {
-        RunAll((x, y) =>
+        RunAll(2, (q, x) => Conj(
             Disj(
-                Conj(Eqo("split", x), Eqo("pea", y)),
-                Conj(Eqo("red", x), Eqo("bean", y))
-            )
-        ).ShouldBe("((\"split\", \"pea\"), (\"red\", \"bean\"))");
+                Conj(Eqo("split", x[0]), Eqo("pea", x[1])),
+                Conj(Eqo("red", x[0]), Eqo("bean", x[1]))
+            ),
+            Eqo(q, x)
+        )).ShouldBe("((\"split\", \"pea\"), (\"red\", \"bean\"))");
     }
     
     [Fact]
@@ -581,14 +583,15 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_80()
+    public void Test_1_80_mk()
     {
-        RunAll((x, y, z) => Conj( // NOTE: Implicit Run conjunction presented in 1_80, is not possible in C#.
+        RunAll(3, (q, x) => Conj( // NOTE: Implicit Run conjunction presented in 1_80, is not possible in C#.
             Disj(
-                Conj(Eqo("split", x), Eqo("pea", y)),
-                Conj(Eqo("red", x), Eqo("bean", y))
+                Conj(Eqo("split", x[0]), Eqo("pea", x[1])),
+                Conj(Eqo("red", x[0]), Eqo("bean", x[1]))
             ),
-            Eqo("soup", z)
+            Eqo("soup", x[2]),
+            Eqo(q, x)
         )).ShouldBe("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
     }
 }

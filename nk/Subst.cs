@@ -50,7 +50,7 @@ public class Subst : IStreamItem
         return new Key(_slots.Count - 1);
     }
 
-    public Key[] Fresh(int n) // p 145
+    public Key[] Fresh(uint n) // p 145
     {
         var ks = new Key[n];
 
@@ -110,6 +110,7 @@ public class Subst : IStreamItem
         return o switch
         {
             Key k => k, // Unresolved since it is fresh
+            Key[] ks => WalkRec(((object[])ks).ToList()),
             List<object> l => l.Select(x => WalkRec(x)).ToList(), // Resolve recursively
             _ => o // Resolved
         };
