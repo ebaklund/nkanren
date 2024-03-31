@@ -1,7 +1,7 @@
 ﻿
 using static nk.Runners;
 using static nk.Goals;
-using static nk.Utils.LoggerModule;
+using static nk.Logging.LoggerModule;
 using static Soduko.Utils.Goals;
 using static Soduko.Utils.BoardExt;
 

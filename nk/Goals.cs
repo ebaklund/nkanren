@@ -1,5 +1,5 @@
-
-using static nk.Utils.LoggerModule;
+using static nk.Logging.LoggerModule;
+using nk.Utils;
 
 namespace nk;
 
@@ -32,7 +32,7 @@ public static class Goals
         {
             LogDebug($"Eqo({s1})");
             var s2 = s1.Clone();
-            return s2.Unify(o1, o2) ? Succ()(s2 ) : Fail()(s2 );
+            return Consolidator.TryConsolidate(s2, o1, o2) ? Succ()(s2 ) : Fail()(s2 );
         };
     }
     

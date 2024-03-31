@@ -1,6 +1,6 @@
 ﻿
 using nk;
-using static nk.Utils.LoggerModule;
+using static nk.Logging.LoggerModule;
 
 namespace Soduko.Utils;
 

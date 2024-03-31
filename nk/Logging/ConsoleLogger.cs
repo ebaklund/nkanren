@@ -1,20 +1,20 @@
 ﻿
 using Microsoft.Extensions.Logging;
 
-namespace nk.Utils;
+namespace nk.Logging;
 
 
 internal class ConsoleLogger : ILogger
 {
     // PRIVATE
 
-    int _logLevel = (int) LogLevel.Error;
+    int _logLevel = (int)LogLevel.Error;
 
     // PUBLIC
 
     public void SetLogLevel(LogLevel logLevel)
     {
-        _logLevel = (int) logLevel;
+        _logLevel = (int)logLevel;
     }
 
     public IDisposable? BeginScope<TState>(TState state) where TState : notnull
@@ -24,10 +24,10 @@ internal class ConsoleLogger : ILogger
 
     public bool IsEnabled(LogLevel logLevel)
     {
-        if (_logLevel == (int) LogLevel.None)
+        if (_logLevel == (int)LogLevel.None)
             return false;
 
-        if (_logLevel > (int) logLevel)
+        if (_logLevel > (int)logLevel)
             return false;
 
         return true;
@@ -44,7 +44,7 @@ internal class ConsoleLogger : ILogger
 
         Console.ForegroundColor = logLevel switch
         {
-            LogLevel.Debug =>  ConsoleColor.Cyan,
+            LogLevel.Debug => ConsoleColor.Cyan,
             LogLevel.Information => ConsoleColor.Green,
             LogLevel.Warning => ConsoleColor.Yellow,
             LogLevel.Error => ConsoleColor.Red,
@@ -59,29 +59,3 @@ internal class ConsoleLogger : ILogger
         Console.ForegroundColor = oldFgColor;
     }
 }
-
-public static class LoggerModule
-{
-    // PRIVATE
-
-    private static readonly ConsoleLogger _logger = new ();
-
-    // PUBLIC
-
-    public static void SetLogLevel(LogLevel logLevel)
-    {
-        _logger.SetLogLevel(logLevel);
-    }
-
-    public static void LogDebug(string message)
-    {
-        _logger.LogDebug(message);
-    }
-
-    public static void LogInformation(string message)
-    {
-        _logger.LogInformation(message);
-    }
-}
-
-

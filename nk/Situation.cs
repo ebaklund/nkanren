@@ -1,7 +1,6 @@
-﻿
-namespace nk;
+﻿namespace nk;
 
-using static nk.Utils.LoggerModule;
+using static nk.Logging.LoggerModule;
 
 public static class SituationExt // : IStreamItem
 {
@@ -114,66 +113,5 @@ public class Situation // : IStreamItem
         {}
 
         return o;
-    }
-
-    public bool Unify(object o1, object o2) // p 151
-    {
-        o1 = Walk(o1);
-        o2 = Walk(o2);
-
-        if (o1 == o2)
-        {
-            return true;
-        }
-/*
-        if (o1 is Key && o2 is Key)
-        {
-            // Walked keys are fresh so no need to compare values
-            return true;
-        }
-*/
-        if (o1 is Key k1)
-        {
-            return Set(k1, o2);
-        }
-        
-        if (o2 is Key k2)
-        {
-            return Set(k2, o1);
-        }
-                
-        var type1 = o1.GetType();
-        var type2 = o2.GetType();
-
-        if (type1.MetadataToken != type2.MetadataToken)
-        {
-            return false;
-        }
-
-        if (o1 is List<object> l1 && o2 is List<object> l2)
-        {
-            if (l1.Count != l2.Count)
-            {
-                return false; 
-            }
-            
-            var i = 0;
-            for (; (i < l1.Count) && Unify(l1[i], l2[i]); ++i);
-
-            return i == l1.Count;
-        }
-
-        if (type1.Name.StartsWith("ValueTuple"))
-        {
-            var fields1 = type1.GetFields();
-            var fields2 = type2.GetFields();
-
-            var i = 0;
-            for (; (i < fields1.Length) && Unify(fields1[i].GetValue(o1)!, fields2[i].GetValue(o2)!); ++i);
-    
-            return i == fields1.Length;
-        }
-
-        return false;
     }
 }
