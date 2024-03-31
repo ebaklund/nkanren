@@ -1,4 +1,6 @@
 
+using nk.Utils;
+
 namespace nk;
 
 public static class Runners
@@ -13,7 +15,7 @@ public static class Runners
         for(var i = 0; (i < nt) && st.MoveNext();)
         {
             var o1 = st.Current.Get(q);
-            var o2 = st.Current.WalkRec(q);
+            var o2 = Observer.Observe(st.Current, q);
             yield return o2;
         }
     }

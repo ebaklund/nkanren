@@ -3,6 +3,10 @@ namespace nk;
 
 using static nk.Utils.LoggerModule;
 
+public static class SituationExt // : IStreamItem
+{
+}
+
 public class Situation // : IStreamItem
 {
     // PRIVATE
@@ -118,39 +122,6 @@ public class Situation // : IStreamItem
         {}
 
         return o;
-    }
-
-    public object WalkRec(object o) // p 166
-    {
-        // Returns copy of input tree with all variables resolved leaving only fresh variables unresolved.
-
-        o = Walk(o);
-        
-        return o switch
-        {
-            Key k          => k, // Unresolved since it is fresh
-            Key[] ks       => WalkRec(((object[])ks).ToList()),
-            object[][] m   => WalkMatrixRec(m),
-            List<object> l => l.Select(x => WalkRec(x)).ToList(), // Resolve recursively
-            _              => o // Resolved
-        };
-    }
-
-    public object[][] WalkMatrixRec(object[][] m1)
-    {
-        var m2 = new object[m1.Length][];
-
-        for (int j = 0; j < m1.Length; j++)
-        {
-            m2[j] = new object[m1[j].Length];
-    
-            for (int i = 0; i < m1.Length; i++)
-            {
-                m2[j][i] = WalkRec(m1[j][i]);
-            }
-        }
-
-        return m2;
     }
 
     public bool Unify(object o1, object o2) // p 151
