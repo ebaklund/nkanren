@@ -12,6 +12,18 @@ internal static class Observer
 {
     // PRIVATE
 
+    private static object[] Observe(Situation s, Key[] ks)
+    {
+        var a = new object[ks.Length];
+
+        for (int i = 0; i< ks.Length; ++i)
+        {
+            a[i] = Observe(s, ks[i]);
+        }
+
+        return a;
+    }
+
     private static object[][] Observe(Situation s, object[][] m1)
     {
         var m2 = new object[m1.Length][];
@@ -39,6 +51,7 @@ internal static class Observer
             string str     => str,
             object v when v.GetType().IsValueType => v,
             object[][] m   => Observe(s, m),
+            Key[] ks       => Observe(s, ks),
             List<object> l => l.Select(o => Observe(s, o)).ToList(),
             object x       => throw new ApplicationException("Unknown observable.")
         };

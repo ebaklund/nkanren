@@ -108,14 +108,6 @@ public class Situation // : IStreamItem
         return f(Fresh());
     }
 
-    public  bool TryUnify(out Situation s2, object o1, object o2) // p 151
-    {
-        s2 = this.Clone();
-        var res = s2.Unify(o1, o2);
-
-        return res;
-    }
-
     public object Walk(object o) // p 148
     {
         for (;o is Key k && _slots[k.Idx] is not null; o = _slots[k.Idx]!)
