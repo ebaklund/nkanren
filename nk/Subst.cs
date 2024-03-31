@@ -1,11 +1,15 @@
 ﻿
 namespace nk;
 
-public class Subst : IStreamItem
+using static nk.Utils.LoggerModule;
+
+public class Subst // : IStreamItem
 {
     // PRIVATE
 
-    List<object?> _slots;
+    private static int _idCount = 0;
+    private int _id = 0;
+    private List<object?> _slots;
 
     private bool Occurs(Key k1, object o2) // p 149
     {
@@ -31,16 +35,32 @@ public class Subst : IStreamItem
     
     public Subst(List<object?> slots)
     {
+        _id = _idCount++;
         _slots = slots;
+
+        LogDebug($"Subst(s{_id})");
     }
 
     public Subst() : this (new List<object?>())
     {
     }
 
+    public override string ToString()
+    {
+        return $"s{_id}";
+    }
+
     public Subst Clone()
     {
         return new Subst(_slots.ToList());
+    }
+
+    public Subst CloneWith(Key k, object o)
+    {
+        var s = new Subst(_slots.ToList());
+        s._slots[k.Idx] = o;
+
+        return s;
     }
 
     public Key Fresh() // p 145
@@ -62,7 +82,7 @@ public class Subst : IStreamItem
         return ks;
     }
 
-    private bool Set(Key k, object o) // p 149
+    public bool Set(Key k, object o) // p 149
     {
         if (Occurs(k, o))
         {
@@ -74,11 +94,10 @@ public class Subst : IStreamItem
         return true;
     }
     
-    private object? Get(Key k) // p 149
+    public object? Get(Key k)
     {
-        return WalkRec(k);
+        return _slots[k.Idx];
     }
-
     
     public Goal CallFresh(Func<Key, Goal> f) // p 165
     {
@@ -109,11 +128,29 @@ public class Subst : IStreamItem
         
         return o switch
         {
-            Key k => k, // Unresolved since it is fresh
-            Key[] ks => WalkRec(((object[])ks).ToList()),
+            Key k          => k, // Unresolved since it is fresh
+            Key[] ks       => WalkRec(((object[])ks).ToList()),
+            object[][] m   => WalkMatrixRec(m),
             List<object> l => l.Select(x => WalkRec(x)).ToList(), // Resolve recursively
-            _ => o // Resolved
+            _              => o // Resolved
         };
+    }
+
+    public object[][] WalkMatrixRec(object[][] m1)
+    {
+        var m2 = new object[m1.Length][];
+
+        for (int j = 0; j < m1.Length; j++)
+        {
+            m2[j] = new object[m1[j].Length];
+    
+            for (int i = 0; i < m1.Length; i++)
+            {
+                m2[j][i] = WalkRec(m1[j][i]);
+            }
+        }
+
+        return m2;
     }
 
     public bool Unify(object o1, object o2) // p 151

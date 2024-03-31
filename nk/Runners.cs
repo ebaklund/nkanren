@@ -7,11 +7,14 @@ public static class Runners
 
     private static IEnumerator<object> RunGoal(Subst s, uint nt, Key q, Goal g)
     {
-        var stream = g(s).FlattenInf();
+        //var st = g(s).FlattenInf();
+        var st = g(s);
 
-        for(var i = 0; (i < nt) && stream.MoveNext();)
+        for(var i = 0; (i < nt) && st.MoveNext();)
         {
-            yield return stream.Current.WalkRec(q);
+            var o1 = st.Current.Get(q);
+            var o2 = st.Current.WalkRec(q);
+            yield return o2;
         }
     }
 

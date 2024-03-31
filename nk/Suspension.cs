@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace nk;
 
+#if false
 public class Suspension : IStreamItem
 {
     // PRIVATE
@@ -21,3 +22,4 @@ public class Suspension : IStreamItem
         return _func();
     }
 }
+#endif

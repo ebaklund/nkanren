@@ -5,6 +5,7 @@ namespace nk.Examples;
 
 internal class ExampleGoals
 {
+    #if false
     public static Goal Nevero() // p 157
     {
         IEnumerator<IStreamItem> _Nevero(Subst s) 
@@ -24,10 +25,11 @@ internal class ExampleGoals
 
         return _Alwayso;
     }
+    #endif
 
     public static Goal Ifte(Goal g1, Goal g2, Goal g3) // 173
     {
-        IEnumerator<IStreamItem> _Ifte(Subst s)
+        IEnumerator<Subst> _Ifte(Subst s)
         {
             var st1 = g1(s);
 
@@ -44,7 +46,7 @@ internal class ExampleGoals
 
     public static Goal Once(Goal g) // P 174
     {
-        IEnumerator<IStreamItem> _Once(Subst s)
+        IEnumerator<Subst> _Once(Subst s)
         {
             var st = g(s);
 
