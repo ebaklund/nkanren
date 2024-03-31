@@ -4,7 +4,7 @@ namespace nk;
 
 public static class StreamExt
 {
-    public static IEnumerator<Subst> FlattenInf(this IEnumerator<Subst> st) // p 163
+    public static IEnumerator<Situation> FlattenInf(this IEnumerator<Situation> st) // p 163
     {
         return st;
         #if false
@@ -41,7 +41,7 @@ public static class StreamExt
         #endif
     }
 
-    public static IEnumerator<Subst> MapInf(this IEnumerator<Subst> st1, Goal g)
+    public static IEnumerator<Situation> MapInf(this IEnumerator<Situation> st1, Goal g)
     {
         while(st1.MoveNext())
         {
@@ -54,7 +54,7 @@ public static class StreamExt
         }
     }
 
-    public static IEnumerator<Subst> AppendInf(this IEnumerator<Subst> st1, params IEnumerator<Subst>[] sts)
+    public static IEnumerator<Situation> AppendInf(this IEnumerator<Situation> st1, params IEnumerator<Situation>[] sts)
     {
         while(st1.MoveNext())
         {
@@ -70,12 +70,12 @@ public static class StreamExt
         }
     }
 
-    public static IEnumerator<Subst> FlatMapInf(this IEnumerator<Subst> st, Goal g) // p 163
+    public static IEnumerator<Situation> FlatMapInf(this IEnumerator<Situation> st, Goal g) // p 163
     {
         return MapInf(FlattenInf(st), g);
     }
 
-    public static IEnumerator<Subst> Take(this IEnumerator<Subst> st, int n) // p161
+    public static IEnumerator<Situation> Take(this IEnumerator<Situation> st, int n) // p161
     {
         for (int i = 0; i < n && st.MoveNext(); ++i)
         {

@@ -5,7 +5,7 @@ public static class Runners
 {
     // PRIVATE
 
-    private static IEnumerator<object> RunGoal(Subst s, uint nt, Key q, Goal g)
+    private static IEnumerator<object> RunGoal(Situation s, uint nt, Key q, Goal g)
     {
         //var st = g(s).FlattenInf();
         var st = g(s);
@@ -22,7 +22,7 @@ public static class Runners
 
     public static IEnumerator<object> Run(uint nt, Func<Key, Goal> f) // p 169
     {
-        var s = new Subst();
+        var s = new Situation();
         var q = s.Fresh();
 
         return RunGoal(s, nt, q, f(q));
@@ -30,7 +30,7 @@ public static class Runners
 
     public static IEnumerator<object> Run(uint nt, uint nk, Func<Key, Key[], Goal> f) // p 169
     {
-        var s = new Subst();
+        var s = new Situation();
         var q = s.Fresh();
 
         return RunGoal(s, nt, q, f(q, s.Fresh(nk)));

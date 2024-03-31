@@ -29,7 +29,7 @@ internal class ExampleGoals
 
     public static Goal Ifte(Goal g1, Goal g2, Goal g3) // 173
     {
-        IEnumerator<Subst> _Ifte(Subst s)
+        IEnumerator<Situation> _Ifte(Situation s)
         {
             var st1 = g1(s);
 
@@ -46,7 +46,7 @@ internal class ExampleGoals
 
     public static Goal Once(Goal g) // P 174
     {
-        IEnumerator<Subst> _Once(Subst s)
+        IEnumerator<Situation> _Once(Situation s)
         {
             var st = g(s);
 

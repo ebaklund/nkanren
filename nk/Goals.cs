@@ -4,13 +4,13 @@ using static nk.Utils.LoggerModule;
 namespace nk;
 
 
-public delegate IEnumerator<Subst> Goal(Subst input);
+public delegate IEnumerator<Situation> Goal(Situation input);
 
 public static class Goals
 {
     public static Goal Succ() // p 154
     {
-        return (Subst s) =>
+        return (Situation s) =>
         {
             LogDebug($"Succ({s})");
             return Enumerable.Repeat(s, 1).GetEnumerator();
@@ -19,7 +19,7 @@ public static class Goals
 
     public static Goal Fail() // p 154
     {
-        return (Subst s) =>
+        return (Situation s) =>
         {
             LogDebug($"Fail({s})");
             return Enumerable.Repeat(s, 0).GetEnumerator();
@@ -28,7 +28,7 @@ public static class Goals
 
     public static Goal Eqo(object o1, object o2) // p 154
     {
-        return (Subst s1) =>
+        return (Situation s1) =>
         {
             LogDebug($"Eqo({s1})");
             var s2 = s1.Clone();
@@ -42,7 +42,7 @@ public static class Goals
         {
             0 => Succ(),
             1 => gs[0],
-            _ => (Subst s) =>
+            _ => (Situation s) =>
             {
                 LogDebug($"Disj({s})");
                 return gs[0](s.Clone()).AppendInf(gs[1..].Select(g => g(s.Clone())).ToArray());
@@ -52,7 +52,7 @@ public static class Goals
 
     public static Goal Conj(params Goal[] gs) // p 177
     {
-        return (Subst s) =>
+        return (Situation s) =>
         {
             LogDebug($"Conj({s}, *{gs.Length})");
 

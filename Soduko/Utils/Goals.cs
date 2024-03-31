@@ -8,7 +8,7 @@ internal static class Goals
 {
     // PRIVATE
 
-    private static int[] CountNumbers(Subst s, params object[][] numberGroups)
+    private static int[] CountNumbers(Situation s, params object[][] numberGroups)
     {
         var dim = numberGroups[0].Length;
         var counts = new int[dim];
@@ -35,7 +35,7 @@ internal static class Goals
 
     public static Goal Onceo(Key k, params object[][] numberGroups)
     {
-        IEnumerator<Subst> _Onceo(Subst s)
+        IEnumerator<Situation> _Onceo(Situation s)
         {
             LogDebug($"Onceo({s}, {k})");
 
@@ -46,7 +46,7 @@ internal static class Goals
 
             var dim = numberGroups[0].Length;
             var counts = CountNumbers(s, numberGroups);
-            Subst?[] ss = new Subst[dim];
+            Situation?[] ss = new Situation[dim];
 
             for (var num = 0; num < dim; ++num)
             {
@@ -55,7 +55,7 @@ internal static class Goals
 
             for (var num = 0; num < dim; ++num)
             {
-                if (ss[num] is Subst rs)
+                if (ss[num] is Situation rs)
                 {
                     yield return rs;
                 }

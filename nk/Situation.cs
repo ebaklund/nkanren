@@ -3,7 +3,7 @@ namespace nk;
 
 using static nk.Utils.LoggerModule;
 
-public class Subst // : IStreamItem
+public class Situation // : IStreamItem
 {
     // PRIVATE
 
@@ -33,7 +33,7 @@ public class Subst // : IStreamItem
 
     // PUBLIC
     
-    public Subst(List<object?> slots)
+    public Situation(List<object?> slots)
     {
         _id = _idCount++;
         _slots = slots;
@@ -41,7 +41,7 @@ public class Subst // : IStreamItem
         LogDebug($"Subst(s{_id})");
     }
 
-    public Subst() : this (new List<object?>())
+    public Situation() : this (new List<object?>())
     {
     }
 
@@ -50,14 +50,14 @@ public class Subst // : IStreamItem
         return $"s{_id}";
     }
 
-    public Subst Clone()
+    public Situation Clone()
     {
-        return new Subst(_slots.ToList());
+        return new Situation(_slots.ToList());
     }
 
-    public Subst CloneWith(Key k, object o)
+    public Situation CloneWith(Key k, object o)
     {
-        var s = new Subst(_slots.ToList());
+        var s = new Situation(_slots.ToList());
         s._slots[k.Idx] = o;
 
         return s;
@@ -104,7 +104,7 @@ public class Subst // : IStreamItem
         return f(Fresh());
     }
 
-    public  bool TryUnify(out Subst s2, object o1, object o2) // p 151
+    public  bool TryUnify(out Situation s2, object o1, object o2) // p 151
     {
         s2 = this.Clone();
         var res = s2.Unify(o1, o2);
