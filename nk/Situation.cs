@@ -6,7 +6,7 @@ public static class SituationExt // : IStreamItem
 {
 }
 
-public class Situation // : IStreamItem
+public record Situation // : IStreamItem
 {
     // PRIVATE
 
@@ -53,7 +53,7 @@ public class Situation // : IStreamItem
         return $"s{_id}";
     }
 
-    public Situation Clone()
+    public Situation Replica()
     {
         return new Situation(_slots.ToList());
     }

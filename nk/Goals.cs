@@ -31,7 +31,7 @@ public static class Goals
         return (Situation s1) =>
         {
             LogDebug($"Eqo({s1})");
-            var s2 = s1.Clone();
+            var s2 = s1.Replica();
             return Consolidator.TryConsolidate(s2, o1, o2) ? Succ()(s2 ) : Fail()(s2 );
         };
     }
@@ -45,7 +45,7 @@ public static class Goals
             _ => (Situation s) =>
             {
                 LogDebug($"Disj({s})");
-                return gs[0](s.Clone()).AppendInf(gs[1..].Select(g => g(s.Clone())).ToArray());
+                return gs[0](s).AppendInf(gs[1..].Select(g => g(s)).ToArray());
             }
         };
     }
