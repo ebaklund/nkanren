@@ -1,10 +1,11 @@
 ﻿
 using nk;
 using static nk.Logging.LoggerModule;
+using static Soduko.Utils.BoardExt;
 
 namespace Soduko.Utils;
 
-internal static class OnceoWorkspace
+internal static class OnceoModule
 {
     // PRIVATE
 
@@ -21,7 +22,7 @@ internal static class OnceoWorkspace
 
             for (var i = 0; i < dim; ++i)
             {
-                var w = s.Walk(group[j]);
+                var w = s.Walk(group[i]);
 
                 if (w is int num)
                 {
@@ -48,7 +49,8 @@ internal static class OnceoWorkspace
             {
                 if (counts[i] == 0)
                 {
-                    yield return s.CloneWith(k, i);
+                    var res = s.CloneWith(k, i);
+                    yield return res;
                 }
             }
         };

@@ -2,7 +2,7 @@
 using static nk.Runners;
 using static nk.Goals;
 using static nk.Logging.LoggerModule;
-using static Soduko.Utils.OnceoWorkspace;
+using static Soduko.Utils.OnceoModule;
 using static Soduko.Utils.BoardExt;
 
 using Microsoft.Extensions.Logging;
@@ -32,8 +32,11 @@ RunAll(4, (q, x) => {
     return Conj
     (
         Eqo(q, board),
+        // ISSUE: Fails cell already set, even to correct value
         Onceo(x[0], board.Row(0), board.Col(0)),
-        Onceo(x[1], board.Row(0), board.Col(1))
+        Onceo(x[0], board.Row(0), board.Col(1))
+        //Onceo(x[1], board.Row(1), board.Col(0)),
+        //Onceo(x[1], board.Row(1), board.Col(1))
     );
 }).Render();
 

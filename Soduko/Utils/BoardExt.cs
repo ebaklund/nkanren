@@ -20,7 +20,7 @@ public static class BoardExt
         return o switch
         {
             int i => $"{i}",
-            Key => " ",
+            Key k => $"{(char)('a' + k.Idx)}",
             _ => " ",
         };
     }
@@ -52,6 +52,27 @@ public static class BoardExt
         sb.Append(strRow[dim - 1] + "┃\n");
     }
 
+    public static void Render(this object[][] board)
+    {
+        var dim = board.Dim();
+
+        var sb = new StringBuilder();
+        sb.Append("┏" + string.Concat(Enumerable.Repeat("━┯", dim - 1)) + "━┓\n");
+
+        for (var i = 0; i < dim; i++)
+        {
+            sb.AppendRow(board.Row(i));
+
+            if (i < dim - 1)
+            {
+                sb.Append("┠" + string.Concat(Enumerable.Repeat("─┼", dim - 1)) + "─┨\n");
+            }
+        }
+
+        sb.Append("┗" + string.Concat(Enumerable.Repeat("━┷", dim - 1)) + "━┛\n\n");
+        Console.Write(sb.ToString());
+    }
+
     public static void Render(this IEnumerator<object> e)
     {
         while (e.MoveNext())
@@ -61,23 +82,7 @@ public static class BoardExt
                 throw new ApplicationException($">>>    This is not a board! Cannot render a {e.Current.GetType().Name}.    <<<");
             }
 
-            var dim = board.Dim();
-
-            var sb = new StringBuilder();
-            sb.Append("┏" + string.Concat(Enumerable.Repeat("━┯", dim - 1)) + "━┓\n");
-
-            for (var i = 0; i < dim; i++)
-            {
-                sb.AppendRow(board.Row(i));
-
-                if (i < dim - 1)
-                {
-                    sb.Append("┠" + string.Concat(Enumerable.Repeat("─┼", dim - 1)) + "─┨\n");
-                }
-            }
-
-            sb.Append("┗" + string.Concat(Enumerable.Repeat("━┷", dim - 1)) + "━┛\n\n");
-            Console.Write(sb.ToString());
+            board.Render();
         }
     }
 
