@@ -2,7 +2,7 @@
 using static nk.Runners;
 using static nk.Goals;
 using static nk.Logging.LoggerModule;
-using static Soduko.Utils.Goals;
+using static Soduko.Utils.Onceo;
 using static Soduko.Utils.BoardExt;
 
 using Microsoft.Extensions.Logging;

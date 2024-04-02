@@ -4,7 +4,7 @@ using static nk.Logging.LoggerModule;
 
 namespace Soduko.Utils;
 
-internal static class Goals
+internal static class OnceoWorkspace
 {
     // PRIVATE
 
