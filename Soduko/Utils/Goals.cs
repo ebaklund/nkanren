@@ -8,6 +8,8 @@ internal static class Goals
 {
     // PRIVATE
 
+    private static int _callCount = 0;
+
     private static int[] CountNumbers(Situation s, params object[][] numberGroups)
     {
         var dim = numberGroups[0].Length;
@@ -37,27 +39,16 @@ internal static class Goals
     {
         IEnumerator<Situation> _Onceo(Situation s)
         {
-            LogDebug($"Onceo({s}, {k})");
-
-            if (s.Walk(k) is int)
-            {
-                yield return s;
-            }
+            LogDebug($"Onceo({s}, {k}) #{++_callCount}");
 
             var dim = numberGroups[0].Length;
             var counts = CountNumbers(s, numberGroups);
-            Situation?[] ss = new Situation[dim];
 
-            for (var num = 0; num < dim; ++num)
+            for (var i = 0; i < dim; ++i)
             {
-                ss[num] = (counts[num] == 0) ? s.CloneWith(k, num) : null;
-            }
-
-            for (var num = 0; num < dim; ++num)
-            {
-                if (ss[num] is Situation rs)
+                if (counts[i] == 0)
                 {
-                    yield return rs;
+                    yield return s.CloneWith(k, i);
                 }
             }
         };

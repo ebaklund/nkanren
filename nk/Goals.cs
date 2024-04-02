@@ -53,7 +53,7 @@ public static class Goals
     {
         return (Situation s) =>
         {
-            LogDebug($"Conj({s}, *{gs.Length})");
+            LogDebug($"Conj({s}, g*{gs.Length})");
 
             return gs.Length switch
             {
