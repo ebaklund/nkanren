@@ -10,6 +10,12 @@ namespace Soduko.Utils;
 
 public static class BoardExt
 {
+    // PRIVATE
+
+    private static int _renderCount = 0;
+
+    // PUBLIC
+
     public static object[] Row(params object[] row)
     {
         return row;
@@ -69,7 +75,7 @@ public static class BoardExt
             }
         }
 
-        sb.Append("┗" + string.Concat(Enumerable.Repeat("━┷", dim - 1)) + "━┛\n\n");
+        sb.Append("┗" + string.Concat(Enumerable.Repeat("━┷", dim - 1)) + $"━┛ {++_renderCount}\n\n");
         Console.Write(sb.ToString());
     }
 
