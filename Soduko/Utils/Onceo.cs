@@ -42,6 +42,12 @@ internal static class OnceoModule
         {
             LogDebug($"Onceo({s}, {k}) #{++_callCount}");
 
+            if(s.IsDefined(k))
+            {
+                yield return s;
+                yield break;
+            }
+
             var dim = numberGroups[0].Length;
             var counts = CountNumbers(s, numberGroups);
 

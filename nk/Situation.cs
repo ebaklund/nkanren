@@ -98,6 +98,11 @@ public class Situation
     {
         return _slots[k.Idx];
     }
+
+    public bool IsDefined(Key k)
+    {
+        return _slots[k.Idx] is not null;
+    }
     
     public Goal CallFresh(Func<Key, Goal> f) // p 165
     {
