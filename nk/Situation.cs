@@ -2,11 +2,8 @@
 
 using static nk.Logging.LoggerModule;
 
-public static class SituationExt // : IStreamItem
-{
-}
 
-public record Situation // : IStreamItem
+public class Situation
 {
     // PRIVATE
 
@@ -53,7 +50,7 @@ public record Situation // : IStreamItem
         return $"s{_id}";
     }
 
-    public Situation Replica()
+    public Situation Clone()
     {
         return new Situation(_slots.ToList());
     }
