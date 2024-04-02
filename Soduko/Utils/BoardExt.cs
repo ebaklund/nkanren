@@ -88,7 +88,9 @@ public static class BoardExt
 
     public static object[] Row(this object[][] board, int r)
     {
-        return board[r];
+        var row = board[r];
+
+        return row;
     }
 
     public static object[] Col(this object[][] board, int c)
@@ -97,7 +99,7 @@ public static class BoardExt
 
         for (var r = 0; r < board.Dim(); ++r)
         {
-            col[c] = board.Row(r)[c];
+            col[r] = board.Row(r)[c];
         }
 
         return col;
