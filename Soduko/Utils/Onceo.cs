@@ -1,6 +1,7 @@
 ﻿
 using nk;
 using static nk.Logging.LoggerModule;
+using static nk.Goals.EqoModule;
 using static Soduko.Utils.BoardExt;
 
 namespace Soduko.Utils;
@@ -53,11 +54,18 @@ internal static class OnceoModule
 
             for (var i = 0; i < dim; ++i)
             {
-                if (counts[i] == 0)
+                if (counts[i] > 0)
                 {
-                    var res = s.CloneWith(k, i);
-                    yield return res;
+                    continue;
                 }
+
+                Situation res;
+                if (!s.TryCloneWith(k, i, out res))
+                {
+                    continue;
+                }
+
+                yield return res;
             }
         };
 

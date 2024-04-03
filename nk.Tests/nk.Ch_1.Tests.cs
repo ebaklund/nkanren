@@ -5,9 +5,10 @@ using Xunit.Abstractions;
 namespace nk.Tests;
 
 using static nk.Runners;
-using static nk.Goals;
+using static nk.GoalsModule;
 using static nk.Freshes;
 using static nk.ListConstructor;
+using static nk.Goals.EqoModule;
 
 public class Playthings
 {

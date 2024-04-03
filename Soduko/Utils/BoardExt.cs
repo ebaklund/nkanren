@@ -116,6 +116,24 @@ public static class BoardExt
         return col;
     }
 
+    public static object[] Box4(this object[][] board, int b)
+    {
+        var box = new object[4];
+        int r0 = (b / 2) * 2;
+        int c0 = (b % 2) * 2;
+        int i = 0;
+
+        for (int r = r0; r < (r0 + 2); ++r)
+        {
+            for (int c = c0; c < (c0 + 2); ++c)
+            {
+                box[i++] = board[r][c];
+            }
+        }
+
+        return box;
+    }
+
     public static object[] Box9(this object[][] board, int b)
     {
         var box = new object[9];

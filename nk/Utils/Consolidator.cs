@@ -21,12 +21,12 @@ internal static class Consolidator
 */
         if (o1 is Key k1)
         {
-            return s.Set(k1, o2);
+            return s.TrySet(k1, o2);
         }
         
         if (o2 is Key k2)
         {
-            return s.Set(k2, o1);
+            return s.TrySet(k2, o1);
         }
                 
         var type1 = o1.GetType();

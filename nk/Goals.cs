@@ -1,3 +1,4 @@
+
 using static nk.Logging.LoggerModule;
 using nk.Utils;
 
@@ -6,7 +7,7 @@ namespace nk;
 
 public delegate IEnumerator<Situation> Goal(Situation input);
 
-public static class Goals
+public static class GoalsModule
 {
     public static Goal Succ() // p 154
     {
@@ -23,15 +24,6 @@ public static class Goals
         {
             LogDebug($"Fail({s})");
             return Enumerable.Repeat(s, 0).GetEnumerator();
-        };
-    }
-
-    public static Goal Eqo(object o1, object o2) // p 154
-    {
-        return (Situation s) =>
-        {
-            LogDebug($"Eqo({s})");
-            return Consolidator.TryConsolidate(s, o1, o2) ? Succ()(s) : Fail()(s);
         };
     }
     

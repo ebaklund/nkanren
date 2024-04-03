@@ -1,5 +1,5 @@
 ﻿
-using static nk.Goals;
+using static nk.GoalsModule;
 
 namespace nk.Examples;
 

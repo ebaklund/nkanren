@@ -1,22 +1,25 @@
 ﻿
 using static nk.Runners;
-using static nk.Goals;
+using static nk.GoalsModule;
+using static nk.Goals.EqoModule;
 using static nk.Logging.LoggerModule;
 using static Soduko.Utils.OnceoModule;
 using static Soduko.Utils.BoardExt;
+
 
 using Microsoft.Extensions.Logging;
 using Soduko.Utils;
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 //SetLogLevel(LogLevel.Debug);
+SetLogLevel(LogLevel.Information);
 
 #if false
 RunAll(1, (q, x) => {
-    var board = new Board
-    (
-        Row( 1 )
-    );
+    var board = new object[][]
+    {
+        Row( x[0] )
+    };
 
     return Conj(Eqo(q, board));
 }).Render();
@@ -81,29 +84,30 @@ RunAll(16, (q, x) => {
     return Conj
     (
         Eqo(q, board),
-        Onceo(x[0], board.Row(0), board.Col(0)),
-        Onceo(x[1], board.Row(0), board.Col(1)),
-        Onceo(x[2], board.Row(0), board.Col(2)),
-        Onceo(x[3], board.Row(0), board.Col(3)),
+        Onceo(x[0], board.Row(0), board.Col(0), board.Box4(0)),
+        Onceo(x[1], board.Row(0), board.Col(1), board.Box4(0)),
+        Onceo(x[2], board.Row(0), board.Col(2), board.Box4(1)),
+        Onceo(x[3], board.Row(0), board.Col(3), board.Box4(1)),
 
-        Onceo(x[4], board.Row(1), board.Col(0)),
-        Onceo(x[5], board.Row(1), board.Col(1)),
-        Onceo(x[6], board.Row(1), board.Col(2)),
-        Onceo(x[7], board.Row(1), board.Col(3)),
+        Onceo(x[4], board.Row(1), board.Col(0), board.Box4(0)),
+        Onceo(x[5], board.Row(1), board.Col(1), board.Box4(0)),
+        Onceo(x[6], board.Row(1), board.Col(2), board.Box4(1)),
+        Onceo(x[7], board.Row(1), board.Col(3), board.Box4(1)),
 
-        Onceo(x[8], board.Row(2), board.Col(0)),
-        Onceo(x[9], board.Row(2), board.Col(1)),
-        Onceo(x[10], board.Row(2), board.Col(2)),
-        Onceo(x[11], board.Row(2), board.Col(3)),
+        Onceo(x[8], board.Row(2), board.Col(0), board.Box4(2)),
+        Onceo(x[9], board.Row(2), board.Col(1), board.Box4(2)),
+        Onceo(x[10], board.Row(2), board.Col(2), board.Box4(3)),
+        Onceo(x[11], board.Row(2), board.Col(3), board.Box4(3)),
 
-        Onceo(x[12], board.Row(3), board.Col(0)),
-        Onceo(x[13], board.Row(3), board.Col(1)),
-        Onceo(x[14], board.Row(3), board.Col(2)),
-        Onceo(x[15], board.Row(3), board.Col(3))
+        Onceo(x[12], board.Row(3), board.Col(0), board.Box4(2)),
+        Onceo(x[13], board.Row(3), board.Col(1), board.Box4(2)),
+        Onceo(x[14], board.Row(3), board.Col(2), board.Box4(3)),
+        Onceo(x[15], board.Row(3), board.Col(3), board.Box4(3))
     );
 }).Render();
 #endif
 
+#if true
 RunAll(81, (q, x) => {
     var board = new object[][]
     {
@@ -123,6 +127,7 @@ RunAll(81, (q, x) => {
     return Conj
     (
         Eqo(q, board),
+
         Onceo(x[0], board.Row(0), board.Col(0), board.Box9(0)),
         Onceo(x[1], board.Row(0), board.Col(1), board.Box9(0)),
         Onceo(x[2], board.Row(0), board.Col(2), board.Box9(0)),
@@ -194,12 +199,12 @@ RunAll(81, (q, x) => {
         Onceo(x[62], board.Row(6), board.Col(8), board.Box9(8)),
 
         Onceo(x[63], board.Row(7), board.Col(0), board.Box9(6)),
-        Onceo(x[65], board.Row(7), board.Col(1), board.Box9(6)),
-        Onceo(x[66], board.Row(7), board.Col(2), board.Box9(6)),
-        Onceo(x[67], board.Row(7), board.Col(3), board.Box9(7)),
-        Onceo(x[68], board.Row(7), board.Col(4), board.Box9(7)),
-        Onceo(x[69], board.Row(7), board.Col(5), board.Box9(7)),
-        Onceo(x[60], board.Row(7), board.Col(6), board.Box9(8)),
+        Onceo(x[64], board.Row(7), board.Col(1), board.Box9(6)),
+        Onceo(x[65], board.Row(7), board.Col(2), board.Box9(6)),
+        Onceo(x[66], board.Row(7), board.Col(3), board.Box9(7)),
+        Onceo(x[67], board.Row(7), board.Col(4), board.Box9(7)),
+        Onceo(x[68], board.Row(7), board.Col(5), board.Box9(7)),
+        Onceo(x[69], board.Row(7), board.Col(6), board.Box9(8)),
         Onceo(x[70], board.Row(7), board.Col(7), board.Box9(8)),
         Onceo(x[71], board.Row(7), board.Col(8), board.Box9(8)),
 
@@ -211,9 +216,22 @@ RunAll(81, (q, x) => {
         Onceo(x[77], board.Row(8), board.Col(5), board.Box9(7)),
         Onceo(x[78], board.Row(8), board.Col(6), board.Box9(8)),
         Onceo(x[79], board.Row(8), board.Col(7), board.Box9(8)),
-        Onceo(x[80], board.Row(8), board.Col(8), board.Box9(8))
+        Onceo(x[80], board.Row(8), board.Col(8), board.Box9(8)),
+
+        Eqo(x[0], 4-1), Eqo(x[3], 6-1), Eqo(x[4], 9-1), Eqo(x[5], 7-1),
+        Eqo(x[11], 3-1), Eqo(x[13], 4-1), Eqo(x[14], 8-1), Eqo(x[16], 6-1),
+        Eqo(x[19], 6-1), Eqo(x[20], 2-1), Eqo(x[23], 3-1), Eqo(x[26], 8-1),
+
+        Eqo(x[27], 5-1), Eqo(x[29], 9-1), Eqo(x[30], 3-1), Eqo(x[32], 1-1),
+        Eqo(x[37], 4-1), Eqo(x[38], 7-1), Eqo(x[39], 8-1), Eqo(x[42], 1-1),
+        Eqo(x[46], 3-1), Eqo(x[47], 1-1), Eqo(x[50], 6-1), Eqo(x[52], 9-1),
+
+        Eqo(x[56], 6-1), Eqo(x[57], 9-1), Eqo(x[58], 8-1), Eqo(x[62], 3-1),
+        Eqo(x[63], 1-1), Eqo(x[69], 8-1),
+        Eqo(x[72], 3-1), Eqo(x[74], 4-1), Eqo(x[79], 2-1), Eqo(x[80], 9-1)
     );
 }).Render();
+#endif
 
 return 0;
 
