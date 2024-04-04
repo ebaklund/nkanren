@@ -8,7 +8,6 @@ using static nk.Runners;
 using static nk.GoalsModule;
 using static nk.Freshes;
 using static nk.ListConstructor;
-using static nk.Goals.EqoModule;
 
 public class Playthings
 {

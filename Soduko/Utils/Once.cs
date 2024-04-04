@@ -1,12 +1,12 @@
 ﻿
 using nk;
 using static nk.Logging.LoggerModule;
-using static nk.Goals.EqoModule;
+using static nk.GoalsModule;
 using static Soduko.Utils.BoardExt;
 
-namespace Soduko.Utils;
+namespace Soduko;
 
-internal static class OnceoModule
+internal static partial class GoalsModule
 {
     // PRIVATE
 
@@ -37,11 +37,11 @@ internal static class OnceoModule
 
     // PUBLIC
 
-    public static Goal Onceo(Key k, params object[][] numberGroups)
+    public static Goal Once(Key k, params object[][] numberGroups)
     {
-        IEnumerator<Situation> _Onceo(Situation s)
+        IEnumerator<Situation> _Once(Situation s)
         {
-            LogDebug($"Onceo({s}, {k}) #{++_callCount}");
+            LogDebug($"Once({s}, {k}) #{++_callCount}");
 
             if(s.IsDefined(k))
             {
@@ -69,6 +69,6 @@ internal static class OnceoModule
             }
         };
 
-        return _Onceo;
+        return _Once;
     }
 }

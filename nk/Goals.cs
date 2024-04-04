@@ -7,7 +7,7 @@ namespace nk;
 
 public delegate IEnumerator<Situation> Goal(Situation input);
 
-public static class GoalsModule
+public static partial class GoalsModule
 {
     public static Goal Succ() // p 154
     {
