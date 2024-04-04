@@ -21,7 +21,7 @@ RunAll(1, (q, x) => {
         Row( x[0] )
     };
 
-    return Conj(Eqo(q, board));
+    return Conj(Equal(q, board));
 }).Render();
 #endif 
 
@@ -35,7 +35,7 @@ RunAll(4, (q, x) => {
 
     return Conj
     (
-        Eqo(q, board),
+        Equal(q, board),
         Onceo(x[0], board.Row(0), board.Col(0)),
         Onceo(x[1], board.Row(0), board.Col(1)),
         Onceo(x[2], board.Row(1), board.Col(0)),
@@ -55,7 +55,7 @@ RunAll(9, (q, x) => {
 
     return Conj
     (
-        Eqo(q, board),
+        Equal(q, board),
         Onceo(x[0], board.Row(0), board.Col(0)),
         Onceo(x[1], board.Row(0), board.Col(1)),
         Onceo(x[2], board.Row(0), board.Col(2)),
@@ -83,7 +83,7 @@ RunAll(16, (q, x) => {
 
     return Conj
     (
-        Eqo(q, board),
+        Equal(q, board),
         Onceo(x[0], board.Row(0), board.Col(0), board.Box4(0)),
         Onceo(x[1], board.Row(0), board.Col(1), board.Box4(0)),
         Onceo(x[2], board.Row(0), board.Col(2), board.Box4(1)),
@@ -126,7 +126,7 @@ RunAll(81, (q, x) => {
 
     return Conj
     (
-        Eqo(q, board),
+        Equal(q, board),
 
         Onceo(x[0], board.Row(0), board.Col(0), board.Box9(0)),
         Onceo(x[1], board.Row(0), board.Col(1), board.Box9(0)),
@@ -218,17 +218,17 @@ RunAll(81, (q, x) => {
         Onceo(x[79], board.Row(8), board.Col(7), board.Box9(8)),
         Onceo(x[80], board.Row(8), board.Col(8), board.Box9(8)),
 
-        Eqo(x[0], 4-1), Eqo(x[3], 6-1), Eqo(x[4], 9-1), Eqo(x[5], 7-1),
-        Eqo(x[11], 3-1), Eqo(x[13], 4-1), Eqo(x[14], 8-1), Eqo(x[16], 6-1),
-        Eqo(x[19], 6-1), Eqo(x[20], 2-1), Eqo(x[23], 3-1), Eqo(x[26], 8-1),
+        Equal(x[0], 4-1), Equal(x[3], 6-1), Equal(x[4], 9-1), Equal(x[5], 7-1),
+        Equal(x[11], 3-1), Equal(x[13], 4-1), Equal(x[14], 8-1), Equal(x[16], 6-1),
+        Equal(x[19], 6-1), Equal(x[20], 2-1), Equal(x[23], 3-1), Equal(x[26], 8-1),
 
-        Eqo(x[27], 5-1), Eqo(x[29], 9-1), Eqo(x[30], 3-1), Eqo(x[32], 1-1),
-        Eqo(x[37], 4-1), Eqo(x[38], 7-1), Eqo(x[39], 8-1), Eqo(x[42], 1-1),
-        Eqo(x[46], 3-1), Eqo(x[47], 1-1), Eqo(x[50], 6-1), Eqo(x[52], 9-1),
+        Equal(x[27], 5-1), Equal(x[29], 9-1), Equal(x[30], 3-1), Equal(x[32], 1-1),
+        Equal(x[37], 4-1), Equal(x[38], 7-1), Equal(x[39], 8-1), Equal(x[42], 1-1),
+        Equal(x[46], 3-1), Equal(x[47], 1-1), Equal(x[50], 6-1), Equal(x[52], 9-1),
 
-        Eqo(x[56], 6-1), Eqo(x[57], 9-1), Eqo(x[58], 8-1), Eqo(x[62], 3-1),
-        Eqo(x[63], 1-1), Eqo(x[69], 8-1),
-        Eqo(x[72], 3-1), Eqo(x[74], 4-1), Eqo(x[79], 2-1), Eqo(x[80], 9-1)
+        Equal(x[56], 6-1), Equal(x[57], 9-1), Equal(x[58], 8-1), Equal(x[62], 3-1),
+        Equal(x[63], 1-1), Equal(x[69], 8-1),
+        Equal(x[72], 3-1), Equal(x[74], 4-1), Equal(x[79], 2-1), Equal(x[80], 9-1)
     );
 }).Render();
 #endif
