@@ -25,4 +25,9 @@ public static class LoggerModule
     {
         _logger.LogInformation(message);
     }
+
+    public static void LogError(string message)
+    {
+        _logger.LogError(message);
+    }
 }

@@ -94,6 +94,22 @@ public class Situation
         return ks;
     }
 
+    public Key[] With(object[] values)
+    {
+        var n = (uint) values.Length;
+        var ks = Fresh(n);
+
+        for (int i = 0; i < n; ++i)
+        {
+            if(!TrySet(ks[i], values[i]))
+            {
+                LogError($"With() Failed for variable [{i}].");
+            }
+        }
+
+        return ks;
+    }
+
     public bool TrySet(Key k, object o) // p 149
     {
         if (Occurs(k, o))
