@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Soduko.Utils;
+namespace Sudoku.Utils;
 
 
 public static class BoardExt

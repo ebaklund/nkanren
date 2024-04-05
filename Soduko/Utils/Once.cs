@@ -2,9 +2,9 @@
 using nk;
 using static nk.Logging.LoggerModule;
 using static nk.GoalsModule;
-using static Soduko.Utils.BoardExt;
+using static Sudoku.Utils.BoardExt;
 
-namespace Soduko;
+namespace Sudoku;
 
 internal static partial class GoalsModule
 {

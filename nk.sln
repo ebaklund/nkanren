@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nk", "nk\nk.csproj", "{AADA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nk.Tests", "nk.Tests\nk.Tests.csproj", "{526A60A3-D916-45FE-94F4-6C5928109E2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nk.Examples", "nk.Examples\nk.Examples.csproj", "{A7845B88-05F4-410C-AF64-7B2024AD0527}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nk.Examples", "nk.Examples\nk.Examples.csproj", "{A7845B88-05F4-410C-AF64-7B2024AD0527}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{086F99DE-E08C-4A4F-98BA-2ADAA038C296}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soduko", "Soduko\Soduko.csproj", "{C23A491E-32A7-497C-8461-57CC50D76115}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sudoku", "Soduko\Sudoku.csproj", "{C23A491E-32A7-497C-8461-57CC50D76115}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

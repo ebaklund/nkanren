@@ -2,12 +2,12 @@
 using static nk.Runners;
 using static nk.GoalsModule;
 using static nk.Logging.LoggerModule;
-using static Soduko.GoalsModule;
-using static Soduko.Utils.BoardExt;
+using static Sudoku.GoalsModule;
+using static Sudoku.Utils.BoardExt;
 
 
 using Microsoft.Extensions.Logging;
-using Soduko.Utils;
+using Sudoku.Utils;
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 //SetLogLevel(LogLevel.Debug);
