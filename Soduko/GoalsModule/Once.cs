@@ -34,6 +34,30 @@ public static partial class GoalsModule
 
         return counts;
     }
+/*
+    private static int[] CountNumbers2(Situation s, params object?[][] numberGroups)
+    {
+        var dim = numberGroups[0].Length;
+        var counts = new int[dim];
+
+        for (var j = 0; j < numberGroups.Length; ++j)
+        {
+            var group = numberGroups[j];
+
+            for (var i = 0; i < dim; ++i)
+            {
+                var w = group[i];
+
+                if (w is int num)
+                {
+                    counts[num] += 1;
+                }
+            }
+        }
+
+        return counts;
+    }
+*/
 
     // PUBLIC
 

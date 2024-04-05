@@ -115,6 +115,8 @@ public static partial class BoardModule
 
     public static IEnumerator<string> AsStrings(this IEnumerator<object[][]> boards)
     {
+        _renderCount = 0;
+
         while (boards.MoveNext())
         {
             yield return AsString(boards.Current);

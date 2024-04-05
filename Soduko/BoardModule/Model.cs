@@ -24,7 +24,20 @@ public static partial class BoardModule
 
         return row;
     }
+/*
+    public static object?[] Row(this object?[] board, int r)
+    {
+        var dim = (int) Math.Sqrt(board.Length);
+        var row = new object[dim];
 
+        for (int c = 0; c < dim; ++c)
+        {
+            row[c] = board[r*dim + c];
+        }
+
+        return row;
+    }
+*/
     public static object[] Col(this object[][] board, int c)
     {
         var col = new object[board.Dim()];
@@ -36,7 +49,20 @@ public static partial class BoardModule
 
         return col;
     }
+/*
+    public static object?[] Col(this object?[] board, int c)
+    {
+        var dim = (int) Math.Sqrt(board.Length);
+        var col = new object[dim];
 
+        for (var r = 0; r < dim; ++r)
+        {
+            col[r] = board[r*dim + c];
+        }
+
+        return col;
+    }
+*/
     public static object[] Box4(this object[][] board, int b)
     {
         var box = new object[4];

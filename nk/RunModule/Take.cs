@@ -27,4 +27,16 @@ public static partial class RunModule
 
         return res.Count == count;
     }
+
+    public static List<T> TakeAll<T>(this IEnumerator<T> stream)
+    {
+        var res = new List<T>();
+
+        while(stream.MoveNext())
+        {
+            res.Add (stream.Current);
+        }
+
+        return res;
+    }
 }
