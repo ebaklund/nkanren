@@ -48,7 +48,14 @@ public static partial class BoardModule
         sb.Append(strRow[dim - 1] + "┃\n");
     }
 
-    private static string AsString(this object[][] board)
+    // PUBLIC
+
+    public static void ResetRenderCount()
+    {
+        _renderCount = 0;
+    }
+
+    public static string AsString(this object[][] board)
     {
         var dim = board.Dim();
 
@@ -69,8 +76,6 @@ public static partial class BoardModule
 
         return sb.ToString();
     }
-
-    // PUBLIC
 
     public static IEnumerator<object[][]> AsBoards(this IEnumerator<object> stream)
     {
