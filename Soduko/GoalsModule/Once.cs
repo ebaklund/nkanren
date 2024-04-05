@@ -1,12 +1,12 @@
 ﻿
 using nk;
-using static nk.Logging.LoggerModule;
+using static nk.LoggerModule;
 using static nk.GoalsModule;
-using static Sudoku.Utils.BoardExt;
+using static Sudoku.BoardModule;
 
 namespace Sudoku;
 
-internal static partial class GoalsModule
+public static partial class GoalsModule
 {
     // PRIVATE
 

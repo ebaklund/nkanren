@@ -1,12 +1,10 @@
-
 using Xunit;
 using Xunit.Abstractions;
 
 namespace nk.Tests;
 
-using static nk.Runners;
+using static nk.RunModule;
 using static nk.GoalsModule;
-using static nk.Freshes;
 using static nk.ListConstructor;
 
 public class Playthings

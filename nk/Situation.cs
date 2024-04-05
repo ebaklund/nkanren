@@ -1,6 +1,6 @@
 ﻿namespace nk;
 
-using static nk.Logging.LoggerModule;
+using static nk.LoggerModule;
 
 
 public class Situation

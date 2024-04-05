@@ -1,30 +1,29 @@
-﻿
-namespace nk;
+﻿namespace nk;
 
-public static class Freshes
+public static partial class RunModule
 {
     public static Goal With(object[] values, Func<Key[], Goal> f)
     {
-        return (Situation s) => f(s.With(values))(s);
+        return (s) => f(s.With(values))(s);
     }
 
     public static Goal Fresh(uint n, Func<Key[], Goal> f)
     {
-        return (Situation s) => f(s.Fresh(n))(s);
+        return (s) => f(s.Fresh(n))(s);
     }
 
     public static Goal Fresh(Func<Key, Goal> f)
     {
-        return (Situation s) => f(s.Fresh())(s);
+        return (s) => f(s.Fresh())(s);
     }
 
     public static Goal Fresh(Func<Key, Key, Goal> f)
     {
-        return (Situation s) => f(s.Fresh(), s.Fresh())(s);
+        return (s) => f(s.Fresh(), s.Fresh())(s);
     }
 
     public static Goal Fresh(Func<Key, Key, Key, Goal> f)
     {
-        return (Situation s) => f(s.Fresh(), s.Fresh(), s.Fresh())(s);
+        return (s) => f(s.Fresh(), s.Fresh(), s.Fresh())(s);
     }
 }

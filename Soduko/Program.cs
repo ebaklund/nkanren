@@ -1,28 +1,14 @@
 ﻿
-using static nk.Runners;
+using static nk.RunModule;
 using static nk.GoalsModule;
-using static nk.Logging.LoggerModule;
+using static nk.LoggerModule;
 using static Sudoku.GoalsModule;
-using static Sudoku.Utils.BoardExt;
-
-
+using static Sudoku.BoardModule;
 using Microsoft.Extensions.Logging;
-using Sudoku.Utils;
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 //SetLogLevel(LogLevel.Debug);
 SetLogLevel(LogLevel.Information);
-
-#if false
-RunAll(1, (q, x) => {
-    var board = new object[][]
-    {
-        Row( x[0] )
-    };
-
-    return Conj(Equal(q, board));
-}).Render();
-#endif 
 
 #if false
 RunAll(4, (q, x) => {
@@ -229,7 +215,7 @@ RunAll(81, (q, x) => {
         Equal(x[63], 1-1), Equal(x[69], 8-1),
         Equal(x[72], 3-1), Equal(x[74], 4-1), Equal(x[79], 2-1), Equal(x[80], 9-1)
     );
-}).Render();
+}).AsBoards().AsStrings().ToConsole();
 #endif
 
 return 0;

@@ -1,9 +1,8 @@
-
 using nk.Utils;
 
 namespace nk;
 
-public static class Runners
+public static partial class RunModule
 {
     // PRIVATE
 
@@ -12,7 +11,7 @@ public static class Runners
         //var st = g(s).FlattenInf();
         var st = g(s);
 
-        for(var i = 0; (i < nt) && st.MoveNext();)
+        for (var i = 0; i < nt && st.MoveNext();)
         {
             var o1 = st.Current.Get(q);
             var o2 = Observer.Observe(st.Current, q);

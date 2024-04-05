@@ -1,5 +1,5 @@
 ﻿
-using static nk.Logging.LoggerModule;
+using static nk.LoggerModule;
 
 namespace nk;
 

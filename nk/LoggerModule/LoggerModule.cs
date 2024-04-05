@@ -1,9 +1,9 @@
 ﻿
 using Microsoft.Extensions.Logging;
 
-namespace nk.Logging;
+namespace nk;
 
-public static class LoggerModule
+public static partial class LoggerModule
 {
     // PRIVATE
 
