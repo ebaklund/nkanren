@@ -21,6 +21,8 @@ public class Given_Board_1x1
                 x[0]
             );
 
+            var xxx = Equal(q, Sudokuo(x, board));
+
             return Conj
             (
                 Equal(q, board),

@@ -87,7 +87,7 @@ public static partial class BoardModule
                 continue;
             }
 
-            if (stream.Current is not object?[] candidate)
+            if (stream.Current is not object[] candidate)
             {
                 throw new ApplicationException($">>>    This cannot be a Sudoku board! Unexpected type: \"{stream.Current.GetType().Name}\".    <<<");
             }
@@ -99,12 +99,12 @@ public static partial class BoardModule
                 throw new ApplicationException($">>>    This cannot be a Sudoku board! Not squareable array length: {candidate.Length}.    <<<");
             }
 
-            var board = new object?[dim][];
+            var board = new object[dim][];
             var i = 0;
 
             for (var r = 0; r < dim; r++)
             {
-                var row = new object?[dim];
+                var row = new object[dim];
 
                 for (var c = 0; c < dim; c++)
                 {

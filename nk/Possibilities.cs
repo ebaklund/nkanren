@@ -1,4 +1,6 @@
 
+using static nk.GoalsModule;
+
 namespace nk;
 
 

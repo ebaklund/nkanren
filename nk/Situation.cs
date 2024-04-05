@@ -1,6 +1,8 @@
-﻿namespace nk;
-
+﻿
 using static nk.LoggerModule;
+using static nk.GoalsModule;
+
+namespace nk;
 
 
 public class Situation

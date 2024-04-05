@@ -1,4 +1,7 @@
-﻿namespace nk;
+﻿
+using static nk.GoalsModule;
+
+namespace nk;
 
 public static partial class RunModule
 {

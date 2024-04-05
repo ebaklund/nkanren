@@ -1,4 +1,5 @@
 using nk.Utils;
+using static nk.GoalsModule;
 
 namespace nk;
 
