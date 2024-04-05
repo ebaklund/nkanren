@@ -94,7 +94,7 @@ public class Situation
         return ks;
     }
 
-    public Key[] With(object[] values)
+    public Key[] Fresh(object[] values)
     {
         var n = (uint) values.Length;
         var ks = Fresh(n);

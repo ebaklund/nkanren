@@ -15,20 +15,21 @@ public class SudokuTests
     [Fact]
     public void Test_1x1()
     {
+        var board = new object?[]
+        {
+            null
+        };
+
         string? res;
         
-        RunAll(1, (q, x) => {
-            var board = new object[][]
-            {
-                Row( x[0] )
-            };
-
-            return Conj(Equal(q, board));
-        }).AsBoards().AsStrings().TryTakeFirst(out res);
+        RunAll(board, (q, x) => Conj(
+            Equal(q, x),
+            Once(x[0], board)
+        )).AsBoards().AsStrings().TryTakeFirst(out res);
 
         res.Should().Be(
             "┏━┓\n" +
-            "┃b┃\n" +
+            "┃0┃\n" +
             "┗━┛ 1\n"
         );
     }

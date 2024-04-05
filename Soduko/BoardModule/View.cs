@@ -72,13 +72,41 @@ public static partial class BoardModule
 
     // PUBLIC
 
-    public static IEnumerator<object[][]> AsBoards(this IEnumerator<object> objects)
+    public static IEnumerator<object[][]> AsBoards(this IEnumerator<object> stream)
     {
-        while (objects.MoveNext())
+        while (stream.MoveNext())
         {
-            if (objects.Current is not object[][] board)
+            if (stream.Current is object[][] matrix)
             {
-                throw new ApplicationException($">>>    This is not a board! Cannot render a {objects.Current.GetType().Name}.    <<<");
+                yield return matrix;
+                continue;
+            }
+
+            if (stream.Current is not object?[] candidate)
+            {
+                throw new ApplicationException($">>>    This cannot be a Sudoku board! Unexpected type: \"{stream.Current.GetType().Name}\".    <<<");
+            }
+
+            int dim = (int)Math.Sqrt(candidate.Length);
+
+            if (dim*dim != candidate.Length)
+            {
+                throw new ApplicationException($">>>    This cannot be a Sudoku board! Not squareable array length: {candidate.Length}.    <<<");
+            }
+
+            var board = new object?[dim][];
+            var i = 0;
+
+            for (var r = 0; r < dim; r++)
+            {
+                var row = new object?[dim];
+
+                for (var c = 0; c < dim; c++)
+                {
+                    row[c] = candidate[i++];
+                }
+
+                board[r] = row;
             }
 
             yield return board;

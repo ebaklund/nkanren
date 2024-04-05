@@ -37,6 +37,14 @@ public static partial class RunModule
         return RunGoal(s, nt, q, f(q, s.Fresh(nk)));
     }
 
+    public static IEnumerator<object> Run(uint nt, object?[] init, Func<Key, Key[], Goal> f) // p 169
+    {
+        var s = new Situation();
+        var q = s.Fresh();
+
+        return RunGoal(s, nt, q, f(q, s.Fresh(init)));
+    }
+
     public static IEnumerator<object> RunAll(Func<Key, Goal> f) // p 177
     {
         return Run(int.MaxValue, f);
@@ -45,5 +53,10 @@ public static partial class RunModule
     public static IEnumerator<object> RunAll(uint nk, Func<Key, Key[], Goal> f) // p 177
     {
         return Run(int.MaxValue, nk, f);
+    }
+
+    public static IEnumerator<object> RunAll(object?[] init, Func<Key, Key[], Goal> f) // p 177
+    {
+        return Run(int.MaxValue, init, f);
     }
 }
