@@ -15,7 +15,7 @@ public class Given_Board_1x1
     [Fact]
     public void ItResolvesAll()
     {
-        var res = RunAll(4, (q, x) => {
+        var boards = RunAll(4, (q, x) => {
             var board = new object[][]
             {
                 Row( x[0] )
@@ -26,7 +26,17 @@ public class Given_Board_1x1
                 Equal(q, board),
                 Once(x[0], board)
             );
-        }).AsBoards().AsStrings().TakeAll();
+        }).AsBoards().TakeAll();
+
+        boards.Count.Should().Be(1);
+        ValidateBoards(boards);
+        ResetRenderCount();
+
+        ("\n" + boards[0].AsString()).Should().Be( "\n" +
+            "┏━┓\n" +
+            "┃0┃\n" +
+            "┗━┛ 1\n"
+        );
     }
 }
 
