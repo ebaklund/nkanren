@@ -1,5 +1,4 @@
-﻿
-namespace Sudoku.Tests;
+﻿namespace Sudoku.Tests.Utils;
 
 public static class ValidatorModule
 {

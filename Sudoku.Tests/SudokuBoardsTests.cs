@@ -5,6 +5,7 @@ using static nk.RunModule;
 using static nk.GoalsModule;
 using static Sudoku.GoalsModule;
 using static Sudoku.BoardModule;
+using Sudoku.Tests.Utils;
 
 namespace Sudoku.Tests;
 using static ValidatorModule;
@@ -16,10 +17,9 @@ public class Given_Board_1x1
     public void ItResolvesAll()
     {
         var boards = RunAll(4, (q, x) => {
-            var board = new object[][]
-            {
-                Row( x[0] )
-            };
+            var board = SudokuBoard(
+                x[0]
+            );
 
             return Conj
             (
@@ -47,11 +47,10 @@ public class Given_Board_2x2
     public void ItResolvesAll()
     {
         var boards = RunAll(4, (q, x) => {
-            var board = new object[][]
-            {
-                Row( x[0], x[1] ),
-                Row( x[2], x[3] )
-            };
+            var board = SudokuBoard(
+                x[0], x[1],
+                x[2], x[3]
+            );
 
             return Conj
             (

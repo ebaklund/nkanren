@@ -98,5 +98,30 @@ public static partial class BoardModule
 
         return box;
     }
+    
+    public static object[][] SudokuBoard(params object[] objects)
+    {
+        var dim = (int) Math.Sqrt(objects.Length);
+
+        if (dim*dim != objects.Length)
+        {
+            throw new ApplicationException("Cannot build Sudoku board from structure not square.");
+        }
+
+        int i = 0;
+        var board = new object[dim][];
+
+        for(var r = 0; r < dim; ++r)
+        {
+            board[r] = new object[dim];
+
+            for( var c = 0; c < dim; ++c)
+            {
+                board[r][c] = objects[i++];
+            }
+        }
+
+        return board;
+    }
 }
 
