@@ -3,7 +3,7 @@ using Xunit.Abstractions;
 
 namespace nk.Tests;
 
-using static nk.RunModule;
+using static nk.RunnerModule;
 using static nk.GoalsModule;
 using static nk.ListConstructor;
 

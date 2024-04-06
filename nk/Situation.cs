@@ -79,9 +79,10 @@ public class Situation
 
     public Key Fresh() // p 145
     {
+        var k = new Key((uint)_slots.Count);
         _slots.Add(null);
 
-        return new Key(_slots.Count - 1);
+        return k;
     }
 
     public Key[] Fresh(uint n) // p 145
@@ -103,7 +104,7 @@ public class Situation
             return false;
         }
 
-        _slots[k.Idx] = o;
+        _slots[(int)k.Idx] = o;
         UpdateMaxDefinedCount();
 
         return true;
@@ -117,12 +118,12 @@ public class Situation
 
     public object? Get(Key k)
     {
-        return _slots[k.Idx];
+        return _slots[(int)k.Idx];
     }
 
     public bool IsDefined(Key k)
     {
-        return _slots[k.Idx] is not null;
+        return _slots[(int)k.Idx] is not null;
     }
     
     public Goal CallFresh(Func<Key, Goal> f) // p 165
@@ -132,8 +133,10 @@ public class Situation
 
     public object Walk(object o) // p 148
     {
-        for (;o is Key k && _slots[k.Idx] is not null; o = _slots[k.Idx]!)
-        {}
+        while (o is Key k && _slots[(int)k.Idx] is not null)
+        {
+            o = _slots[(int)k.Idx]!;
+        }
 
         return o;
     }

@@ -1,7 +1,7 @@
 ﻿using nk;
 
 namespace Sudoku;
-
+using static Sudoku.RunnerModule;
 
 public static partial class BoardModule
 {
@@ -26,7 +26,7 @@ public static partial class BoardModule
         return new Board(cells);
     }
 
-    public record Board(params object[] Cells)
+    public record Board(object[] Cells) : IResolvable
     {
         public uint Dim
         {
@@ -38,13 +38,20 @@ public static partial class BoardModule
             get => (uint) Math.Sqrt(this.Dim);
         }
 
+        public uint BCnt
+        {
+            get => Dim / BDim;
+        }
+
         public IEnumerator<object> Row(uint r)
         {
             var dim = this.Dim;
+            var c0 = r*dim;
 
             for (int c = 0; c < dim; c++)
             {
-                yield return Cells[r*dim + c];
+                var i = c0 + c;
+                yield return Cells[i];
             }
         }
 
@@ -78,16 +85,19 @@ public static partial class BoardModule
         {
             var dim = this.Dim;
             var bdim = this.BDim;
-            var r0 = (b / bdim) * bdim;
-            var c0 = (b % bdim) * bdim;
-            var rn = r0 + bdim;
-            var cn = c0 + bdim;
+            var bcnt = this.BCnt;
 
-            for (var r = r0; r < rn; ++r)
+            var i0r = (b / bcnt) * bcnt * bdim; // Index (i) to first (0) cell in row (r) that intersects with box.
+            var i0b = i0r + (b % bcnt) * bdim;  // Index (i) to first (0) cell in box (b)
+
+            for (var r = 0; r < bdim; ++r)
             {
-                for (var c = c0; c < cn; ++c)
+                var ir = i0r + r * dim;
+
+                for (var c = 0; c < bdim; ++c)
                 {
-                    yield return Cells[r*dim + c];
+                    var i = ir + c;
+                    yield return Cells[i];
                 }
             }
         }
@@ -100,7 +110,7 @@ public static partial class BoardModule
             }
         }
 
-        public IEnumerator<object> Siblings(uint i)
+        public IEnumerator<object> PeersOfCellAt(uint i)
         {
             var bdim = this.BDim;
             var r = i / this.Dim;
@@ -124,6 +134,21 @@ public static partial class BoardModule
             {
                 yield return box.Current;
             }
+        }
+
+        public object GetResolvable()
+        {
+            return this.Cells;
+        }
+
+        public IResolvable Wrap(object resolved)
+        {
+            if (resolved is object[] cells)
+            {
+                return new Board(cells);
+            }
+            
+            throw new ApplicationException("Could not convert to array of cells.");
         }
     }
 }

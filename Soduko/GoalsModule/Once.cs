@@ -35,13 +35,13 @@ public static partial class GoalsModule
         return counts;
     }
 
-    private static uint[] CountNumbers(Situation s, uint dim, object[] siblings)
+    private static uint[] CountNumbers(Situation s, uint dim, object[] peers)
     {
         var counts = new uint[dim];
 
-        for (var i = 0; i < siblings.Length; ++i)
+        for (var i = 0; i < peers.Length; ++i)
         {
-            var w = s.Walk(siblings[i]);
+            var w = s.Walk(peers[i]);
 
             if (w is int num)
             {
@@ -113,7 +113,7 @@ public static partial class GoalsModule
         return _Once;
     }
 
-    public static Goal Once(Key k, uint dim, object[] siblings)
+    public static Goal CellConstraint(Key k, uint dim, object[] peers)
     {
         IEnumerator<Situation> _Once(Situation s)
         {
@@ -125,7 +125,7 @@ public static partial class GoalsModule
                 yield break;
             }
 
-            var counts = CountNumbers(s, dim, siblings);
+            var counts = CountNumbers(s, dim, peers);
 
             for (var i = 0; i < dim; ++i)
             {

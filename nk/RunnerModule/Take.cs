@@ -1,7 +1,7 @@
 ﻿
 namespace nk;
 
-public static partial class RunModule
+public static partial class RunnerModule
 {
     public static bool TryTakeFirst<T>(this IEnumerator<T> s, out T? res) where T : class
     {

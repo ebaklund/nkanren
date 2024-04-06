@@ -3,7 +3,7 @@ using static nk.GoalsModule;
 
 namespace nk;
 
-public static partial class RunModule
+public static partial class RunnerModule
 {
     public static Goal Fresh(uint n, Func<Key[], Goal> f)
     {

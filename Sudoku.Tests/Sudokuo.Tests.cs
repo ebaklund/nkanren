@@ -3,7 +3,7 @@ using FluentAssertions;
 using System.Collections.Generic;
 using System.Linq;
 
-using static nk.RunModule;
+using static nk.RunnerModule;
 using static nk.GoalsModule;
 using static Sudoku.GoalsModule;
 using static Sudoku.BoardModule;

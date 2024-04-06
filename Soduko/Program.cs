@@ -1,5 +1,5 @@
 ﻿
-using static nk.RunModule;
+using static nk.RunnerModule;
 using static nk.GoalsModule;
 using static nk.LoggerModule;
 using static Sudoku.GoalsModule;
