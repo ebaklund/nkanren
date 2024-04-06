@@ -18,7 +18,7 @@ public static partial class RunnerModule
 
     public static IEnumerator<Board> RunSudoku(uint dim, Func<Key[], Board> f)
     {
-        return RunAll<Board>(4, (q, ks) => {
+        return RunAll<Board>(dim, (q, ks) => {
             var board = f(ks);
             var CellIdx = (Key k) => (uint)(k.Idx - ks[0].Idx); // Calculate cell index from cell key.
 

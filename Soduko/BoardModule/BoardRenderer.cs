@@ -100,8 +100,13 @@ public static partial class BoardModule
         return sb.ToString();
     }
 
-    public static string AsString(this Board board)
+    public static string AsString(this Board board, bool resetRenderCount = false)
     {
+        if (resetRenderCount)
+        {
+            _renderCount = 0;
+        }
+
         var dim = board.Dim;
         int rcount = ((int) dim) -1;
 
