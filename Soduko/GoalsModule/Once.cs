@@ -12,7 +12,7 @@ public static partial class GoalsModule
 
     private static int _callCount = 0;
 
-    private static int[] CountNumbers(Situation s, params object[][] numberGroups)
+        private static int[] CountNumbers(Situation s, params object[][] numberGroups)
     {
         var dim = numberGroups[0].Length;
         var counts = new int[dim];
@@ -29,6 +29,23 @@ public static partial class GoalsModule
                 {
                     counts[num] += 1;
                 }
+            }
+        }
+
+        return counts;
+    }
+
+    private static uint[] CountNumbers(Situation s, uint dim, object[] siblings)
+    {
+        var counts = new uint[dim];
+
+        for (var i = 0; i < siblings.Length; ++i)
+        {
+            var w = s.Walk(siblings[i]);
+
+            if (w is int num)
+            {
+                counts[num] += 1;
             }
         }
 
@@ -75,6 +92,40 @@ public static partial class GoalsModule
 
             var dim = numberGroups[0].Length;
             var counts = CountNumbers(s, numberGroups);
+
+            for (var i = 0; i < dim; ++i)
+            {
+                if (counts[i] > 0)
+                {
+                    continue;
+                }
+
+                Situation res;
+                if (!s.TryCloneWith(k, i, out res))
+                {
+                    continue;
+                }
+
+                yield return res;
+            }
+        };
+
+        return _Once;
+    }
+
+    public static Goal Once(Key k, uint dim, object[] siblings)
+    {
+        IEnumerator<Situation> _Once(Situation s)
+        {
+            LogDebug($"Once({s}, {k}) #{++_callCount}");
+
+            if(s.IsDefined(k))
+            {
+                yield return s;
+                yield break;
+            }
+
+            var counts = CountNumbers(s, dim, siblings);
 
             for (var i = 0; i < dim; ++i)
             {

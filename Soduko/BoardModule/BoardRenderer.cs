@@ -10,10 +10,10 @@ public static partial class BoardModule
     // PRIVATE
 
     private static int _renderCount = 0;
-    
-    private static string AsString(object o)
+   
+    private static string AsString(this object value)
     {
-        return o switch
+        return value switch
         {
             int i => $"{i}",
             Key k => $"{(char)('a' + k.Idx)}",
@@ -33,6 +33,14 @@ public static partial class BoardModule
         return strings;
     }
 
+    private static IEnumerator<string> AsStrings(this IEnumerator<object> values)
+    {
+        while (values.MoveNext())
+        {
+            yield return values.Current.AsString();
+        }
+    }
+
     private static void AppendRow(this StringBuilder sb, object[] row)
     {
         var dim = row.Length;
@@ -46,6 +54,21 @@ public static partial class BoardModule
         }
 
         sb.Append(strRow[dim - 1] + "┃\n");
+    }
+
+    private static void AppendRow(this StringBuilder sb, IEnumerator<object> row)
+    {
+        var strings = row.AsStrings();
+
+        sb.Append("┃");
+
+        while (strings.MoveNext())
+        {
+            sb.Append(strings.Current + "│");
+        }
+
+        sb.Remove(sb.Length - 1, 1);
+        sb.Append("┃\n");
     }
 
     // PUBLIC
@@ -73,6 +96,29 @@ public static partial class BoardModule
         }
 
         sb.Append("┗" + string.Concat(Enumerable.Repeat("━┷", dim - 1)) + $"━┛ {++_renderCount}\n");
+
+        return sb.ToString();
+    }
+
+    public static string AsString(this Board board)
+    {
+        var dim = board.Dim;
+        int rcount = ((int) dim) -1;
+
+        var sb = new StringBuilder();
+        sb.Append("┏" + string.Concat(Enumerable.Repeat("━┯", rcount)) + "━┓\n");
+
+        for (uint i = 0; i < dim; i++)
+        {
+            sb.AppendRow(board.Row(i));
+
+            if (i < dim - 1)
+            {
+                sb.Append("┠" + string.Concat(Enumerable.Repeat("─┼", rcount)) + "─┨\n");
+            }
+        }
+
+        sb.Append("┗" + string.Concat(Enumerable.Repeat("━┷", rcount)) + $"━┛ {++_renderCount}\n");
 
         return sb.ToString();
     }
@@ -125,6 +171,16 @@ public static partial class BoardModule
         while (boards.MoveNext())
         {
             yield return AsString(boards.Current);
+        }
+    }
+
+    public static IEnumerator<string> AsStrings(this IEnumerator<Board> boards)
+    {
+        _renderCount = 0;
+
+        while (boards.MoveNext())
+        {
+            yield return boards.Current.AsString();
         }
     }
     

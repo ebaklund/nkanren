@@ -1,4 +1,6 @@
-﻿namespace Sudoku.Tests.Utils;
+﻿using static Sudoku.BoardModule;
+
+namespace Sudoku.Tests.Utils;
 
 public static class ValidatorModule
 {
@@ -35,11 +37,44 @@ public static class ValidatorModule
         }
     }
 
+    public static void AssertValidDims(Board board)
+    {
+        var length = board.Cells.Length;
+        var dim = (int) Math.Sqrt(length);
+
+        if (dim*dim != length)
+        {
+            throw new ApplicationException($"AssertValidDims(): Not a square board.");
+        }
+    }
+
     public static void ValidateRows(object[][] board)
     {
         foreach (var row in board)
         {
             ValidateArray(row);
+        }
+    }
+
+    public static void AssertValidCounts(IEnumerator<IEnumerator<object>> numberSets, uint dim)
+    {
+        while(numberSets.MoveNext())
+        {
+            var counts = new uint[dim];
+            var numbers = numberSets.Current;
+
+            while (numbers.MoveNext())
+            {
+                if (numbers.Current is int num)
+                {
+                    ++counts[num];
+
+                    if (counts[num] > 1)
+                    {
+                        throw new ApplicationException($"ValidateRow() Count of number {num} is {counts[num]}.");
+                    }
+                }
+            }
         }
     }
 
@@ -72,8 +107,6 @@ public static class ValidatorModule
         }
     }
 
-    // PUBLIC
-
     public static void ValidateBoard(object[][] board)
     {
         ValidateDims(board);
@@ -81,11 +114,29 @@ public static class ValidatorModule
         ValidateCols(board);
     }
 
+    private static void AssertValid(Board board)
+    {
+        AssertValidCounts(board.Rows(), board.Dim);
+        AssertValidCounts(board.Cols(), board.Dim);
+        AssertValidCounts(board.Boxs(), board.Dim);
+    }
+
+    // PUBLIC
+
     public static void ValidateBoards(List<object[][]> boards)
     {
         foreach (var board in boards)
         {
             ValidateBoard(board);
+        }
+    }
+
+    public static IEnumerator<Board> AssertValid(this IEnumerator<Board> boards)
+    {
+        while (boards.MoveNext())
+        {
+            AssertValid(boards.Current);
+            yield return boards.Current;
         }
     }
 }
