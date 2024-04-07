@@ -37,17 +37,6 @@ public static class ValidatorModule
         }
     }
 
-    public static void AssertValidDims(Board board)
-    {
-        var length = board.Cells.Length;
-        var dim = (int) Math.Sqrt(length);
-
-        if (dim*dim != length)
-        {
-            throw new ApplicationException($"AssertValidDims(): Not a square board.");
-        }
-    }
-
     public static void ValidateRows(object[][] board)
     {
         foreach (var row in board)

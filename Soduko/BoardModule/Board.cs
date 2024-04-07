@@ -7,6 +7,16 @@ public static partial class BoardModule
 {
     // PRIVATE
 
+    private static void AssertValidContent(object[] cells)
+    {
+        var dim = (int) Math.Sqrt(cells.Length);
+
+        if (dim*dim != cells.Length)
+        {
+            throw new ArgumentException("Cell array does not make a square.");
+        }
+    }
+
     // PUBLIC
     
     public static object[] AsArray(this IEnumerator<object> objects)
@@ -23,24 +33,89 @@ public static partial class BoardModule
 
     public static Board With(params object[] cells)
     {
-        return new Board(cells);
+        return Board.With(cells);
     }
 
-    public record Board(object[] Cells) : IResolvable
+    public class Board : IResolvable
     {
+        // PRIVATE
+
+        private object[] _cells;
+
+        private Board(object[] cells)
+        {
+            _cells = cells;
+        }
+
+        // PUBLIC
+
+        //          +-----------------------+
+        //          V                       |
+        // +-----+------+-------++------+------+------+------+
+        // | Dim | BDim | BDCnt || √Dim | bDim |D/bDim| Dim? |
+        // +-----+------+-------++------+------+------+------+
+        // |   1 |    1 |     1 ||  1.0 |    1 |    1 |    1 |
+        // +-----+------+-------++------+------+------+------+
+        // |   2 |    1 |     2 ||  1.4 |    1 |    2 |    2 |
+        // +-----+------+-------++------+------+------+------+
+        // |   3 |  ! 1 |     3 ||  1.7 |    1 |    3 |    3 | Prime!
+        // +-----+------+-------++------+------+------+------+
+        // |   4 |    2 |     2 ||  2.0 |    2 |    2 |    4 |
+        // +-----+------+-------++------+------+------+------+
+        // |   5 |  ! 1 |   ! 5 ||  2.2 |    2 |    2 | 👎 4 | Prime!
+        // +-----+------+-------++------+------+------+------+
+        // |   6 |    2 |     3 ||  2.4 |    2 |    3 |    6 |
+        // +-----+------+-------++------+------+------+------+
+        // |   7 |  ! 1 |   ! 7 ||  2.6 |    2 |    3 | 👎 6 | Prime!
+        // +-----+------+-------++------+------+------+------+
+        // |   8 |    2 |     4 ||  2.8 |    2 |    4 |    8 |
+        // +-----+------+-------++------+------+------+------+
+        // |   9 |    3 |     3 ||  8.0 |    3 |    3 |    9 |
+        // +-----+------+-------++------+------+------+------+
+        //          |        ^
+        //          +--------+ 
+
+
+        public static Board With(params object[] cells)
+        {
+            AssertValidContent(cells);
+            return new Board(cells);
+        }
+
+        public uint CellCount
+        {
+            get => (uint) _cells.Length;
+        }
+
         public uint Dim
         {
-            get => (uint) Math.Sqrt(Cells.Length);
+            get => (uint) Math.Sqrt(CellCount);
         }
 
-        public uint BDim
+        public uint BoxDim
         {
-            get => (uint) Math.Sqrt(this.Dim);
+            get
+            {
+                var boxDim = (uint) Math.Sqrt(Dim);
+                var boxCnt = Dim / boxDim;
+                var boardDim = boxDim * boxCnt;
+
+                return (boardDim == this.Dim) switch
+                {
+                    true => boxDim,
+                    _ => 1
+                };
+            }
         }
 
-        public uint BCnt
+        public uint BoxCnt
         {
-            get => Dim / BDim;
+            get => CellCount / (BoxDim * BoxDim);
+        }
+
+        public uint DimBoxCnt
+        {
+            get => Dim / BoxDim;
         }
 
         public IEnumerator<object> Row(uint r)
@@ -51,7 +126,7 @@ public static partial class BoardModule
             for (int c = 0; c < dim; c++)
             {
                 var i = c0 + c;
-                yield return Cells[i];
+                yield return _cells[i];
             }
         }
 
@@ -69,7 +144,7 @@ public static partial class BoardModule
 
             for (int r = 0; r < dim; r++)
             {
-                yield return Cells[r*dim + c];
+                yield return _cells[r*dim + c];
             }
         }
 
@@ -84,8 +159,8 @@ public static partial class BoardModule
         public IEnumerator<object> Box(uint b)
         {
             var dim = this.Dim;
-            var bdim = this.BDim;
-            var bcnt = this.BCnt;
+            var bdim = this.BoxDim;
+            var bcnt = this.DimBoxCnt;
 
             var i0r = (b / bcnt) * bcnt * bdim; // Index (i) to first (0) cell in row (r) that intersects with box.
             var i0b = i0r + (b % bcnt) * bdim;  // Index (i) to first (0) cell in box (b)
@@ -97,7 +172,7 @@ public static partial class BoardModule
                 for (var c = 0; c < bdim; ++c)
                 {
                     var i = ir + c;
-                    yield return Cells[i];
+                    yield return _cells[i];
                 }
             }
         }
@@ -112,7 +187,7 @@ public static partial class BoardModule
 
         public IEnumerator<object> PeersOfCellAt(uint i)
         {
-            var bdim = this.BDim;
+            var bdim = this.BoxDim;
             var r = i / this.Dim;
             var c = i % this.Dim;
             var b = (r / bdim) * bdim + c / bdim;
@@ -138,7 +213,7 @@ public static partial class BoardModule
 
         public object GetResolvable()
         {
-            return this.Cells;
+            return this._cells;
         }
 
         public IResolvable Wrap(object resolved)

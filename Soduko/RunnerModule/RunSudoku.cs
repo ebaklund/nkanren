@@ -16,15 +16,15 @@ public static partial class RunnerModule
 
     // PUBLIC
 
-    public static IEnumerator<Board> RunSudoku(uint dim, Func<Key[], Board> f)
+    public static IEnumerator<Board> RunSudoku(uint cellCount, Func<Key[], Board> f)
     {
-        return RunAll<Board>(dim, (q, ks) => {
+        return RunAll<Board>(cellCount, (q, ks) => {
             var board = f(ks);
             var CellIdx = (Key k) => (uint)(k.Idx - ks[0].Idx); // Calculate cell index from cell key.
 
             List<Goal> constaints = 
                 ks.ToList()
-                .Select(k => CellConstraint(k, board.Dim, board.PeersOfCellAt(CellIdx(k)).AsArray()))
+                .Select(cellKey => CellConstraint(cellKey, board.Dim, board.PeersOfCellAt(CellIdx(cellKey)).AsArray()))
                 .ToList();
 
             constaints.Add(Equal(q, board));
