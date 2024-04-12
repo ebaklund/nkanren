@@ -45,16 +45,16 @@ public static class ValidatorModule
         }
     }
 
-    public static void AssertValidCounts(IEnumerator<IEnumerator<object>> numberSets, uint dim)
+    public static void AssertValidPeerGroups(IEnumerator<IEnumerator<object>> peerGroups, uint boardDim)
     {
-        while(numberSets.MoveNext())
+        while(peerGroups.MoveNext())
         {
-            var counts = new uint[dim];
-            var numbers = numberSets.Current;
+            var counts = new uint[boardDim];
+            var peerCells = peerGroups.Current;
 
-            while (numbers.MoveNext())
+            while (peerCells.MoveNext())
             {
-                if (numbers.Current is int num)
+                if (peerCells.Current is int num)
                 {
                     ++counts[num];
 
@@ -105,9 +105,9 @@ public static class ValidatorModule
 
     private static void AssertValid(Board board)
     {
-        AssertValidCounts(board.Rows(), board.BoardDim);
-        AssertValidCounts(board.Cols(), board.BoardDim);
-        AssertValidCounts(board.Boxs(), board.BoardDim);
+        AssertValidPeerGroups(board.Rows(), board.BoardDim);
+        AssertValidPeerGroups(board.Cols(), board.BoardDim);
+        AssertValidPeerGroups(board.Boxs(), board.BoardDim);
     }
 
     // PUBLIC

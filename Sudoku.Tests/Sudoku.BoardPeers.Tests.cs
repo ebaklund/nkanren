@@ -63,7 +63,6 @@ public class Board_should_provide_cell_peers
     [InlineData(4, 5, new uint[] { 4, 5, 6, 7, 1, 5, 9, 13, 0, 1, 4, 5 })]
     [InlineData(4, 6, new uint[] { 4, 5, 6, 7, 2, 6, 10, 14, 2, 3, 6, 7 })]
     [InlineData(4, 7, new uint[] { 4, 5, 6, 7, 3, 7, 11, 15, 2, 3, 6, 7 })]
-
     [InlineData(4, 8, new uint[] { 8, 9, 10, 11, 0, 4, 8, 12, 8, 9, 12, 13 })]
     [InlineData(4, 9, new uint[] { 8, 9, 10, 11, 1, 5, 9, 13, 8, 9, 12, 13 })]
     [InlineData(4, 10, new uint[] { 8, 9, 10, 11, 2, 6, 10, 14, 10, 11, 14, 15 })]
@@ -72,6 +71,8 @@ public class Board_should_provide_cell_peers
     [InlineData(4, 13, new uint[] { 12, 13, 14, 15, 1, 5, 9, 13, 8, 9, 12, 13 })]
     [InlineData(4, 14, new uint[] { 12, 13, 14, 15, 2, 6, 10, 14, 10, 11, 14, 15 })]
     [InlineData(4, 15, new uint[] { 12, 13, 14, 15, 3, 7, 11, 15, 10, 11, 14, 15 })]
+
+    [InlineData(6, 0, new uint[] { 0, 1, 2, 3, 4, 5, 0, 6, 12, 18, 24, 30, 0, 1, 6, 7 })]
 
     public void Where(uint boardDim, uint cellIdx, uint[] expectedIndexes)
     {

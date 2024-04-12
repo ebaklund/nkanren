@@ -134,7 +134,7 @@ public static partial class BoardModule
         {
             var dim = this.BoardDim;
 
-            for (uint r = 0; r < this.BoardDim; r++)
+            for (uint r = 0; r < dim; r++)
             {
                 yield return this.Row(r);
             }
