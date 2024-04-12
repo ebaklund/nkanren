@@ -105,9 +105,9 @@ public static class ValidatorModule
 
     private static void AssertValid(Board board)
     {
-        AssertValidCounts(board.Rows(), board.Dim);
-        AssertValidCounts(board.Cols(), board.Dim);
-        AssertValidCounts(board.Boxs(), board.Dim);
+        AssertValidCounts(board.Rows(), board.BoardDim);
+        AssertValidCounts(board.Cols(), board.BoardDim);
+        AssertValidCounts(board.Boxs(), board.BoardDim);
     }
 
     // PUBLIC

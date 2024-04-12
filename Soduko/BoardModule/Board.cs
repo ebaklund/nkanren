@@ -87,7 +87,7 @@ public static partial class BoardModule
             get => (uint) _cells.Length;
         }
 
-        public uint Dim
+        public uint BoardDim
         {
             get => (uint) Math.Sqrt(CellCount);
         }
@@ -96,11 +96,11 @@ public static partial class BoardModule
         {
             get
             {
-                var boxDim = (uint) Math.Sqrt(Dim);
-                var boxCnt = Dim / boxDim;
-                var boardDim = boxDim * boxCnt;
+                var boardDim = this.BoardDim;
+                var boxDim = (uint) Math.Sqrt(this.BoardDim);
+                var boxCnt = boardDim / boxDim;
 
-                return (boardDim == this.Dim) switch
+                return ((boxDim * boxCnt) == boardDim) switch
                 {
                     true => boxDim,
                     _ => 1
@@ -115,12 +115,12 @@ public static partial class BoardModule
 
         public uint DimBoxCnt
         {
-            get => Dim / BoxDim;
+            get => BoardDim / BoxDim;
         }
 
         public IEnumerator<object> Row(uint r)
         {
-            var dim = this.Dim;
+            var dim = this.BoardDim;
             var c0 = r*dim;
 
             for (int c = 0; c < dim; c++)
@@ -132,7 +132,9 @@ public static partial class BoardModule
 
         public IEnumerator<IEnumerator<object>> Rows()
         {
-            for (uint r = 0; r < this.Dim; r++)
+            var dim = this.BoardDim;
+
+            for (uint r = 0; r < this.BoardDim; r++)
             {
                 yield return this.Row(r);
             }
@@ -140,7 +142,7 @@ public static partial class BoardModule
 
         public IEnumerator<object> Col(uint c)
         {
-            var dim = this.Dim;
+            var dim = this.BoardDim;
 
             for (int r = 0; r < dim; r++)
             {
@@ -150,15 +152,17 @@ public static partial class BoardModule
 
         public IEnumerator<IEnumerator<object>> Cols()
         {
-            for (uint c = 0; c < this.Dim; ++c)
+            var dim = this.BoardDim;
+
+            for (uint c = 0; c < dim; ++c)
             {
                 yield return this.Col(c);
             }
         }
 
-        public IEnumerator<object> Box(uint b)
+        public IEnumerator<object> Box_old(uint b)
         {
-            var dim = this.Dim;
+            var dim = this.BoardDim;
             var bdim = this.BoxDim;
             var bcnt = this.DimBoxCnt;
 
@@ -177,9 +181,43 @@ public static partial class BoardModule
             }
         }
 
+        // Box: b
+        //     bri━┯━bi━━┯━┓ b: 0, br: 0, bri: 0, bi:  0
+        //       ┃0│1 │ 2│3┃ b: 1, br: 0, bri: 0, bi:  2
+        // br: 0 ┠─0──┼──1─┨ b: 2, br: 1, bri: 8, bi:  8
+        //       ┃4│5 │ 6│7┃ b: 3, br: 1, bri: 8, bi: 10
+        //     bri─┼─bi──┼─┨ bvol: bdim * bdim
+        //       ┃8│9 │ a│b┃ brvol: dim * bdim
+        // br: 1 ┠─2──┼──3─┨ br = b / dbcnt
+        //       ┃c│d │ e│f┃ bri = br * brvol
+        //       ┗━┷━━┷━━┷━┛ bi = bri + (b % dbcnt) * bdim
+        
+        public IEnumerator<object> Box(uint b)
+        {
+            var dim = this.BoardDim;
+            var bdim = this.BoxDim;
+            var dbcnt = this.DimBoxCnt;
+            var brvol = dim * bdim;
+            var br = b / dbcnt;
+            var bri = br * brvol;
+            var bi = bri + (b % dbcnt) * bdim; // Index (i) to first (0) cell in row (r) that intersects with box.
+
+            var jend = bi + brvol;
+
+            for (var j = bi; j < jend; j += dim)
+            {
+                var iend = j + bdim;
+
+                for (var i = j; i < iend; ++i)
+                {
+                    yield return _cells[i];
+                }
+            }
+        }
+
         public IEnumerator<IEnumerator<object>> Boxs()
         {
-            for (uint b = 0; b < this.Dim; ++b)
+            for (uint b = 0; b < this.BoardDim; ++b)
             {
                 yield return this.Box(b);
             }
@@ -188,10 +226,14 @@ public static partial class BoardModule
 
         public IEnumerator<object> PeersOfCellAt(uint i)
         {
+            var dim = this.BoardDim;
             var bdim = this.BoxDim;
-            var r = i / this.Dim;
-            var c = i % this.Dim;
-            var b = i / (bdim * bdim);
+            var dbcnt = this.DimBoxCnt;
+            var r = i / dim;
+            var c = i % dim;
+            var brvol = dim * bdim;
+            var br = i / brvol;
+            var b = br * dbcnt + (i % dim) / bdim;
             var row = this.Row(r);
             var col = this.Col(c);
             var box = this.Box(b);

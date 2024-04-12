@@ -24,7 +24,7 @@ public static partial class RunnerModule
 
             List<Goal> constaints = 
                 ks.ToList()
-                .Select(cellKey => CellConstraint(cellKey, board.Dim, board.PeersOfCellAt(CellIdx(cellKey)).AsArray()))
+                .Select(cellKey => CellConstraint(cellKey, board.BoardDim, board.PeersOfCellAt(CellIdx(cellKey)).AsArray()))
                 .ToList();
 
             constaints.Add(Equal(q, board));

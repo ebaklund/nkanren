@@ -107,7 +107,7 @@ public static partial class BoardModule
             _renderCount = 0;
         }
 
-        var dim = board.Dim;
+        var dim = board.BoardDim;
         int rcount = ((int) dim) -1;
 
         var sb = new StringBuilder();

@@ -47,7 +47,7 @@ public class Board_Structure
         public void Dim(uint cellCount, uint expected)
         {
             var board = Board.With(new object[cellCount]);
-            board.Dim.Should().Be(expected);
+            board.BoardDim.Should().Be(expected);
         }
         
         [Theory]
