@@ -41,9 +41,10 @@ public static partial class GoalsModule
 
         for (var i = 0; i < peers.Length; ++i)
         {
-            var w = s.Walk(peers[i]);
+            var cell = peers[i];
+            var content = s.Walk(cell);
 
-            if (w is int num)
+            if (content is int num)
             {
                 counts[num] += 1;
             }

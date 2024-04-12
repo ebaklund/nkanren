@@ -167,11 +167,11 @@ public static partial class BoardModule
 
             for (var r = 0; r < bdim; ++r)
             {
-                var ir = i0r + r * dim;
+                var ibr = i0b + r * dim;
 
                 for (var c = 0; c < bdim; ++c)
                 {
-                    var i = ir + c;
+                    var i = ibr + c;
                     yield return _cells[i];
                 }
             }
@@ -185,12 +185,13 @@ public static partial class BoardModule
             }
         }
 
+
         public IEnumerator<object> PeersOfCellAt(uint i)
         {
             var bdim = this.BoxDim;
             var r = i / this.Dim;
             var c = i % this.Dim;
-            var b = (r / bdim) * bdim + c / bdim;
+            var b = i / (bdim * bdim);
             var row = this.Row(r);
             var col = this.Col(c);
             var box = this.Box(b);

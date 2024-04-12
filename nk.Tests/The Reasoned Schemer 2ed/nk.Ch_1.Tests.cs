@@ -7,6 +7,7 @@ using static nk.RunnerModule;
 using static nk.GoalsModule;
 using static nk.ListConstructor;
 
+[Trait("The Reasoned Schemer 2nd ed", "Playthings")]
 public class Playthings
 {
     // PROTECTED

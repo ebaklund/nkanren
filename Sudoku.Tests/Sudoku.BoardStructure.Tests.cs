@@ -5,16 +5,19 @@ using static nk.RunnerModule;
 using static Sudoku.BoardModule;
 using static Sudoku.RunnerModule;
 using Sudoku.Tests.Utils;
+using nk;
 
 namespace Sudoku.Tests;
 using static ValidatorModule;
 
 
-public class Board_given_cells 
+[Trait("Board", "Structure")]
+public class Board_Structure
 {
-    [Trait("Board", "Structure")]
-    public class Has : Board_given_cells
+    public class Has : Board_Structure
     {
+        // PUBLIC
+
         [Theory]
         [InlineData(1, 1)]
         [InlineData(4, 4)]

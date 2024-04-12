@@ -45,6 +45,8 @@ public static class StreamExt
 
     public static IEnumerator<Situation> MapInf(this IEnumerator<Situation> st1, Goal g)
     {
+        var yielded = 0;
+
         while(st1.MoveNext())
         {
             var st2 = g(st1.Current);
@@ -52,6 +54,7 @@ public static class StreamExt
             while(st2.MoveNext())
             {
                 yield return st2.Current;
+                ++yielded;
             }
         }
     }
