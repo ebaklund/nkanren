@@ -4,11 +4,6 @@ using static nk.LoggerModule;
 
 namespace nk;
 
-public interface IResolvable
-{
-    object GetResolvable();
-    IResolvable Wrap(object r);
-}
 
 public static partial class RunnerModule
 {

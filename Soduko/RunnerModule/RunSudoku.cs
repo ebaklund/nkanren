@@ -10,10 +10,6 @@ using static Sudoku.GoalsModule;
 
 public static partial class RunnerModule
 {
-    // PRIVATE
-
-
-
     // PUBLIC
 
     public static IEnumerator<Board> RunSudoku(uint cellCount, Func<Key[], Board> f)
@@ -24,7 +20,10 @@ public static partial class RunnerModule
 
             List<Goal> constaints = 
                 ks.ToList()
-                .Select(cellKey => CellConstraint(cellKey, board.BoardDim, board.PeersOfCellAt(CellIdx(cellKey)).AsArray()))
+                .Select(cellKey => Conj(
+                    SudokuConstraint(cellKey, board.BoardDim, board.PeersOfCellAt(CellIdx(cellKey)).AsArray()),
+                    Equal(cellKey, board.GetCellValue(CellIdx(cellKey)))
+                ))
                 .ToList();
 
             constaints.Add(Equal(q, board));

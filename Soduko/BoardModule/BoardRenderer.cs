@@ -15,9 +15,9 @@ public static partial class BoardModule
     {
         return value switch
         {
-            int i => $"{i}",
+            SudokuNumber n => $"{n.Value}",
             Key k => $"{(char)('a' + k.Idx)}",
-            _ => " ",
+            _ => throw new ArgumentException($"Unexpected type \"{value.GetType().Name}\" in Sudoku cell.")
         };
     }
 

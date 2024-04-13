@@ -28,9 +28,10 @@ public class Board_Structure
         [InlineData(49, 49)]
         [InlineData(64, 64)]
         [InlineData(81, 81)]
-        public void CellCount(uint cellCount, uint expected)
+        public void CellCount(int cellCount, uint expected)
         {
-            var board = Board.With(new object[cellCount]);
+            object[] cells = Enumerable.Range(0, cellCount).Select(i => new Key((uint)i)).ToArray();
+            var board = Board.With(cells);
             board.CellCount.Should().Be(expected);
         }
 
@@ -44,9 +45,10 @@ public class Board_Structure
         [InlineData(49, 7)]
         [InlineData(64, 8)]
         [InlineData(81, 9)]
-        public void Dim(uint cellCount, uint expected)
+        public void Dim(int cellCount, uint expected)
         {
-            var board = Board.With(new object[cellCount]);
+            object[] cells = Enumerable.Range(0, cellCount).Select(i => new Key((uint)i)).ToArray();
+            var board = Board.With(cells);
             board.BoardDim.Should().Be(expected);
         }
         
@@ -60,9 +62,10 @@ public class Board_Structure
         [InlineData(49, 1)]
         [InlineData(64, 2)]
         [InlineData(81, 3)]
-        public void BoxDim(uint cellCount, uint expected)
+        public void BoxDim(int cellCount, uint expected)
         {
-            var board = Board.With(new object[cellCount]);
+            object[] cells = Enumerable.Range(0, cellCount).Select(i => new Key((uint)i)).ToArray();
+            var board = Board.With(cells);
             board.BoxDim.Should().Be(expected);
         }
         
@@ -76,9 +79,10 @@ public class Board_Structure
         [InlineData(49, 49)]
         [InlineData(64, 16)]
         [InlineData(81, 9)]
-        public void BoxCnt(uint cellCount, uint expected)
+        public void BoxCnt(int cellCount, uint expected)
         {
-            var board = Board.With(new object[cellCount]);
+            object[] cells = Enumerable.Range(0, cellCount).Select(i => new Key((uint)i)).ToArray();
+            var board = Board.With(cells);
             board.BoxCnt.Should().Be(expected);
         }
         
@@ -92,9 +96,10 @@ public class Board_Structure
         [InlineData(49, 7)]
         [InlineData(64, 4)]
         [InlineData(81, 3)]
-        public void DimBoxCnt(uint cellCount, uint expected)
+        public void DimBoxCnt(int cellCount, uint expected)
         {
-            var board = Board.With(new object[cellCount]);
+            object[] cells = Enumerable.Range(0, cellCount).Select(i => new Key((uint)i)).ToArray();
+            var board = Board.With(cells);
             board.DimBoxCnt.Should().Be(expected);
         }
     }

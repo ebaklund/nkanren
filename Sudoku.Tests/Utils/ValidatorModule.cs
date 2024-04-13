@@ -56,9 +56,9 @@ public static class ValidatorModule
             {
                 if (peerCells.Current is int num)
                 {
-                    ++counts[num];
+                    ++counts[num - 1];
 
-                    if (counts[num] > 1)
+                    if (counts[num - 1] > 1)
                     {
                         throw new ApplicationException($"ValidateRow() Count of number {num} is {counts[num]}.");
                     }

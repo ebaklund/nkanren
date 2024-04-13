@@ -15,6 +15,27 @@ public static partial class BoardModule
         {
             throw new ArgumentException("Cell array does not make a square.");
         }
+
+        for (int i = 0; i < cells.Length; i++)
+        {
+            if (cells[i] is Key)
+            {
+                continue;
+            }
+
+            if (cells[i] is SudokuNumber)
+            {
+                continue;
+            }
+
+            if (cells[i] is int num)
+            {
+                cells[i] = SudokuNumber.From((uint)num);
+                continue;
+            }
+
+            throw new ArgumentException("Unexpected cell content.");
+        }
     }
 
     // PUBLIC
@@ -80,6 +101,11 @@ public static partial class BoardModule
         {
             AssertValidContent(cells);
             return new Board(cells);
+        }
+
+        public object GetCellValue(uint i)
+        {
+            return _cells[i];
         }
 
         public uint CellCount
