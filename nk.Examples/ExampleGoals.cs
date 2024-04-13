@@ -1,7 +1,7 @@
 ﻿
+namespace nk.Examples;
 using static nk.GoalsModule;
 
-namespace nk.Examples;
 
 internal class ExampleGoals
 {

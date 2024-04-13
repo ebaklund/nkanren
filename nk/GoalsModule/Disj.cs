@@ -1,7 +1,6 @@
 ﻿
-using static nk.LoggerModule;
-
 namespace nk;
+using static nk.LoggerModule;
 
 
 public static partial class GoalsModule
