@@ -600,4 +600,58 @@ public class Playthings
             Equal("pea", y)
         )).AsString().Should().Be("((\"split\", \"pea\"))");
     }
+
+    static Func<Key, Goal> Defrel(Func<Key, Goal> f)
+    {
+        return f;
+    }
+
+    Func<Key, Goal> Teacupo = Defrel((t) => Disj(
+        Equal("tea", t),
+        Equal("cup", t)
+    ));
+    
+    [Fact]
+    public void Test_1_83()
+    {
+         RunAll((x) => 
+            Teacupo(x)
+        ).AsString().Should().Be("(\"tea\", \"cup\")");
+    }
+
+    [Fact]
+    public void Test_1_84()
+    {
+        RunAll((x, y) => Disj(
+            Conj(Teacupo(x), Equal(true, y)),
+            Conj(Equal(false, x), Equal(true, y))
+        )).AsString().Should().Be("((\"tea\", True), (False, True), (\"cup\", True))");
+    }
+
+    [Fact]
+    public void Test_1_85()
+    {
+        RunAll((x, y) => Conj(
+            Teacupo(x),
+            Teacupo(y)
+        )).AsString().Should().Be("((\"tea\", \"tea\"), (\"cup\", \"tea\"), (\"tea\", \"cup\"), (\"cup\", \"cup\"))");
+    }
+
+    [Fact]
+    public void Test_1_86()
+    {
+        RunAll((x, y) => Conj(
+            Teacupo(x),
+            Teacupo(x)
+        )).AsString().Should().Be("((\"tea\", _1), (\"cup\", _1))");
+    }
+
+    [Fact]
+    public void Test_1_87()
+    {
+        RunAll((x, y) => Disj(
+            Conj(Teacupo(x), Teacupo(x)),
+            Conj(Equal(false, x), Teacupo(y))
+        )).AsString().Should().Be("((\"tea\", _1), (False, \"tea\"), (\"cup\", _1), (False, \"cup\"))");
+    }
 }
