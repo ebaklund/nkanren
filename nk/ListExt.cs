@@ -12,45 +12,29 @@ public static class ListConstructor
 }
 
 public static class ListExt
-{
-    public static List<object> ListFrom(params object[] items)
-    {
-        return new List<object>(items);
-    }
-
-    public static object? Car(this List<object> self)
-    {
-        return self.FirstOrDefault();
-    }
-
-    public static List<object> Cdr(this List<object> self)
-    {
-        return self.Count > 1 
-            ? self.Skip(1).ToList() // ISSUE: Performance?
-            : new List<object>();
-    }
-    
-    public static string AsString(this List<object> list)
+{   
+    public static string AsString(this IEnumerable<object> objects)
     {
         var sb = new StringBuilder().Append("(");
 
-        for (var i = 0; i < list.Count; ++i)
+        foreach (var o in objects)
         {
-            var str = list[i] switch
+            var str = o switch
             {
                 Key k => $"_{k.Idx}",
                 string s => $"\"{s}\"",
                 List<object> l => l.AsString(),
-                object[] a => a.ToList().AsString(),
-                _ => list[i].ToString()
+                object[] a => a.AsString(),
+                _ => o.ToString()
             };
 
             sb.Append(str);
-            
-            if ((i+1) < list.Count)
-            {
-                sb.Append(", ");
-            }
+            sb.Append(", ");
+        }
+
+        if (sb.Length > 2)
+        {
+            sb.Remove(sb.Length - 2, 2);
         }
 
         return sb.Append(")").ToString();
