@@ -1,5 +1,6 @@
 using Xunit;
 using Xunit.Abstractions;
+using FluentAssertions;
 
 namespace nk.Tests;
 
@@ -31,7 +32,7 @@ public class Playthings
     {
         RunAll((q) => 
             Fail()
-        ).ShouldBe("()");
+        ).AsString().Should().Be("()");
     }
 
     [Fact]
@@ -39,7 +40,7 @@ public class Playthings
     {
         RunAll((q) => 
             Equal("pea", "pod")
-        ).ShouldBe("()");
+        ).AsString().Should().Be("()");
     }
 
     [Fact]
@@ -47,7 +48,7 @@ public class Playthings
     {
         RunAll((q) =>
             Equal(q, "pea")
-        ).ShouldBe("(\"pea\")");
+        ).AsString().Should().Be("(\"pea\")");
     }
 
     [Fact]
@@ -55,7 +56,7 @@ public class Playthings
     {
         RunAll((q) =>
             Equal("pea", q)
-        ).ShouldBe("(\"pea\")");
+        ).AsString().Should().Be("(\"pea\")");
     }
 
     [Fact]
@@ -63,7 +64,7 @@ public class Playthings
     {
         RunAll((q) =>
             Succ()
-        ).ShouldBe("(_0)");
+        ).AsString().Should().Be("(_0)");
     }
 
     [Fact]
@@ -71,7 +72,7 @@ public class Playthings
     {
         RunAll((q) =>
             Equal("pea", "pea")
-        ).ShouldBe("(_0)");
+        ).AsString().Should().Be("(_0)");
     }
     
     [Fact]
@@ -79,7 +80,7 @@ public class Playthings
     {
         RunAll((q) =>
             Equal(q, q)
-        ).ShouldBe("(_0)");
+        ).AsString().Should().Be("(_0)");
     }
 
     [Fact]
@@ -89,7 +90,7 @@ public class Playthings
             Fresh((x) =>
                 Equal("pea", x)
             )
-        ).ShouldBe("(_0)");
+        ).AsString().Should().Be("(_0)");
     }
 
     [Fact]
@@ -99,7 +100,7 @@ public class Playthings
             Fresh(1, (x) =>
                 Equal("pea", x[0])
             )
-        ).ShouldBe("(_0)");
+        ).AsString().Should().Be("(_0)");
     }
 
     [Fact]
@@ -108,7 +109,7 @@ public class Playthings
         RunAll((q) =>
             Fresh((x) =>
                 Equal(q, x)
-        )).ShouldBe("(_1)");
+        )).AsString().Should().Be("(_1)");
     }
 
     [Fact]
@@ -117,7 +118,7 @@ public class Playthings
         RunAll((q) =>
             Fresh(1, (x) =>
                 Equal(q, x[0])
-        )).ShouldBe("(_1)");
+        )).AsString().Should().Be("(_1)");
     }
 
     [Fact]
@@ -125,7 +126,7 @@ public class Playthings
     {
         RunAll((q) =>
             Equal(l(l(l("pea")), "pod"), l(l(l("pea")), "pod"))
-        ).ShouldBe("(_0)");
+        ).AsString().Should().Be("(_0)");
     }
 
     [Fact]
@@ -133,7 +134,7 @@ public class Playthings
     {
         RunAll((q) =>
             Equal(l(l(l("pea")), "pod"), l(l(l("pea")), q))
-        ).ShouldBe("(\"pod\")");
+        ).AsString().Should().Be("(\"pod\")");
     }
 
     [Fact]
@@ -141,7 +142,7 @@ public class Playthings
     {
         RunAll((q) =>
             Equal(l(l(l(q)), "pod"), l(l(l("pea")), "pod"))
-        ).ShouldBe("(\"pea\")");
+        ).AsString().Should().Be("(\"pea\")");
     }
 
     [Fact]
@@ -150,7 +151,7 @@ public class Playthings
         RunAll((q) => 
             Fresh((x) =>
                 Equal(l(l(l(q)), "pod"), l(l(l(x)), "pod"))
-        )).ShouldBe("(_1)");
+        )).AsString().Should().Be("(_1)");
     }
     
     [Fact]
@@ -159,7 +160,7 @@ public class Playthings
         RunAll((q) => 
             Fresh(1, (x) =>
                 Equal(l(l(l(q)), "pod"), l(l(l(x[0])), "pod"))
-        )).ShouldBe("(_1)");
+        )).AsString().Should().Be("(_1)");
     }
 
     [Fact]
@@ -168,7 +169,7 @@ public class Playthings
         RunAll((q) =>
             Fresh((x) =>
                 Equal(l(l(l(q)), x), l(l(l(x)), "pod"))
-        )).ShouldBe("(\"pod\")");
+        )).AsString().Should().Be("(\"pod\")");
     }
 
     [Fact]
@@ -177,7 +178,7 @@ public class Playthings
         RunAll((q) =>
             Fresh(1, (x) =>
                 Equal(l(l(l(q)), x[0]), l(l(l(x[0])), "pod"))
-        )).ShouldBe("(\"pod\")");
+        )).AsString().Should().Be("(\"pod\")");
     }
 
     [Fact]
@@ -186,7 +187,7 @@ public class Playthings
         RunAll((q) =>
             Fresh((x) =>
                 Equal(l(x, x), q)
-        )).ShouldBe("((_1, _1))");
+        )).AsString().Should().Be("((_1, _1))");
     }
 
     [Fact]
@@ -195,7 +196,7 @@ public class Playthings
         RunAll((q) =>
             Fresh(1, (x) =>
                 Equal(l(x[0], x[0]), q)
-        )).ShouldBe("((_1, _1))");
+        )).AsString().Should().Be("((_1, _1))");
     }
     
     [Fact]
@@ -205,7 +206,7 @@ public class Playthings
             Fresh((x) =>
                 Fresh((y) =>
                     Equal(l(q, y), l(l(x, y), x))
-        ))).ShouldBe("((_1, _1))");
+        ))).AsString().Should().Be("((_1, _1))");
     }
 
     [Fact]
@@ -214,7 +215,7 @@ public class Playthings
         RunAll((q) =>
             Fresh(2, (x) =>
                 Equal(l(q, x[1]), l(l(x[0], x[1]), x[0]))
-        )).ShouldBe("((_1, _1))");
+        )).AsString().Should().Be("((_1, _1))");
     }
 
     [Fact]
@@ -224,7 +225,7 @@ public class Playthings
             Fresh((x) =>
                 Fresh((y) =>
                     Equal(l(x, y), q)
-        ))).ShouldBe("((_1, _2))");
+        ))).AsString().Should().Be("((_1, _2))");
     }
     
     [Fact]
@@ -233,7 +234,7 @@ public class Playthings
         RunAll((q) => 
             Fresh(2, (x) =>
                 Equal(l(x[0], x[1]), q)
-        )).ShouldBe("((_1, _2))");
+        )).AsString().Should().Be("((_1, _2))");
     }
 
     [Fact]
@@ -243,7 +244,7 @@ public class Playthings
             Fresh((t) =>
                 Fresh((u) =>
                     Equal(l(t, u), s)
-        ))).ShouldBe("((_1, _2))");
+        ))).AsString().Should().Be("((_1, _2))");
     }
 
     [Fact]
@@ -252,7 +253,7 @@ public class Playthings
         RunAll((s) => 
             Fresh(2, (t) =>
                 Equal(l(t[0], t[1]), s)
-        )).ShouldBe("((_1, _2))");
+        )).AsString().Should().Be("((_1, _2))");
     }
 
     [Fact]
@@ -262,7 +263,7 @@ public class Playthings
             Fresh((x) =>
                 Fresh((y) =>
                     Equal(l(x, y, x), q)
-        ))).ShouldBe("((_1, _2, _1))");
+        ))).AsString().Should().Be("((_1, _2, _1))");
     }
 
     [Fact]
@@ -271,7 +272,7 @@ public class Playthings
         RunAll((q) => 
             Fresh(2, (x) =>
                 Equal(l(x[0], x[1], x[0]), q)
-        )).ShouldBe("((_1, _2, _1))");
+        )).AsString().Should().Be("((_1, _2, _1))");
     }
 
     [Fact]
@@ -279,7 +280,7 @@ public class Playthings
     {
         RunAll((q) => 
             Conj(Succ(), Succ())
-        ).ShouldBe("(_0)");
+        ).AsString().Should().Be("(_0)");
     }
 
     [Fact]
@@ -287,7 +288,7 @@ public class Playthings
     {
         RunAll((q) => 
             Conj(Succ(), Equal("corn", q))
-        ).ShouldBe("(\"corn\")");
+        ).AsString().Should().Be("(\"corn\")");
     }
 
     [Fact]
@@ -295,7 +296,7 @@ public class Playthings
     {
         RunAll((q) => 
             Conj(Fail(), Equal("corn", q))
-        ).ShouldBe("()");
+        ).AsString().Should().Be("()");
     }
 
     [Fact]
@@ -303,7 +304,7 @@ public class Playthings
     {
         RunAll((q) => 
             Conj(Equal("corn", q), Equal("meal", q))
-        ).ShouldBe("()");
+        ).AsString().Should().Be("()");
     }
 
     [Fact]
@@ -311,7 +312,7 @@ public class Playthings
     {
         RunAll((q) => 
             Conj(Equal("corn", q), Equal("corn", q))
-        ).ShouldBe("(\"corn\")");
+        ).AsString().Should().Be("(\"corn\")");
     }
 
     [Fact]
@@ -319,7 +320,7 @@ public class Playthings
     {
         RunAll((q) => 
             Conj(Fail(), Fail())
-        ).ShouldBe("()");
+        ).AsString().Should().Be("()");
     }
 
     [Fact]
@@ -327,7 +328,7 @@ public class Playthings
     {
         RunAll((q) => 
             Disj(Equal("olive", q), Fail())
-        ).ShouldBe("(\"olive\")");
+        ).AsString().Should().Be("(\"olive\")");
     }
 
     [Fact]
@@ -335,7 +336,7 @@ public class Playthings
     {
         RunAll((q) => 
             Disj(Fail(), Equal("oil", q))
-        ).ShouldBe("(\"oil\")");
+        ).AsString().Should().Be("(\"oil\")");
     }
 
     [Fact]
@@ -343,7 +344,7 @@ public class Playthings
     {
         RunAll((q) => 
             Disj(Equal("olive", q), Equal("oil", q))
-        ).ShouldBe("(\"olive\", \"oil\")");
+        ).AsString().Should().Be("(\"olive\", \"oil\")");
     }
 
     [Fact]
@@ -353,7 +354,7 @@ public class Playthings
             Fresh((x) =>
                 Fresh((y) =>
                     Disj(Equal(l(x, y), q), Equal(l(y, x), q))
-        ))).ShouldBe("((_1, _2), (_2, _1))");
+        ))).AsString().Should().Be("((_1, _2), (_2, _1))");
     }
 
     [Fact]
@@ -362,7 +363,7 @@ public class Playthings
         RunAll((q) =>
             Fresh(2, (x) =>
                 Disj(Equal(l(x[0], x[1]), q), Equal(l(x[1], x[0]), q))
-        )).ShouldBe("((_1, _2), (_2, _1))");
+        )).AsString().Should().Be("((_1, _2), (_2, _1))");
     }
 
     [Fact]
@@ -370,7 +371,7 @@ public class Playthings
     {
         RunAll((x) =>
             Disj(Equal("olive", x), Equal("oil" ,x))
-        ).ShouldBe("(\"olive\", \"oil\")");
+        ).AsString().Should().Be("(\"olive\", \"oil\")");
     }
 
     [Fact]
@@ -378,7 +379,7 @@ public class Playthings
     {
         RunAll((x) =>
             Disj(Equal("oil", x), Equal("olive" ,x))
-        ).ShouldBe("(\"oil\", \"olive\")");
+        ).AsString().Should().Be("(\"oil\", \"olive\")");
     }
 
     [Fact]
@@ -388,7 +389,7 @@ public class Playthings
             Disj(
                 Conj(Equal("olive", x), Fail()),
                 Equal("oil" ,x)
-        )).ShouldBe("(\"oil\")");
+        )).AsString().Should().Be("(\"oil\")");
     }
 
     [Fact]
@@ -398,7 +399,7 @@ public class Playthings
             Disj(
                 Conj(Equal("olive", x), Succ()),
                 Equal("oil" ,x)
-        )).ShouldBe("(\"olive\", \"oil\")");
+        )).AsString().Should().Be("(\"olive\", \"oil\")");
     }
 
     [Fact]
@@ -409,7 +410,7 @@ public class Playthings
                 Equal("oil" ,x),
                 Conj(Equal("olive", x), Succ())
             )
-        ).ShouldBe("(\"oil\", \"olive\")");
+        ).AsString().Should().Be("(\"oil\", \"olive\")");
     }
 
     [Fact]
@@ -422,7 +423,7 @@ public class Playthings
                     Equal("olive" ,x),
                     Disj(Succ(), Equal("oil" ,x))
             ))
-        ).ShouldBe("(\"olive\", _0, \"oil\")");
+        ).AsString().Should().Be("(\"olive\", _0, \"oil\")");
     }
 
     [Fact]
@@ -437,7 +438,7 @@ public class Playthings
                             Equal("pea", y),
                             Equal(l(x, y), r)
             ))))
-        ).ShouldBe("((\"split\", \"pea\"))");
+        ).AsString().Should().Be("((\"split\", \"pea\"))");
     }
 
     [Fact]
@@ -451,7 +452,7 @@ public class Playthings
                         Equal("pea", x[1]),
                         Equal(l(x[0], x[1]), r)
             )))
-        ).ShouldBe("((\"split\", \"pea\"))");
+        ).AsString().Should().Be("((\"split\", \"pea\"))");
     }
 
     [Fact]
@@ -467,7 +468,7 @@ public class Playthings
                         ),
                     Equal(l(x, y), r)
            )))
-        ).ShouldBe("((\"split\", \"pea\"))");
+        ).AsString().Should().Be("((\"split\", \"pea\"))");
     }
 
     [Fact]
@@ -482,7 +483,7 @@ public class Playthings
                     ),
                 Equal(l(x[0], x[1]), r)
            ))
-        ).ShouldBe("((\"split\", \"pea\"))");
+        ).AsString().Should().Be("((\"split\", \"pea\"))");
     }
 
     [Fact]
@@ -496,7 +497,7 @@ public class Playthings
                 ),
                 Equal(l(x, x[0], x[1]), r)
             )
-        ).ShouldBe("(((\"split\", \"pea\"), \"split\", \"pea\"))");
+        ).AsString().Should().Be("(((\"split\", \"pea\"), \"split\", \"pea\"))");
     }
 
     [Fact]
@@ -508,7 +509,7 @@ public class Playthings
                 Equal("split", x[0]),
                 Equal(x, q)
             )
-        ).ShouldBe("((\"split\", \"pea\"))");
+        ).AsString().Should().Be("((\"split\", \"pea\"))");
     }
 
     [Fact]
@@ -520,7 +521,7 @@ public class Playthings
                 Conj(Equal("red", x[0]), Equal("bean", x[1]))
             ),
             Equal(q, x)
-        )).ShouldBe("((\"split\", \"pea\"), (\"red\", \"bean\"))");
+        )).AsString().Should().Be("((\"split\", \"pea\"), (\"red\", \"bean\"))");
     }
     
     [Fact]
@@ -535,7 +536,7 @@ public class Playthings
                     ),
                     Equal(l(x, y, "soup"), r)
             ))
-        ).ShouldBe("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
+        ).AsString().Should().Be("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
     }
     
     [Fact]
@@ -550,7 +551,7 @@ public class Playthings
                     ),
                     Equal(l(x[0], x[1], "soup"), r)
             ))
-        ).ShouldBe("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
+        ).AsString().Should().Be("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
     }
 
     [Fact]
@@ -564,7 +565,7 @@ public class Playthings
                 ),
                 Equal(l(x, y, "soup"), r)
             ))
-        ).ShouldBe("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
+        ).AsString().Should().Be("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
     }
 
     [Fact]
@@ -578,7 +579,7 @@ public class Playthings
                 ),
                 Equal(l(x[0], x[1], "soup"), r)
             ))
-        ).ShouldBe("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
+        ).AsString().Should().Be("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
     }
 
     [Fact]
@@ -591,6 +592,6 @@ public class Playthings
             ),
             Equal("soup", x[2]),
             Equal(q, x)
-        )).ShouldBe("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
+        )).AsString().Should().Be("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
     }
 }

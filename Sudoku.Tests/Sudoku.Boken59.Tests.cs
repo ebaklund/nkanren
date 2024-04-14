@@ -1,6 +1,5 @@
 ﻿
 using FluentAssertions;
-using static nk.RunnerModule;
 using static Sudoku.BoardModule;
 using static Sudoku.RunnerModule;
 using Sudoku.Tests.Utils;
