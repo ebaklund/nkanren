@@ -17,9 +17,9 @@ public class Given_Board_1x1
     {
         var res = RunSudoku(1, (x) => With(
             x[0]
-        )).AssertValid().TakeAll();
+        )).AssertValid().ToArray();
         
-        res.Count.Should().Be(1);
+        res.Length.Should().Be(1);
 
         ("\n" + res[0].AsString(resetRenderCount: true)).Should().Be( "\n" +
             "┏━┓\n" +
@@ -39,9 +39,9 @@ public class Given_Board_2x2
         var res = RunSudoku(4, (x) => With(
             x[0], x[1],
             x[2], x[3]
-        )).AssertValid().TakeAll();
+        )).AssertValid().ToArray();
         
-        res.Count.Should().Be(2);
+        res.Length.Should().Be(2);
         
         ("\n" + res[0].AsString(resetRenderCount: true)).Should().Be( "\n" +
             "┏━┯━┓\n" +
@@ -72,9 +72,9 @@ public class Given_Board_3x3
             x[0], x[1], x[2],
             x[3], x[4], x[5],
             x[6], x[7], x[8]
-        )).AssertValid().TakeAll();
+        )).AssertValid().ToArray();
  
-        res.Count.Should().Be(12);
+        res.Length.Should().Be(12);
 
         ("\n" + res[0].AsString(resetRenderCount: true)).Should().Be( "\n" +
             "┏━┯━┯━┓\n" +
@@ -120,7 +120,7 @@ public class Given_Board_4x4
              x[4],  x[5],  x[6],  x[7],
              x[8],  x[9], x[10], x[11],
             x[12], x[13], x[14], x[15]
-        )).AssertValid().TakeMax(1);
+        )).AssertValid().Take(1).ToArray();
 
         ("\n" + res[0].AsString(resetRenderCount: true)).Should().Be( "\n" +
             "┏━┯━┯━┯━┓\n" +
@@ -149,7 +149,7 @@ public class Given_Board_5x5
             x[10], x[11], x[12], x[13], x[14],
             x[15], x[16], x[17], x[18], x[19],
             x[20], x[21], x[22], x[23], x[24]
-        )).AssertValid().TakeMax(1);
+        )).AssertValid().Take(1).ToArray();
 
         ("\n" + res[0].AsString(resetRenderCount: true)).Should().Be( "\n" +
             "┏━┯━┯━┯━┯━┓\n" +
@@ -181,7 +181,7 @@ public class Given_Board_6x6
             x[18], x[19], x[20], x[21], x[22], x[23], 
             x[24], x[25], x[26], x[27], x[28], x[29],
             x[30], x[31], x[32], x[33], x[34], x[35]            
-        )).AssertValid().TakeMax(1);
+        )).AssertValid().Take(1).ToArray();
 
         ("\n" + res[0].AsString(resetRenderCount: true)).Should().Be( "\n" +
             "┏━┯━┯━┯━┯━┯━┓\n" +
@@ -216,7 +216,7 @@ public class Given_Board_7x7
             x[28], x[29], x[30], x[31], x[32], x[33], x[34],
             x[35], x[36], x[37], x[38], x[39], x[40], x[41],           
             x[42], x[43], x[44], x[45], x[46], x[47], x[48]          
-        )).AssertValid().TakeMax(1);
+        )).AssertValid().Take(1).ToArray();
 
         ("\n" + res[0].AsString(resetRenderCount: true)).Should().Be( "\n" +
             "┏━┯━┯━┯━┯━┯━┯━┓\n" +
@@ -254,7 +254,7 @@ public class Given_Board_8x8
              x[40], x[41], x[42], x[43], x[44], x[45], x[46], x[47],         
              x[48], x[49], x[50], x[51], x[52], x[53], x[54], x[55],          
              x[56], x[57], x[58], x[59], x[60], x[61], x[62], x[63]
-        )).AssertValid().TakeMax(1);
+        )).AssertValid().Take(1).ToArray();
 
         ("\n" + res[0].AsString(resetRenderCount: true)).Should().Be( "\n" +
             "┏━┯━┯━┯━┯━┯━┯━┯━┓\n" +
@@ -309,7 +309,7 @@ public class Given_Board_9x9
             x[17], x[16], x[15],   x[14], x[13], x[12],   x[11], x[10],  x[9],
              x[8],  x[7],  x[6],    x[5],  x[4],  x[3],    x[2],  x[1],  x[0]
 #endif
-        )).AssertValid().TakeMax(1);
+        )).AssertValid().Take(1).ToArray();
 
         ("\n" + res[0].AsString(resetRenderCount: true)).Should().Be( "\n" +
             "┏━┯━┯━┯━┯━┯━┯━┯━┯━┓\n" +

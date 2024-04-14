@@ -11,7 +11,7 @@ internal class ExampleGoals
     #if false
     public static Goal Nevero() // p 157
     {
-        IEnumerator<IStreamItem> _Nevero(Subst s) 
+        IEnumeraable<IStreamItem> _Nevero(Subst s) 
         {
             yield return new Suspension(() => Nevero()(s));
         }
@@ -21,7 +21,7 @@ internal class ExampleGoals
 
     public static Goal Alwayso() // p 159
     {
-        IEnumerator<IStreamItem> _Alwayso(Subst s)
+        IEnumerable<IStreamItem> _Alwayso(Subst s)
         {
             yield return new Suspension(() => Disj(Succ(), Alwayso())(s));
         }
@@ -30,35 +30,8 @@ internal class ExampleGoals
     }
     #endif
 
-    public static Goal Ifte(Goal g1, Goal g2, Goal g3) // 173
-    {
-        IEnumerator<Substitution> _Ifte(Substitution s)
-        {
-            var st1 = g1(s);
-
-            if(!st1.MoveNext())
-            {
-                return g3(s);
-            }
-            
-            return st1.FlatMapInf(g2); 
-        };
-
-        return _Ifte;
-    }
-
     public static Goal Once(Goal g) // P 174
     {
-        IEnumerator<Substitution> _Once(Substitution s)
-        {
-            var st = g(s);
-
-            if (st.MoveNext())
-            {
-                yield return st.Current;
-            }
-        };
-
-        return _Once;
+        return (Substitution s) => g(s).Take(1);
     }
 }

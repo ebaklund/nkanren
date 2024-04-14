@@ -8,5 +8,5 @@ public static partial class GoalsModule
 {
     // PUBLIC
    
-    public delegate IEnumerator<Substitution> Goal(Substitution input);
+    public delegate IEnumerable<Substitution> Goal(Substitution input);
 }

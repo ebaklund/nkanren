@@ -21,23 +21,20 @@ public static partial class BoardModule
         };
     }
 
-    private static IEnumerator<string> AsStrings(this IEnumerator<object> values)
+    private static IEnumerable<string> AsStrings(this IEnumerable<object> values)
     {
-        while (values.MoveNext())
-        {
-            yield return values.Current.AsString();
-        }
+        return values.Select(values => values.AsString());
     }
 
-    private static void AppendRow(this StringBuilder sb, IEnumerator<object> row)
+    private static void AppendRow(this StringBuilder sb, IEnumerable<object> row)
     {
         var strings = row.AsStrings();
 
         sb.Append("┃");
 
-        while (strings.MoveNext())
+        foreach (var str in strings)
         {
-            sb.Append(strings.Current + "│");
+            sb.Append(str + "│");
         }
 
         sb.Remove(sb.Length - 1, 1);

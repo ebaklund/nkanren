@@ -35,7 +35,7 @@ public static partial class GoalsModule
 
     public static Goal SudokuConstraint(Key k, uint dim, object[] peers)
     {
-        IEnumerator<Substitution> _goal(Substitution s)
+        IEnumerable<Substitution> _goal(Substitution s)
         {
             LogDebug($"Once({s}, {k}) #{++_callCount}");
 

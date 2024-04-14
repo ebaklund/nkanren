@@ -80,6 +80,6 @@ public class Board_should_provide_cell_peers
         var expectedKeys = GetExpectedKeysWith(expectedIndexes);
 
 
-        board.PeersOfCellAt(cellIdx).TakeAll().Should().BeEquivalentTo(expectedKeys);
+        board.PeersOfCellAt(cellIdx).ToList().Should().BeEquivalentTo(expectedKeys);
     }
 }

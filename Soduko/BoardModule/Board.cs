@@ -39,18 +39,6 @@ public static partial class BoardModule
     }
 
     // PUBLIC
-    
-    public static object[] AsArray(this IEnumerator<object> objects)
-    {
-        var res = new List<object>();
-
-        while (objects.MoveNext())
-        {
-            res.Add(objects.Current);
-        }
-
-        return res.ToArray();
-    }
 
     public static Board With(params object[] cells)
     {
@@ -144,7 +132,7 @@ public static partial class BoardModule
             get => BoardDim / BoxDim;
         }
 
-        public IEnumerator<object> Row(uint r)
+        public IEnumerable<object> Row(uint r)
         {
             var dim = this.BoardDim;
             var c0 = r*dim;
@@ -156,7 +144,7 @@ public static partial class BoardModule
             }
         }
 
-        public IEnumerator<IEnumerator<object>> Rows()
+        public IEnumerable<IEnumerable<object>> Rows()
         {
             var dim = this.BoardDim;
 
@@ -166,7 +154,7 @@ public static partial class BoardModule
             }
         }
 
-        public IEnumerator<object> Col(uint c)
+        public IEnumerable<object> Col(uint c)
         {
             var dim = this.BoardDim;
 
@@ -176,7 +164,7 @@ public static partial class BoardModule
             }
         }
 
-        public IEnumerator<IEnumerator<object>> Cols()
+        public IEnumerable<IEnumerable<object>> Cols()
         {
             var dim = this.BoardDim;
 
@@ -186,7 +174,7 @@ public static partial class BoardModule
             }
         }
 
-        public IEnumerator<object> Box_old(uint b)
+        public IEnumerable<object> Box_old(uint b)
         {
             var dim = this.BoardDim;
             var bdim = this.BoxDim;
@@ -218,7 +206,7 @@ public static partial class BoardModule
         //       ┃c│d │ e│f┃ bri = br * brvol
         //       ┗━┷━━┷━━┷━┛ bi = bri + (b % dbcnt) * bdim
         
-        public IEnumerator<object> Box(uint b)
+        public IEnumerable<object> Box(uint b)
         {
             var dim = this.BoardDim;
             var bdim = this.BoxDim;
@@ -241,7 +229,7 @@ public static partial class BoardModule
             }
         }
 
-        public IEnumerator<IEnumerator<object>> Boxs()
+        public IEnumerable<IEnumerable<object>> Boxs()
         {
             for (uint b = 0; b < this.BoardDim; ++b)
             {
@@ -250,7 +238,7 @@ public static partial class BoardModule
         }
 
 
-        public IEnumerator<object> PeersOfCellAt(uint i)
+        public IEnumerable<object> PeersOfCellAt(uint i)
         {
             var dim = this.BoardDim;
             var bdim = this.BoxDim;
@@ -264,19 +252,19 @@ public static partial class BoardModule
             var col = this.Col(c);
             var box = this.Box(b);
 
-            while(row.MoveNext())
+            foreach (var cell in row)
             {
-                yield return row.Current;
+                yield return cell;
             }
 
-            while(col.MoveNext())
+            foreach (var cell in col)
             {
-                yield return col.Current;
+                yield return cell;
             }   
             
-            while(box.MoveNext())
+            foreach (var cell in box)
             {
-                yield return box.Current;
+                yield return cell;
             }
         }
 

@@ -12,7 +12,7 @@ public static partial class RunnerModule
 {
     // PUBLIC
 
-    public static IEnumerator<Board> RunSudoku(uint cellCount, Func<Key[], Board> f)
+    public static IEnumerable<Board> RunSudoku(uint cellCount, Func<Key[], Board> f)
     {
         return RunAll<Board>(cellCount, (q, ks) => {
             var board = f(ks);
@@ -21,7 +21,7 @@ public static partial class RunnerModule
             List<Goal> constaints = 
                 ks.ToList()
                 .Select(cellKey => Conj(
-                    SudokuConstraint(cellKey, board.BoardDim, board.PeersOfCellAt(CellIdx(cellKey)).AsArray()),
+                    SudokuConstraint(cellKey, board.BoardDim, board.PeersOfCellAt(CellIdx(cellKey)).ToArray()),
                     Equal(cellKey, board.GetCellValue(CellIdx(cellKey)))
                 ))
                 .ToList();

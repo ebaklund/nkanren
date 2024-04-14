@@ -14,7 +14,7 @@ public static partial class GoalsModule
         return (Substitution s) =>
         {
             LogDebug($"Succ({s})");
-            return Enumerable.Repeat(s, 1).GetEnumerator();
+            return Enumerable.Repeat(s, 1);
         };
     }
 }

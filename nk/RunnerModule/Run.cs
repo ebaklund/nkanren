@@ -1,4 +1,6 @@
 
+using System.Linq;
+
 using static nk.GoalsModule;
 using static nk.LoggerModule;
 using static nk.SubstModule;
@@ -78,36 +80,28 @@ public static partial class RunnerModule
         };
     }
 
-    private static IEnumerator<object> RunGoal(Substitution s, uint nt, Key q, Goal g)
+    private static IEnumerable<object> RunGoal(Substitution s, int nt, Key q, Goal g)
     {
-        //var st = g(s).FlattenInf();
-        var st = g(s);
-
-        for (var i = 0; i < nt && st.MoveNext();)
-        {
-            var o1 = st.Current.Get(q);
-            var o2 = GetResolved(st.Current, q);
-            yield return o2;
-        }
+        return g(s).Take(nt).Select(s2 => GetResolved(s2, q));
     }
 
-    private static IEnumerator<T> As<T>(this IEnumerator<object> objects)
+    private static IEnumerable<T> As<T>(this IEnumerable<object> objects)
     {
-        while (objects.MoveNext())
+        foreach (var o in objects)
         {
-            if(objects.Current is T obj)
+            if(o is T obj)
             {
                 yield return obj;
             } else
             {
-                LogError($"Removed from stream: Failed to convert from \"{objects.Current.GetType().Name}\" to \"{typeof(T).Name}\".");
+                LogError($"Removed from stream: Failed to convert from \"{o.GetType().Name}\" to \"{typeof(T).Name}\".");
             }
         }
     }
 
     // PUBLIC
 
-    public static IEnumerator<object> Run(uint nt, Func<Key, Goal> f) // p 169
+    public static IEnumerable<object> Run(int nt, Func<Key, Goal> f) // p 169
     {
         var s = new Substitution();
         var q = s.Fresh();
@@ -115,7 +109,7 @@ public static partial class RunnerModule
         return RunGoal(s, nt, q, f(q));
     }
 
-    public static IEnumerator<object> Run(uint nt, uint nk, Func<Key, Key[], Goal> f) // p 169
+    public static IEnumerable<object> Run(int nt, uint nk, Func<Key, Key[], Goal> f) // p 169
     {
         var s = new Substitution();
         var q = s.Fresh();
@@ -123,18 +117,18 @@ public static partial class RunnerModule
         return RunGoal(s, nt, q, f(q, s.Fresh(nk)));
     }
 
-    public static IEnumerator<object> RunAll(Func<Key, Goal> f) // p 177
+    public static IEnumerable<object> RunAll(Func<Key, Goal> f) // p 177
     {
         return Run(int.MaxValue, f);
     }
 
-    public static IEnumerator<object> RunAll(uint nk, Func<Key, Key[], Goal> f) // p 177
+    public static IEnumerable<object> RunAll(uint nk, Func<Key, Key[], Goal> f) // p 177
     {
         return Run(int.MaxValue, nk, f);
     }
 
     
-    public static IEnumerator<T> RunAll<T>(uint nk, Func<Key, Key[], Goal> f) where T : class
+    public static IEnumerable<T> RunAll<T>(uint nk, Func<Key, Key[], Goal> f) where T : class
     {
         return Run(int.MaxValue, nk, f).As<T>();
     }

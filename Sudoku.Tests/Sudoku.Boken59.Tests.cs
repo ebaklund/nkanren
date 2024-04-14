@@ -25,7 +25,7 @@ public class SudokuBoken59
              x[54], x[55], x[56], x[57], x[58], x[59], x[60], x[61], x[62],        
              x[63], x[64], x[65], x[66], x[67], x[68], x[69], x[70], x[71],
              x[72], x[73], x[74], x[75], x[76], x[77], x[78], x[79], x[80]
-        )).AssertValid().TakeMax(1);
+        )).AssertValid().Take(1).ToArray();
 
         ("\n" + res[0].AsString(resetRenderCount: true)).Should().Be( "\n" +
             "┏━┯━┯━┯━┯━┯━┯━┯━┯━┓\n" +
@@ -65,7 +65,7 @@ public class SudokuBoken59
              x[54], x[55],     6,       9,     8, x[59],   x[60], x[61],     3,        
                  1, x[64], x[65],   x[66], x[67], x[68],       8, x[70], x[71],
                  3, x[73],     4,   x[75], x[76], x[77],   x[78],     2,     9
-        )).AssertValid().TakeMax(1);
+        )).AssertValid().Take(1).ToArray();
 
         ("\n" + res[0].AsString(resetRenderCount: true)).Should().Be( "\n" +
             "┏━┯━┯━┯━┯━┯━┯━┯━┯━┓\n" +

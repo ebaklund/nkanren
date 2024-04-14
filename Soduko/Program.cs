@@ -20,7 +20,7 @@ var res = RunSudoku(81, (x) => With(
     x[54], x[55], x[56], x[57], x[58], x[59], x[60], x[61], x[62],        
     x[63], x[64], x[65], x[66], x[67], x[68], x[69], x[70], x[71],
     x[72], x[73], x[74], x[75], x[76], x[77], x[78], x[79], x[80]
-)).TakeMax(1);
+)).Take(1).ToArray();
 
 Console.Write(res[0].AsString(resetRenderCount: true));
 
