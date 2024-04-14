@@ -18,7 +18,7 @@ public static partial class GoalsModule
             {
                 0 => Succ()(s),
                 1 => gs[0](s),
-                _ => Conj(gs[1..])(s).MapInf(gs[0])
+                _ => Conj(gs[1..])(s).SelectMany(s2 => gs[0](s2))
             };
         };
     }

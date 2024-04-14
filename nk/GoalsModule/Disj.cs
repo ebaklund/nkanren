@@ -7,6 +7,27 @@ namespace nk;
 
 public static partial class GoalsModule
 {
+    // PRIVATE
+
+    private static IEnumerable<Substitution> Multiplex(IEnumerable<IEnumerable<Substitution>> streams)
+    {
+        Queue<IEnumerator<Substitution>> queue = new(streams.Select(st => st.GetEnumerator()));
+
+        while (queue.Count > 0)
+        {
+            var st = queue.Dequeue();
+
+            if (!st.MoveNext())
+            {
+                continue;
+            }
+
+            yield return st.Current;
+
+            queue.Enqueue(st);
+        }
+    }
+
     // PUBLIC
    
     public static Goal Disj(params Goal[] gs) // p 177
@@ -18,7 +39,7 @@ public static partial class GoalsModule
             _ => (Substitution s) =>
             {
                 LogDebug($"Disj({s})");
-                return gs[0](s.Clone()).AppendInf(gs[1..].Select(g => g(s.Clone())).ToArray());
+                return Multiplex(gs.Select(g => g(s.Clone())));
             }
         };
     }
