@@ -1,11 +1,13 @@
+
 using static nk.GoalsModule;
+using static nk.SubstModule;
 
 namespace nk;
 
 
 public static partial class StreamModule
 {
-    public static IEnumerator<Situation> FlattenInf(this IEnumerator<Situation> st) // p 163
+    public static IEnumerator<Substitution> FlattenInf(this IEnumerator<Substitution> st) // p 163
     {
         return st;
 #if false
@@ -42,7 +44,7 @@ public static partial class StreamModule
 #endif
     }
 
-    public static IEnumerator<Situation> MapInf(this IEnumerator<Situation> st1, Goal g)
+    public static IEnumerator<Substitution> MapInf(this IEnumerator<Substitution> st1, Goal g)
     {
         var yielded = 0;
 
@@ -58,7 +60,7 @@ public static partial class StreamModule
         }
     }
 
-    public static IEnumerator<Situation> AppendInf(this IEnumerator<Situation> st1, params IEnumerator<Situation>[] sts)
+    public static IEnumerator<Substitution> AppendInf(this IEnumerator<Substitution> st1, params IEnumerator<Substitution>[] sts)
     {
         while (st1.MoveNext())
         {
@@ -74,12 +76,12 @@ public static partial class StreamModule
         }
     }
 
-    public static IEnumerator<Situation> FlatMapInf(this IEnumerator<Situation> st, Goal g) // p 163
+    public static IEnumerator<Substitution> FlatMapInf(this IEnumerator<Substitution> st, Goal g) // p 163
     {
         return st.FlattenInf().MapInf(g);
     }
 
-    public static IEnumerator<Situation> Take(this IEnumerator<Situation> st, int n) // p161
+    public static IEnumerator<Substitution> Take(this IEnumerator<Substitution> st, int n) // p161
     {
         for (int i = 0; i < n && st.MoveNext(); ++i)
         {

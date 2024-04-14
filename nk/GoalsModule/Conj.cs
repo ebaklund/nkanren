@@ -2,6 +2,7 @@
 
 namespace nk;
 using static nk.LoggerModule;
+using static nk.SubstModule;
 
 public static partial class GoalsModule
 {
@@ -9,7 +10,7 @@ public static partial class GoalsModule
    
     public static Goal Conj(params Goal[] gs) // p 177
     {
-        return (Situation s) =>
+        return (Substitution s) =>
         {
             LogDebug($"Conj({s}, g*{gs.Length})");
 

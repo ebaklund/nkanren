@@ -1,5 +1,6 @@
 ﻿
 using static nk.LoggerModule;
+using static nk.SubstModule;
 
 namespace nk;
 
@@ -10,7 +11,7 @@ public static partial class GoalsModule
    
     public static Goal Succ() // p 154
     {
-        return (Situation s) =>
+        return (Substitution s) =>
         {
             LogDebug($"Succ({s})");
             return Enumerable.Repeat(s, 1).GetEnumerator();

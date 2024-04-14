@@ -1,6 +1,8 @@
 ﻿
-namespace nk;
 using static nk.LoggerModule;
+using static nk.SubstModule;
+
+namespace nk;
 
 
 public static partial class GoalsModule
@@ -13,7 +15,7 @@ public static partial class GoalsModule
         {
             0 => Succ(),
             1 => gs[0],
-            _ => (Situation s) =>
+            _ => (Substitution s) =>
             {
                 LogDebug($"Disj({s})");
                 return gs[0](s.Clone()).AppendInf(gs[1..].Select(g => g(s.Clone())).ToArray());

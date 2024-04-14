@@ -1,6 +1,9 @@
 ﻿
-namespace nk.Examples;
+using nk;
 using static nk.GoalsModule;
+using static nk.SubstModule;
+
+namespace nk.Examples;
 
 
 internal class ExampleGoals
@@ -29,7 +32,7 @@ internal class ExampleGoals
 
     public static Goal Ifte(Goal g1, Goal g2, Goal g3) // 173
     {
-        IEnumerator<Situation> _Ifte(Situation s)
+        IEnumerator<Substitution> _Ifte(Substitution s)
         {
             var st1 = g1(s);
 
@@ -46,7 +49,7 @@ internal class ExampleGoals
 
     public static Goal Once(Goal g) // P 174
     {
-        IEnumerator<Situation> _Once(Situation s)
+        IEnumerator<Substitution> _Once(Substitution s)
         {
             var st = g(s);
 

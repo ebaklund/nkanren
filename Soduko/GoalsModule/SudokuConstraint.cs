@@ -2,7 +2,7 @@
 using nk;
 using static nk.LoggerModule;
 using static nk.GoalsModule;
-using static Sudoku.BoardModule;
+using static nk.SubstModule;
 using System;
 
 namespace Sudoku;
@@ -13,7 +13,7 @@ public static partial class GoalsModule
 
     private static int _callCount = 0;
 
-    private static uint[] CountNumbers(Situation s, uint dim, object[] peers)
+    private static uint[] CountNumbers(Substitution s, uint dim, object[] peers)
     {
         var counts = new uint[dim];
 
@@ -35,7 +35,7 @@ public static partial class GoalsModule
 
     public static Goal SudokuConstraint(Key k, uint dim, object[] peers)
     {
-        IEnumerator<Situation> _goal(Situation s)
+        IEnumerator<Substitution> _goal(Substitution s)
         {
             LogDebug($"Once({s}, {k}) #{++_callCount}");
 
@@ -54,7 +54,7 @@ public static partial class GoalsModule
                     continue;
                 }
 
-                Situation res;
+                Substitution res;
                 if (!s.TryCloneWith(k, SudokuNumber.From(i + 1), out res))
                 {
                     continue;

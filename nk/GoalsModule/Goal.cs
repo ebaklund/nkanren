@@ -1,4 +1,6 @@
 ﻿
+using static nk.SubstModule;
+
 namespace nk;
 
 
@@ -6,5 +8,5 @@ public static partial class GoalsModule
 {
     // PUBLIC
    
-    public delegate IEnumerator<Situation> Goal(Situation input);
+    public delegate IEnumerator<Substitution> Goal(Substitution input);
 }

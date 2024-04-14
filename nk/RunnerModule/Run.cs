@@ -1,6 +1,7 @@
 
 using static nk.GoalsModule;
 using static nk.LoggerModule;
+using static nk.SubstModule;
 
 namespace nk;
 
@@ -9,7 +10,7 @@ public static partial class RunnerModule
 {
     // PRIVATE
 
-    private static object[] GetResolved(Situation s, Key[] ks)
+    private static object[] GetResolved(Substitution s, Key[] ks)
     {
         var a = new object[ks.Length];
 
@@ -21,7 +22,7 @@ public static partial class RunnerModule
         return a;
     }
 
-    private static object[] GetResolved(Situation s, object[] a)
+    private static object[] GetResolved(Substitution s, object[] a)
     {
         var a2 = new object[a.Length];
 
@@ -33,7 +34,7 @@ public static partial class RunnerModule
         return a2;
     }
 
-    private static object[][] GetResolved(Situation s, object[][] m1)
+    private static object[][] GetResolved(Substitution s, object[][] m1)
     {
         var m2 = new object[m1.Length][];
 
@@ -50,7 +51,7 @@ public static partial class RunnerModule
         return m2;
     }
 
-    private static IResolvable GetResolved(Situation s, IResolvable r)
+    private static IResolvable GetResolved(Substitution s, IResolvable r)
     {
         var resolved = GetResolved(s, r.GetResolvable());
         var w = r.Wrap(resolved);
@@ -58,7 +59,7 @@ public static partial class RunnerModule
         return w;
     }
 
-    private static object GetResolved(Situation s, object o)
+    private static object GetResolved(Substitution s, object o)
     {
         var w = s.Walk(o);
 
@@ -77,7 +78,7 @@ public static partial class RunnerModule
         };
     }
 
-    private static IEnumerator<object> RunGoal(Situation s, uint nt, Key q, Goal g)
+    private static IEnumerator<object> RunGoal(Substitution s, uint nt, Key q, Goal g)
     {
         //var st = g(s).FlattenInf();
         var st = g(s);
@@ -108,7 +109,7 @@ public static partial class RunnerModule
 
     public static IEnumerator<object> Run(uint nt, Func<Key, Goal> f) // p 169
     {
-        var s = new Situation();
+        var s = new Substitution();
         var q = s.Fresh();
 
         return RunGoal(s, nt, q, f(q));
@@ -116,7 +117,7 @@ public static partial class RunnerModule
 
     public static IEnumerator<object> Run(uint nt, uint nk, Func<Key, Key[], Goal> f) // p 169
     {
-        var s = new Situation();
+        var s = new Substitution();
         var q = s.Fresh();
 
         return RunGoal(s, nt, q, f(q, s.Fresh(nk)));

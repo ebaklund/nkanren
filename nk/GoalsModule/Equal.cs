@@ -1,14 +1,14 @@
 ﻿
-using static nk.LoggerModule;
-
 namespace nk;
+using static nk.LoggerModule;
+using static nk.SubstModule;
 
 
 public static partial class GoalsModule
 {
     // PRIVATE
 
-    public static bool TryUnify(Situation s, object o1, object o2) // p 151
+    public static bool TryUnify(Substitution s, object o1, object o2) // p 151
     {
         o1 = s.Walk(o1);
         o2 = s.Walk(o2);
@@ -17,13 +17,7 @@ public static partial class GoalsModule
         {
             return true;
         }
-/*
-        if (o1 is Key && o2 is Key)
-        {
-            // Walked keys are fresh so no need to compare values
-            return true;
-        }
-*/
+
         if (o1 is Key k1)
         {
             return s.TrySet(k1, o2);
@@ -73,7 +67,7 @@ public static partial class GoalsModule
 
     public static Goal Equal(object o1, object o2) // p 154
     {
-        return (Situation s) =>
+        return (Substitution s) =>
         {
             LogDebug($"Equal({s})");
             return TryUnify(s, o1, o2) ? Succ()(s) : Fail()(s);
