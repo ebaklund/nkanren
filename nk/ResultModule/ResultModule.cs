@@ -11,7 +11,7 @@ public static class ListConstructor
     }
 }
 
-public static class ListExt
+public static partial class ResultModule
 {   
     public static string AsString(this IEnumerable<object> objects)
     {
