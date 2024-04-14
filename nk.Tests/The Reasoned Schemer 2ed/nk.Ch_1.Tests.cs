@@ -501,26 +501,24 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_75_nk()
+    public void Test_1_75()
     {
-        RunAll(2, (q, x) =>
+        RunAll((x, y) =>
             Conj(
-                Equal("pea", x[1]),
-                Equal("split", x[0]),
-                Equal(x, q)
+                Equal("split", x),
+                Equal("pea", y)
             )
         ).AsString().Should().Be("((\"split\", \"pea\"))");
     }
 
     [Fact]
-    public void Test_1_76_nk()
+    public void Test_1_76()
     {
-        RunAll(2, (q, x) => Conj(
+        RunAll((x, y) => Conj(
             Disj(
-                Conj(Equal("split", x[0]), Equal("pea", x[1])),
-                Conj(Equal("red", x[0]), Equal("bean", x[1]))
-            ),
-            Equal(q, x)
+                Conj(Equal("split", x), Equal("pea", y)),
+                Conj(Equal("red", x), Equal("bean", y))
+            )
         )).AsString().Should().Be("((\"split\", \"pea\"), (\"red\", \"bean\"))");
     }
     
@@ -583,15 +581,23 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_80_mk()
+    public void Test_1_80()
     {
-        RunAll(3, (q, x) => Conj( // NOTE: Implicit Run conjunction presented in 1_80, is not possible in C#.
+        RunAll((x, y, z) => Conj( // NOTE: Implicit Run conjunction presented in 1_80, is not possible in C#.
             Disj(
-                Conj(Equal("split", x[0]), Equal("pea", x[1])),
-                Conj(Equal("red", x[0]), Equal("bean", x[1]))
+                Conj(Equal("split", x), Equal("pea", y)),
+                Conj(Equal("red", x), Equal("bean", y))
             ),
-            Equal("soup", x[2]),
-            Equal(q, x)
+            Equal("soup", z)
         )).AsString().Should().Be("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
+    }
+
+    [Fact]
+    public void Test_1_81()
+    {
+        RunAll((x, y) => Conj( // NOTE: Implicit Run conjunction presented in 1_80, is not possible in C#.
+            Equal("split", x),
+            Equal("pea", y)
+        )).AsString().Should().Be("((\"split\", \"pea\"))");
     }
 }
