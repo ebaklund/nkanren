@@ -514,12 +514,12 @@ public class Playthings
     [Fact]
     public void Test_1_76()
     {
-        RunAll((x, y) => Conj(
+        RunAll((x, y) => [
             Disj(
                 Conj(Equal("split", x), Equal("pea", y)),
                 Conj(Equal("red", x), Equal("bean", y))
             )
-        )).AsString().Should().Be("((\"split\", \"pea\"), (\"red\", \"bean\"))");
+        ]).AsString().Should().Be("((\"split\", \"pea\"), (\"red\", \"bean\"))");
     }
     
     [Fact]
@@ -653,5 +653,16 @@ public class Playthings
             Conj(Teacupo(x), Teacupo(x)),
             Conj(Equal(false, x), Teacupo(y))
         )).AsString().Should().Be("((\"tea\", _1), (False, \"tea\"), (\"cup\", _1), (False, \"cup\"))");
+    }
+
+    [Fact]
+    public void Test_1_88()
+    {
+        RunAll((x, y) =>
+            Conde(
+                [Equal("split", x), Equal("pea", y)],
+                [Equal("red", x), Equal("bean", y)]
+            )
+        ).AsString().Should().Be("((\"split\", \"pea\"), (\"red\", \"bean\"))");
     }
 }

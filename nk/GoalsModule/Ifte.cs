@@ -10,29 +10,10 @@ public static partial class GoalsModule
    
     public static Goal Ifte(Goal g1, Goal g2, Goal g3) // 173
     {
-        IEnumerable<Substitution> _Ifte(Substitution s)
+        return (Substitution s) =>
         {
-            bool succeeded = false;
-
-            foreach (var s1 in g1(s))
-            {
-                foreach (var s2 in g2(s1))
-                {
-                    yield return s2;
-                }
-
-                succeeded = true;
-            }
-
-            if (succeeded == false)
-            {
-                foreach (var s3 in g3(s))
-                {
-                    yield return s3; 
-                }
-            } 
+            var st1 = Conj(g2, g1)(s);
+            return st1.Any() ? st1 : g3(s);
         };
-
-        return _Ifte;
     }
 }
