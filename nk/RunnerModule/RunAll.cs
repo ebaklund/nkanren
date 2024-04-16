@@ -26,7 +26,25 @@ public static partial class RunnerModule
     #endregion PRIVATE
     #region PUBLIC
 
+    public static IEnumerable<object> RunAll(Func<Key, Goal> f) // p 177
+    {
+        return RunN(int.MaxValue, f);
+    }
+
+    public static IEnumerable<object> RunAll(Func<Key, Goal[]> f) // p 177
+    {
+        return RunN(int.MaxValue, f);
+    }
+
     public static IEnumerable<object> RunAll(Func<Key, Key, Goal> f) // p 177
+    {
+        var s = new Substitution();
+        var x = s.Fresh(2);
+
+        return RunGoal(s, int.MaxValue, x[0], x[1], f(x[0], x[1]));
+    }
+
+    public static IEnumerable<object> RunAll(Func<Key, Key, Goal[]> f) // p 177
     {
         var s = new Substitution();
         var x = s.Fresh(2);
@@ -40,11 +58,6 @@ public static partial class RunnerModule
         var x = s.Fresh(3);
 
         return RunGoal(s, int.MaxValue, x[0], x[1], x[2], f(x[0], x[1], x[2]));
-    }
-
-    public static IEnumerable<object> RunAll(Func<Key, Goal> f) // p 177
-    {
-        return RunN(int.MaxValue, f);
     }
 
     public static IEnumerable<object> RunAll(uint nk, Func<Key, Key[], Goal> f) // p 177

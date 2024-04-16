@@ -487,15 +487,15 @@ public class Playthings
     }
 
     [Fact]
-    public void Test_1_72_nk()
+    public void Test_1_72()
     {
-        RunAll(2, (r, x) =>
+        RunAll((r, x, y) =>
             Conj(
                 Conj(
-                    Equal("pea", x[1]),
-                    Equal("split", x[0])
+                    Equal("split", x),
+                    Equal("pea", y)
                 ),
-                Equal(l(x, x[0], x[1]), r)
+                Equal(l(x, y), r)
             )
         ).AsString().Should().Be("(((\"split\", \"pea\"), \"split\", \"pea\"))");
     }
@@ -556,13 +556,13 @@ public class Playthings
     public void Test_1_78a()
     {
         RunAll((r) =>
-            Fresh((x, y) => Conj( // NOTE: Implicit Fresh conjunction presented in 1_78, is not possible in C#.
+            Fresh((x, y) => [
                 Disj(
                     Conj(Equal("split", x), Equal("pea", y)),
                     Conj(Equal("red", x), Equal("bean", y))
                 ),
                 Equal(l(x, y, "soup"), r)
-            ))
+            ])
         ).AsString().Should().Be("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
     }
 
@@ -570,13 +570,13 @@ public class Playthings
     public void Test_1_78b()
     {
         RunAll((r) =>
-            Fresh(2, (x) => Conj( // NOTE: Implicit Fresh conjunction presented in 1_78, is not possible in C#.
+            Fresh(2, (x) => [
                 Disj(
                     Conj(Equal("split", x[0]), Equal("pea", x[1])),
                     Conj(Equal("red", x[0]), Equal("bean", x[1]))
                 ),
                 Equal(l(x[0], x[1], "soup"), r)
-            ))
+            ])
         ).AsString().Should().Be("((\"split\", \"pea\", \"soup\"), (\"red\", \"bean\", \"soup\"))");
     }
 
@@ -595,10 +595,10 @@ public class Playthings
     [Fact]
     public void Test_1_81()
     {
-        RunAll((x, y) => Conj( // NOTE: Implicit Run conjunction presented in 1_80, is not possible in C#.
+        RunAll((x, y) => [
             Equal("split", x),
             Equal("pea", y)
-        )).AsString().Should().Be("((\"split\", \"pea\"))");
+        ]).AsString().Should().Be("((\"split\", \"pea\"))");
     }
 
     static Func<Key, Goal> Defrel(Func<Key, Goal> f)
@@ -631,19 +631,19 @@ public class Playthings
     [Fact]
     public void Test_1_85()
     {
-        RunAll((x, y) => Conj(
+        RunAll((x, y) => [
             Teacupo(x),
             Teacupo(y)
-        )).AsString().Should().Be("((\"tea\", \"tea\"), (\"cup\", \"tea\"), (\"tea\", \"cup\"), (\"cup\", \"cup\"))");
+        ]).AsString().Should().Be("((\"tea\", \"tea\"), (\"cup\", \"tea\"), (\"tea\", \"cup\"), (\"cup\", \"cup\"))");
     }
 
     [Fact]
     public void Test_1_86()
     {
-        RunAll((x, y) => Conj(
+        RunAll((x, y) => [
             Teacupo(x),
             Teacupo(x)
-        )).AsString().Should().Be("((\"tea\", _1), (\"cup\", _1))");
+        ]).AsString().Should().Be("((\"tea\", _1), (\"cup\", _1))");
     }
 
     [Fact]
