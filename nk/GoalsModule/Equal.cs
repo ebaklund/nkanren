@@ -10,33 +10,33 @@ public static partial class GoalsModule
 
     public static bool TryUnify(Substitution s, object o1, object o2) // p 151
     {
-        o1 = s.Walk(o1);
-        o2 = s.Walk(o2);
+        object w1 = s.Walk(o1);
+        object w2 = s.Walk(o2);
 
-        if (o1 == o2)
+        if (Object.Equals(w1, w2))
         {
             return true;
         }
 
-        if (o1 is Key k1)
+        if (w1 is Key k1)
         {
-            return s.TrySet(k1, o2);
+            return s.TrySet(k1, w2);
         }
         
-        if (o2 is Key k2)
+        if (w2 is Key k2)
         {
-            return s.TrySet(k2, o1);
+            return s.TrySet(k2, w1);
         }
                 
-        var type1 = o1.GetType();
-        var type2 = o2.GetType();
+        var type1 = w1.GetType();
+        var type2 = w2.GetType();
 
         if (type1.MetadataToken != type2.MetadataToken)
         {
             return false;
         }
 
-        if (o1 is List<object> l1 && o2 is List<object> l2)
+        if (w1 is List<object> l1 && w2 is List<object> l2)
         {
             if (l1.Count != l2.Count)
             {
@@ -49,13 +49,36 @@ public static partial class GoalsModule
             return i == l1.Count;
         }
 
+        if (type1.IsArray)
+        {
+            Array a1 = (Array) w1;
+            Array a2 = (Array) w2;
+
+            if (a1.Length != a2.Length)
+            {
+                return false; 
+            }
+            
+            var i = 0;
+            for (; (i < a1.Length) && TryUnify(s, (object) a1.GetValue(i)!, (object) a2.GetValue(i)!); ++i);
+
+            if (i == a1.Length)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         if (type1.Name.StartsWith("ValueTuple"))
         {
             var fields1 = type1.GetFields();
             var fields2 = type2.GetFields();
 
             var i = 0;
-            for (; (i < fields1.Length) && TryUnify(s, fields1[i].GetValue(o1)!, fields2[i].GetValue(o2)!); ++i);
+            for (; (i < fields1.Length) && TryUnify(s, fields1[i].GetValue(w1)!, fields2[i].GetValue(w2)!); ++i);
     
             return i == fields1.Length;
         }
@@ -74,5 +97,9 @@ public static partial class GoalsModule
         };
     }
 
+    public static Goal Equal(Func<object> getObj1, Func<object> getObj2) // p 154
+    {
+        return Equal(getObj1(), getObj2());
+    }
 }
 

@@ -1,6 +1,7 @@
 ﻿
 using static nk.LoggerModule;
 using static nk.GoalsModule;
+using static System.Linq.Enumerable;
 
 namespace nk;
 
@@ -118,6 +119,14 @@ public static partial class SubstModule
         {
             s = new Substitution(_slots.ToList());
             return s.TrySet(k, o);
+        }
+    
+        public bool TryCloneWith(Key[] ks, object[] objs, out Substitution s)
+        {
+            var sCloned = new Substitution(_slots.ToList());
+            s = sCloned;
+
+            return Range(0, ks.Length).All(i => sCloned.TrySet(ks[i], objs[i]));
         }
 
         public object? Get(Key k)

@@ -12,17 +12,29 @@ public static partial class RunnerModule
 {
     #region PRIVATE
 
-    private static IEnumerable<T> As<T>(this IEnumerable<object> objects)
+    private static IEnumerable<T> As<T>(this IEnumerable<object> objs)
     {
-        foreach (var o in objects)
+        var tt = typeof(T);
+        var tte = tt.GetElementType();
+
+        foreach (var obj in objs)
         {
-            if(o is T obj)
+            var t = obj.GetType();
+            var te = t.GetElementType();
+
+            if(obj is T o)
             {
-                yield return obj;
-            } else
-            {
-                LogError($"Object removed from stream: Failed to convert from \"{o.GetType().Name}\" to \"{typeof(T).Name}\".");
+                yield return o;
+                continue;
             }
+
+            if (tt.IsArray)
+            {
+                var a = (Array) obj;
+                throw new ApplicationException("");
+            }
+
+            throw new ApplicationException($"Object removed from stream: Failed to convert from \"{obj.GetType().Name}\" to \"{typeof(T).Name}\".");
         }
     }
 
@@ -69,12 +81,28 @@ public static partial class RunnerModule
         return RunGoal(s, nt, xs, f(xs[0], xs[1], xs[2]));
     }
 
+    public static IEnumerable<T> RunN<T>(int nt, Func<Key, Key, Key, Goal> f) where T : class
+    {
+        var s = new Substitution();
+        var xs = s.Fresh(3);
+
+        return RunGoal(s, nt, xs, f(xs[0], xs[1], xs[2])).As<T>();
+    }
+
     public static IEnumerable<object> RunN(int nt, Func<Key, Key, Key, Goal[]> f)
     {
         var s = new Substitution();
         var xs = s.Fresh(3);
 
         return RunGoal(s, nt, xs, f(xs[0], xs[1], xs[2]));
+    }
+
+    public static IEnumerable<T> RunN<T>(int nt, Func<Key, Key, Key, Goal[]> f) where T : class
+    {
+        var s = new Substitution();
+        var xs = s.Fresh(3);
+
+        return RunGoal(s, nt, xs, f(xs[0], xs[1], xs[2])).As<T>();
     }
 
     public static IEnumerable<object> RunN(int nt, uint nk, Func<Key, Key[], Goal> f)

@@ -22,6 +22,18 @@ public static partial class SubstModule
         return a;
     }
 
+    private static object[] GetResolved(Substitution s, Array a)
+    {
+        var a2 = new object[a.Length];
+
+        for (int i = 0; i < a.Length; i++)
+        {
+            a2[i] = GetResolved(s, a.GetValue(i)!);
+        }
+    
+        return a2;
+    }
+
     private static object[] GetResolved(Substitution s, object[] a)
     {
         var a2 = new object[a.Length];
@@ -59,21 +71,23 @@ public static partial class SubstModule
         return w;
     }
 
-    private static object GetResolved(Substitution s, object o)
+    private static object GetResolved(Substitution s, object o1)
     {
-        var w = s.Walk(o);
+        var w = s.Walk(o1);
+        var t = w.GetType();
 
         return w switch
         {
             Key k          => k, // Return unresolved fresh keys as is.
             string str     => str,
-            object v when v.GetType().IsValueType => v,
-            object[][] m   => GetResolved(s, m),
-            Key[] ks       => GetResolved(s, ks),
-            List<object> l => l.Select(o => GetResolved(s, o)).ToList(),
+            object v when t.IsValueType => v,
+            List<object> l => l.Select(o2 => GetResolved(s, o2)).ToList(),
+            object a when t.IsArray => GetResolved(s, (Array) a),
             IResolvable  r => GetResolved(s, r),
+            //object[][] m   => GetResolved(s, m),
+            //Key[] ks       => GetResolved(s, ks),
             //IResolvable  r => r,
-            object[] a     => GetResolved(s, a),
+            //object[] a     => GetResolved(s, a),
             object x       => throw new ApplicationException("Unknown observable.")
         };
     }

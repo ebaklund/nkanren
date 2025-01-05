@@ -21,12 +21,12 @@ public static partial class RunnerModule
             );
     }
 
-    private static IEnumerable<List<object>> RunGoal(Substitution s, int nt, Key[] ks, params Goal[] gs)
+    private static IEnumerable<object[]> RunGoal(Substitution s, int nt, Key[] ks, params Goal[] gs)
     {
         return Conj(gs)(s)
             .Take(nt)
             .Select(
-                s2 => ks.Select(k => s2.GetResolved(k)).ToList()
+                s2 => ks.Select(k => s2.GetResolved(k)).ToArray()
              );
     }
 
